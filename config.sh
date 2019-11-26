@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 #Script for configure the plugin project
-PHP_SDK_VERSION="1.5.1"
+PHP_SDK_VERSION="feat/add-rest-support"
+DOWNLOAD_FILENAME="${PHP_SDK_VERSION///}sdk.zip"
 REPO_SDK="https://github.com/TransbankDevelopers/transbank-sdk-php/archive/$PHP_SDK_VERSION.zip"
 DIR_LIBS="src/transbank_webpay/library"
 DIR_NAME_SDK="transbank-sdk-php"
@@ -11,10 +12,10 @@ echo "Removing the older SDK $DIR_DEST_SDK"
 rm -rf $DIR_DEST_SDK**
 
 echo "Downloading SDK version: $PHP_SDK_VERSION from: $REPO_SDK"
-curl -O -L $REPO_SDK
-unzip "$PHP_SDK_VERSION.zip" -d $DIR_LIBS
-rm -rf "$PHP_SDK_VERSION.zip"
-mv "$DIR_DEST_SDK-$PHP_SDK_VERSION" "$DIR_DEST_SDK"
+curl -o $DOWNLOAD_FILENAME -L $REPO_SDK
+unzip "$DOWNLOAD_FILENAME" -d $DIR_LIBS
+rm -rf "$DOWNLOAD_FILENAME"
+mv "$DIR_DEST_SDK-${PHP_SDK_VERSION/\//-}" "$DIR_DEST_SDK"
 
 echo "Remove onepay sdk, is not necessary"
 sed -i.bkp '/lib\/onepay/d' "$DIR_DEST_SDK/init.php"
