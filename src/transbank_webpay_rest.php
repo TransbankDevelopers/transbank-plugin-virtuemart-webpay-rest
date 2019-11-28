@@ -36,7 +36,7 @@ if (!class_exists('ConfigProvider')) {
  * Transbank Webpay Payment plugin implementation
  * @autor vutreras (victor.utreras@continuum.cl)
  */
-class plgVmPaymentTransbank_Webpay extends vmPSPlugin {
+class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin {
     
     const PLUGIN_CODE = 'transbank_webpay_rest'; //code of plugin for virtuemart
     
