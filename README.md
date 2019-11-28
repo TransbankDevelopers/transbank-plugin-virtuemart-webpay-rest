@@ -2,7 +2,7 @@
 
 ## Descripción
 
-Este plugin de Virtuemart 3.x implementa el [SDK PHP de Webpay](https://github.com/TransbankDevelopers/transbank-sdk-php) en modalidad checkout (REST). 
+Este plugin de Virtuemart 3.x implementa el [SDK REST de PHP de Webpay](https://github.com/TransbankDevelopers/transbank-sdk-php) en modalidad checkout (REST). 
 
 ## Dependencias
 
