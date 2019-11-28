@@ -49,7 +49,7 @@ Para acceder a la configuración, debes seguir los siguientes pasos:
 4. Ingresar los datos para "Transbank Webpay" como se muestra en la siguiente imagen.
 
     - Payment Name: Transbank Webpay 
-    - Sef Alias: transbank_webpay
+    - Sef Alias: transbank_webpay_rest
     - Published: Yes
     - Payment Method: Transbank Webpay
     - Currency: Chilean peso

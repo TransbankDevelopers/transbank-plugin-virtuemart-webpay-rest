@@ -33,8 +33,8 @@ class ConfigProvider {
                 $query = $db->getQuery(true);
                 $query->select($db->quoteName(array('payment_params')));
                 $query->from($db->quoteName('#__virtuemart_paymentmethods'));
-                $query->where($db->quoteName('payment_element') . ' = '. $db->quote('transbank_webpay'));
-                //$query = 'SELECT `payment_params` FROM `#__virtuemart_paymentmethods` where `payment_element` = ' . $db->quote('transbank_webpay');
+                $query->where($db->quoteName('payment_element') . ' = '. $db->quote('transbank_webpay_rest'));
+                //$query = 'SELECT `payment_params` FROM `#__virtuemart_paymentmethods` where `payment_element` = ' . $db->quote('transbank_webpay_rest');
                 $db->setQuery($query);
                 $values = $db->loadObjectList();
                 $arr = explode('|', $values[0]->payment_params);
@@ -62,7 +62,7 @@ class ConfigProvider {
         if ($this->_configXml === 0) {
             try {
                 $this->_configXml = array();
-                $xml = simplexml_load_file(JPATH_PLUGINS."/vmpayment/transbank_webpay/transbank_webpay.xml",null, LIBXML_NOCDATA);
+                $xml = simplexml_load_file(JPATH_PLUGINS."/vmpayment/transbank_webpay_rest/transbank_webpay_rest.xml",null, LIBXML_NOCDATA);
                 $json = json_encode($xml);
                 $dataConfig = json_decode($json , true);
                 $dataConfig = $dataConfig['vmconfig']['fields']['fieldset']['field'];

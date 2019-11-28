@@ -2,6 +2,6 @@
 /.idea
 .idea
 .vscode/
-src/transbank_webpay/vendor
+src/transbank_webpay_rest/vendor
 docker-virtuemart3/www/**
 plugin-transbank-webpay-**.zip

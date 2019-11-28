@@ -10,7 +10,7 @@ if (!class_exists('ShopFunctions')) {
     require_once(JPATH_VM_ADMINISTRATOR . DS . 'helpers' . DS . 'shopfunctions.php');
 }
 
-defined ('DIR_SYSTEM') or define ('DIR_SYSTEM', VMPATH_PLUGINS . '/vmpayment/transbank_webpay/transbank_webpay/');
+defined ('DIR_SYSTEM') or define ('DIR_SYSTEM', VMPATH_PLUGINS . '/vmpayment/transbank_webpay_rest/transbank_webpay_rest/');
 
 if (!class_exists('TransbankSdkWebpay')) {
     require_once(DIR_SYSTEM.'library/TransbankSdkWebpay.php');
@@ -38,7 +38,7 @@ if (!class_exists('ConfigProvider')) {
  */
 class plgVmPaymentTransbank_Webpay extends vmPSPlugin {
     
-    const PLUGIN_CODE = 'transbank_webpay'; //code of plugin for virtuemart
+    const PLUGIN_CODE = 'transbank_webpay_rest'; //code of plugin for virtuemart
     
     private $paymentTypeCodearray = array(
         "VD" => "Venta Debito",
