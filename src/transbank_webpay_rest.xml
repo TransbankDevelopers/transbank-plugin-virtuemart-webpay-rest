@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension version="2.5" type="plugin" group="vmpayment" method="upgrade">
+    <name>Transbank Webpay REST</name>
+    <author>Transbank</author>
+    <license>https://github.com/TransbankDevelopers/transbank-plugin-virtuemart-webpay-rest/LICENCE</license>
+    <version>1.0.0</version>
+    <description>Transbank Webpay REST</description>
+    <creationDate>November 2019</creationDate>
+    <files>
+        <filename plugin="transbank_webpay_rest">transbank_webpay_rest.php</filename>
+        <folder>transbank_webpay_rest</folder>
+        <folder>language</folder>
+    </files>
+    <vmconfig>
+        <fields name="params">
+            <fieldset name="basic" addfieldpath="/plugins/vmpayment/transbank_webpay_rest/transbank_webpay_rest/fields">
+                <field type="WebpayLogo"/>
+                <field name="ambiente" type="list" label="Ambiente" required="true" default="TEST">
+                    <option value="TEST">INTEGRACIÓN</option>
+                    <option value="LIVE">PRODUCCIÓN</option>
+                </field>
+                <field name="id_comercio" type="text" size="50" label="Código de Comercio" required="true" default="597055555532" />
+                <field name="api_key" type="text" size="64" label="api_key" required="true" default="579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C" />
+
+                <field type="vmtitle" description="" default="Estados de la orden" />
+
+                <field name="status_success" type="vmorderstate" scope="com_virtuemart" default="C" label="Orden pagada" />
+                <field name="status_failed" type="vmorderstate" scope="com_virtuemart" default="D" label="Orden fallida" />
+                <field name="status_cancelled" type="vmorderstate" scope="com_virtuemart" default="X" label="Orden anulada por usuario" />
+
+            </fieldset>
+        </fields>
+    </vmconfig>
+</extension>

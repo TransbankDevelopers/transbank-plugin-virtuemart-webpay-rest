@@ -140,10 +140,10 @@ class HealthCheck {
         include_once(JPATH_ROOT.'/administrator/components/com_virtuemart/version.php');
         $actualversion = vmVersion::$RELEASE; // NOTE: confirmar si es como obtiene la version de ecommerce
         $lastversion = $this->getLastVirtuemartVersion();
-        if (! file_exists(JPATH_PLUGINS."/vmpayment/transbank_webpay/transbank_webpay.xml")) {
+        if (! file_exists(JPATH_PLUGINS."/vmpayment/transbank_webpay_rest/transbank_webpay_rest.xml")) {
             exit;
         } else {
-            $xml = simplexml_load_file(JPATH_PLUGINS."/vmpayment/transbank_webpay/transbank_webpay.xml",null, LIBXML_NOCDATA);
+            $xml = simplexml_load_file(JPATH_PLUGINS."/vmpayment/transbank_webpay_rest/transbank_webpay_rest.xml",null, LIBXML_NOCDATA);
             $json = json_encode($xml);
             $arr = json_decode($json,true);
             $currentplugin = $arr['version'];
