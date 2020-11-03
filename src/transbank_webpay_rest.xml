@@ -20,7 +20,7 @@
                     <option value="LIVE">PRODUCCIÓN</option>
                 </field>
                 <field name="id_comercio" type="text" size="50" label="Código de Comercio" required="true" default="597055555532" />
-                <field name="api_key" type="text" size="64" label="api_key" required="true" default="579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C" />
+                <field name="api_key" type="text" size="64" label="API Key" required="true" default="579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C" />
 
                 <field type="vmtitle" description="" default="Estados de la orden" />
 
