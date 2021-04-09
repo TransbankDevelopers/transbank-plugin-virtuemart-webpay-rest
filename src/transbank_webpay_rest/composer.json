@@ -1,5 +1,10 @@
 {
     "require": {
         "transbank/transbank-sdk": "2.0-beta"
+    },
+    "config": {
+        "platform": {
+            "php": "5.6"
+        }
     }
 }
