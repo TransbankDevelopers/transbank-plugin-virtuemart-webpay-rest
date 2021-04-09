@@ -1,21 +1,21 @@
 <?php
-require_once(__DIR__ . '/../vendor/autoload.php');
-require_once('LogHandler.php');
 
-use Transbank\Webpay\Configuration;
-use Transbank\Webpay\Webpay;
+require_once __DIR__.'/../vendor/autoload.php';
+require_once 'LogHandler.php';
+
 use Transbank\Webpay\WebpayPlus;
 
-class TransbankSdkWebpay {
+class TransbankSdkWebpay
+{
+    public $transaction;
+    public $log;
 
-    var $transaction;
-    var $log;
-
-    function __construct($config) {
+    public function __construct($config)
+    {
         $this->log = new LogHandler();
         $this->transaction = new WebpayPlus\Transaction();
         if (isset($config)) {
-            $environment = isset($config["MODO"]) ? $config["MODO"] : 'TEST';
+            $environment = isset($config['MODO']) ? $config['MODO'] : 'TEST';
             if ($environment == 'TEST') {
                 $this->transaction->configureForIntegration(WebpayPlus::DEFAULT_COMMERCE_CODE, WebpayPlus::DEFAULT_API_KEY);
             } else {
@@ -24,49 +24,56 @@ class TransbankSdkWebpay {
         }
     }
 
-    public function initTransaction($amount, $sessionId, $buyOrder, $returnUrl) {
-        try{
+    public function initTransaction($amount, $sessionId, $buyOrder, $returnUrl)
+    {
+        try {
             $txDate = date('d-m-Y');
             $txTime = date('H:i:s');
-            $this->log->logInfo('initTransaction - amount: ' . $amount . ', sessionId: ' . $sessionId .
-                ', buyOrder: ' . $buyOrder . ', txDate: ' . $txDate . ', txTime: ' . $txTime);
+            $this->log->logInfo('initTransaction - amount: '.$amount.', sessionId: '.$sessionId.
+                ', buyOrder: '.$buyOrder.', txDate: '.$txDate.', txTime: '.$txTime);
 
             $response = $this->transaction->create($buyOrder, $sessionId, $amount, $returnUrl);
-            $this->log->logInfo('initTransaction - initResult: ' . json_encode($response));
+            $this->log->logInfo('initTransaction - initResult: '.json_encode($response));
             if (isset($response) && isset($response->url) && isset($response->token)) {
-                return array(
-                    "url" => $response->url,
-                    "token_ws" => $response->token
-                );
+                return [
+                    'url'      => $response->url,
+                    'token_ws' => $response->token,
+                ];
             }
-            throw new Exception('No se ha creado la transacción para, amount: ' . $amount . ', sessionId: ' . $sessionId . ', buyOrder: ' . $buyOrder);
 
-        } catch(Exception $e) {
-            $result = array(
-                "error" => 'Error al crear la transacción',
-                "detail" => $e->getMessage()
-            );
+            throw new Exception('No se ha creado la transacción para, amount: '.$amount.', sessionId: '.$sessionId.', buyOrder: '.$buyOrder);
+        } catch (Exception $e) {
+            $result = [
+                'error'  => 'Error al crear la transacción',
+                'detail' => $e->getMessage(),
+            ];
             $this->log->logError(json_encode($result));
+
             return $result;
         }
-        return array();
+
+        return [];
     }
 
-    public function commitTransaction($tokenWs) {
-        $result = array();
-        try{
-            $this->log->logInfo('getTransactionResult - tokenWs: ' . $tokenWs);
+    public function commitTransaction($tokenWs)
+    {
+        $result = [];
+
+        try {
+            $this->log->logInfo('getTransactionResult - tokenWs: '.$tokenWs);
             if ($tokenWs == null) {
-                throw new Exception("El token webpay es requerido");
+                throw new Exception('El token webpay es requerido');
             }
+
             return $this->transaction->commit($tokenWs);
-        } catch(Exception $e) {
-            $result = array(
-                "error" => 'Error al confirmar la transacción',
-                "detail" => $e->getMessage()
-            );
+        } catch (Exception $e) {
+            $result = [
+                'error'  => 'Error al confirmar la transacción',
+                'detail' => $e->getMessage(),
+            ];
             $this->log->logError(json_encode($result));
         }
+
         return $result;
     }
 }

@@ -5,7 +5,7 @@
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ * the License. You may obtain a copy of the License at.
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -14,26 +14,22 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * @package log4php
  */
 
 /**
  * The interface for configurator adapters.
- * 
- * Adapters convert configuration in several formats such as XML, ini and PHP 
- * file to a PHP array. 
- * 
- * @package log4php
- * @subpackage configurators
+ *
+ * Adapters convert configuration in several formats such as XML, ini and PHP
+ * file to a PHP array.
+ *
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ *
  * @version $Revision$
+ *
  * @since 2.2
  */
 interface LoggerConfigurationAdapter
 {
-	/** Converts the configuration file to PHP format usable by the configurator. */
-	public function convert($input); 
-
+    /** Converts the configuration file to PHP format usable by the configurator. */
+    public function convert($input);
 }
-

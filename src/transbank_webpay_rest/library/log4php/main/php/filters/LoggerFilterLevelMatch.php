@@ -5,7 +5,7 @@
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
+ * the License. You may obtain a copy of the License at.
  *
  *	   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -14,8 +14,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * @package log4php
  */
 
 /**
@@ -23,78 +21,83 @@
  *
  * <p>The filter admits two options <b><var>LevelToMatch</var></b> and
  * <b><var>AcceptOnMatch</var></b>. If there is an exact match between the value
- * of the <b><var>LevelToMatch</var></b> option and the level of the 
- * {@link LoggerLoggingEvent}, then the {@link decide()} method returns 
- * {@link LoggerFilter::ACCEPT} in case the <b><var>AcceptOnMatch</var></b> 
- * option value is set to <i>true</i>, if it is <i>false</i> then 
- * {@link LoggerFilter::DENY} is returned. If there is no match, 
+ * of the <b><var>LevelToMatch</var></b> option and the level of the
+ * {@link LoggerLoggingEvent}, then the {@link decide()} method returns
+ * {@link LoggerFilter::ACCEPT} in case the <b><var>AcceptOnMatch</var></b>
+ * option value is set to <i>true</i>, if it is <i>false</i> then
+ * {@link LoggerFilter::DENY} is returned. If there is no match,
  * {@link LoggerFilter::NEUTRAL} is returned.</p>
- * 
+ *
  * <p>
  * An example for this filter:
- * 
+ *
  * {@example ../../examples/php/filter_levelmatch.php 19}
  *
  * <p>
  * The corresponding XML file:
- * 
+ *
  * {@example ../../examples/resources/filter_levelmatch.xml 18}
- * 
+ *
  * @version $Revision$
- * @package log4php
- * @subpackage filters
+ *
  * @since 0.6
  */
-class LoggerFilterLevelMatch extends LoggerFilter {
-  
-	/** 
-	 * Indicates if this event should be accepted or denied on match
-	 * @var boolean
-	 */
-	protected $acceptOnMatch = true;
+class LoggerFilterLevelMatch extends LoggerFilter
+{
+    /**
+     * Indicates if this event should be accepted or denied on match.
+     *
+     * @var bool
+     */
+    protected $acceptOnMatch = true;
 
-	/**
-	 * The level, when to match
-	 * @var LoggerLevel
-	 */
-	protected $levelToMatch;
-  
-	/**
-	 * @param boolean $acceptOnMatch
-	 */
-	public function setAcceptOnMatch($acceptOnMatch) {
-		$this->setBoolean('acceptOnMatch', $acceptOnMatch);
-	}
-	
-	/**
-	 * @param string $l the level to match
-	 */
-	public function setLevelToMatch($level) {
-		$this->setLevel('levelToMatch', $level);
-	}
+    /**
+     * The level, when to match.
+     *
+     * @var LoggerLevel
+     */
+    protected $levelToMatch;
 
-	/**
-	 * Return the decision of this filter.
-	 * 
-	 * Returns {@link LoggerFilter::NEUTRAL} if the <b><var>LevelToMatch</var></b>
-	 * option is not set or if there is not match.	Otherwise, if there is a
-	 * match, then the returned decision is {@link LoggerFilter::ACCEPT} if the
-	 * <b><var>AcceptOnMatch</var></b> property is set to <i>true</i>. The
-	 * returned decision is {@link LoggerFilter::DENY} if the
-	 * <b><var>AcceptOnMatch</var></b> property is set to <i>false</i>.
-	 *
-	 * @param LoggerLoggingEvent $event
-	 * @return integer
-	 */
-	public function decide(LoggerLoggingEvent $event) {
-		if($this->levelToMatch === null) {
-			return LoggerFilter::NEUTRAL;
-		}
-		
-		if($this->levelToMatch->equals($event->getLevel())) {	
-			return $this->acceptOnMatch ? LoggerFilter::ACCEPT : LoggerFilter::DENY;
-		} else {
-			return LoggerFilter::NEUTRAL;
-		}
-	}
+    /**
+     * @param bool $acceptOnMatch
+     */
+    public function setAcceptOnMatch($acceptOnMatch)
+    {
+        $this->setBoolean('acceptOnMatch', $acceptOnMatch);
+    }
+
+    /**
+     * @param string $l the level to match
+     */
+    public function setLevelToMatch($level)
+    {
+        $this->setLevel('levelToMatch', $level);
+    }
+
+    /**
+     * Return the decision of this filter.
+     *
+     * Returns {@link LoggerFilter::NEUTRAL} if the <b><var>LevelToMatch</var></b>
+     * option is not set or if there is not match.	Otherwise, if there is a
+     * match, then the returned decision is {@link LoggerFilter::ACCEPT} if the
+     * <b><var>AcceptOnMatch</var></b> property is set to <i>true</i>. The
+     * returned decision is {@link LoggerFilter::DENY} if the
+     * <b><var>AcceptOnMatch</var></b> property is set to <i>false</i>.
+     *
+     * @param LoggerLoggingEvent $event
+     *
+     * @return int
+     */
+    public function decide(LoggerLoggingEvent $event)
+    {
+        if ($this->levelToMatch === null) {
+            return LoggerFilter::NEUTRAL;
+        }
+
+        if ($this->levelToMatch->equals($event->getLevel())) {
+            return $this->acceptOnMatch ? LoggerFilter::ACCEPT : LoggerFilter::DENY;
+        } else {
+            return LoggerFilter::NEUTRAL;
+        }
+    }
 }

@@ -1,19 +1,20 @@
 <?php
-defined('JPATH_BASE') or die();
+
+defined('JPATH_BASE') or exit();
 
 jimport('joomla.form.formfield');
 
-class JFormFieldModalInformation extends JFormField {
-
+class JFormFieldModalInformation extends JFormField
+{
     /**
-	 * Element name
-	 *
-	 * @access    protected
-	 * @var        string
-	 */
-    var $type = 'ModalInformation';
+     * Element name.
+     *
+     * @var string
+     */
+    public $type = 'ModalInformation';
 
-    protected function getInput() {
-        return include_once('modalcontent.php');
+    protected function getInput()
+    {
+        return include_once 'modalcontent.php';
     }
 }

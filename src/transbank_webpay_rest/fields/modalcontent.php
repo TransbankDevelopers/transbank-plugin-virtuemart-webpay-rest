@@ -1,42 +1,42 @@
 <?php
-defined('JPATH_BASE') or die();
+defined('JPATH_BASE') or exit();
 
 if (!class_exists('vmPSPlugin')) {
-    require(JPATH_VM_PLUGINS . DS . 'vmpsplugin.php');
+    require JPATH_VM_PLUGINS.DS.'vmpsplugin.php';
 }
 
-include_once(dirname( dirname(__FILE__) ) . '/library/HealthCheck.php');
-include_once(dirname( dirname(__FILE__) ) . '/library/LogHandler.php');
-include_once(dirname( dirname(__FILE__) ) . '/library/ConfigProvider.php');
+include_once dirname(dirname(__FILE__)).'/library/HealthCheck.php';
+include_once dirname(dirname(__FILE__)).'/library/LogHandler.php';
+include_once dirname(dirname(__FILE__)).'/library/ConfigProvider.php';
 
-$cid = vRequest::getvar('cid', NULL, 'array');
-if (is_Array($cid)) {
+$cid = vRequest::getvar('cid', null, 'array');
+if (is_array($cid)) {
     $virtuemart_paymentmethod_id = $cid[0];
 } else {
     $virtuemart_paymentmethod_id = $cid;
 }
 
 $baseUrl = "index.php?option=com_virtuemart&view=paymentmethod&task=edit&cid[]={$virtuemart_paymentmethod_id}";
-$urlCreaPdfReport = $baseUrl . '&createPdf=true&document=report';
-$urlCreaPdfPhpInfo = $baseUrl . '&createPdf=true&document=php_info';
-$urlUpdateConfig = $baseUrl . '&updateConfig=true';
-$urlCheckTransaction = $baseUrl . '&checkTransaction=true';
+$urlCreaPdfReport = $baseUrl.'&createPdf=true&document=report';
+$urlCreaPdfPhpInfo = $baseUrl.'&createPdf=true&document=php_info';
+$urlUpdateConfig = $baseUrl.'&updateConfig=true';
+$urlCheckTransaction = $baseUrl.'&checkTransaction=true';
 
 $confProv = new ConfigProvider();
 $configBd = $confProv->getConfig();
 
-if (!isset($configBd['ambiente']) or trim($configBd['ambiente']) == "") {
+if (!isset($configBd['ambiente']) or trim($configBd['ambiente']) == '') {
     $configBd = $confProv->getConfigFromXml();
 }
 
-$config = array(
-    'MODO' => $configBd['ambiente'],
+$config = [
+    'MODO'          => $configBd['ambiente'],
     'COMMERCE_CODE' => $configBd['id_comercio'],
-    'PUBLIC_CERT' => $configBd['cert_public'],
-    'PRIVATE_KEY' => $configBd['key_secret'],
-    'WEBPAY_CERT' => $configBd['cert_transbank'],
-    'ECOMMERCE' => 'virtuemart'
-);
+    'PUBLIC_CERT'   => $configBd['cert_public'],
+    'PRIVATE_KEY'   => $configBd['key_secret'],
+    'WEBPAY_CERT'   => $configBd['cert_transbank'],
+    'ECOMMERCE'     => 'virtuemart',
+];
 
 $loghandler = new LogHandler();
 $logs = json_decode($loghandler->getResume());
@@ -44,10 +44,11 @@ $logs = json_decode($loghandler->getResume());
 $healthCheck = new HealthCheck($config);
 $res = json_decode($healthCheck->printFullResume());
 
-function showOkOrError($status){
-    if ($status == "OK") {
+function showOkOrError($status)
+{
+    if ($status == 'OK') {
         return "<span class='label label-success'>OK</span>";
-    }else{
+    } else {
         return "<span class='label label-danger'>{$status}</span>";
     }
 }
@@ -64,19 +65,19 @@ if (isset($logs->last_log->log_content)) {
     $log_file_regs = $log_file;
 }
 
-if ($logs->config->status === false ) {
+if ($logs->config->status === false) {
     $status = "<span class='label label-warning'>Desactivado sistema de Registros</span>";
-}else{
+} else {
     $status = "<span class='label label-success'>Activado sistema de Registros</span>";
 }
 
-$logs_list = "<ul>";
+$logs_list = '<ul>';
 if (is_array($logs->logs_list) || is_object($logs->logs_list)) {
     foreach ($logs->logs_list as $value) {
         $logs_list .= "<li>{$value}</li>";
     }
 }
-$logs_list .= "</ul>";
+$logs_list .= '</ul>';
 
 $logs_main_info =
         "<table>
@@ -458,7 +459,7 @@ if ($logs->config->status === true) {
                                             class="label label-info">?</div> <b>Cantidad de Dias a Registrar</b>
                                     </td>
                                     <td class="tbk_table_td"><input type="number" name="tb_regs_days" id="tb_regs_days"
-                                            value=<?php echo '"' .(integer)$tb_max_logs_days.'"'; ?> placeholder="1"
+                                            value=<?php echo '"'.(int) $tb_max_logs_days.'"'; ?> placeholder="1"
                                         maxlength="2" size="2" min="1" max="30"> <span>Dias</span></td>
                                 </tr>
                                 <tr>
@@ -467,7 +468,7 @@ if ($logs->config->status === true) {
                                             class="label label-info">?</div> <b>Peso maximo de Registros: </b>
                                     </td>
                                     <td class="tbk_table_td"> <input type="number" name="tb_regs_weight" id="tb_regs_weight"
-                                            value=<?php echo '"' .(integer)$tb_max_logs_weight.'"'; ?> placeholder="2"
+                                            value=<?php echo '"'.(int) $tb_max_logs_weight.'"'; ?> placeholder="2"
                                         maxlength="2" size="2" min="2" max="10"> <span>Mb</span></td>
                                 </tr>
                                 <tr>
@@ -513,7 +514,7 @@ if ($logs->config->status === true) {
                         <b>Contenido último Log: </b>
                         <div class="log_content">
                             <pre>
-                                <code><?php echo stripslashes((string)$res_logcontent); ?></code>
+                                <code><?php echo stripslashes((string) $res_logcontent); ?></code>
                             </pre>
                         </div>
                     </div>
