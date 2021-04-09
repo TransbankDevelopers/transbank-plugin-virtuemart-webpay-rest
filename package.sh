@@ -11,7 +11,7 @@ fi
 SRC_DIR="src"
 FILE1="transbank_webpay_rest.xml"
 
-sed -i.bkp "s/<version>2.0.4/<version>${TRAVIS_TAG}/g" "$SRC_DIR/$FILE1"
+sed -i.bkp "s/<version>1.0.0/<version>${TRAVIS_TAG}/g" "$SRC_DIR/$FILE1"
 
 PLUGIN_FILE="plugin-transbank-webpay-virtuemart3-rest-$TRAVIS_TAG.zip"
 
