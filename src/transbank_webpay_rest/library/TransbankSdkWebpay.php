@@ -7,27 +7,31 @@ use Transbank\Webpay\Webpay;
 use Transbank\Webpay\WebpayPlus;
 
 class TransbankSdkWebpay {
-    
+
     var $transaction;
-    
+    var $log;
+
     function __construct($config) {
         $this->log = new LogHandler();
+        $this->transaction = new WebpayPlus\Transaction();
         if (isset($config)) {
             $environment = isset($config["MODO"]) ? $config["MODO"] : 'TEST';
-            WebpayPlus::setApiKey($config['API_KEY']);
-            WebpayPlus::setCommerceCode($config['COMMERCE_CODE']);
-            WebpayPlus::setIntegrationType($environment);
+            if ($environment == 'TEST') {
+                $this->transaction->configureForIntegration(WebpayPlus::DEFAULT_COMMERCE_CODE, WebpayPlus::DEFAULT_API_KEY);
+            } else {
+                $this->transaction->configureForProduction($config['COMMERCE_CODE'], $config['API_KEY']);
+            }
         }
     }
-    
+
     public function initTransaction($amount, $sessionId, $buyOrder, $returnUrl) {
         try{
             $txDate = date('d-m-Y');
             $txTime = date('H:i:s');
             $this->log->logInfo('initTransaction - amount: ' . $amount . ', sessionId: ' . $sessionId .
                 ', buyOrder: ' . $buyOrder . ', txDate: ' . $txDate . ', txTime: ' . $txTime);
-            
-            $response = WebpayPlus\Transaction::create($buyOrder, $sessionId, $amount, $returnUrl);
+
+            $response = $this->transaction->create($buyOrder, $sessionId, $amount, $returnUrl);
             $this->log->logInfo('initTransaction - initResult: ' . json_encode($response));
             if (isset($response) && isset($response->url) && isset($response->token)) {
                 return array(
@@ -36,7 +40,7 @@ class TransbankSdkWebpay {
                 );
             }
             throw new Exception('No se ha creado la transacción para, amount: ' . $amount . ', sessionId: ' . $sessionId . ', buyOrder: ' . $buyOrder);
-            
+
         } catch(Exception $e) {
             $result = array(
                 "error" => 'Error al crear la transacción',
@@ -47,7 +51,7 @@ class TransbankSdkWebpay {
         }
         return array();
     }
-    
+
     public function commitTransaction($tokenWs) {
         $result = array();
         try{
@@ -55,7 +59,7 @@ class TransbankSdkWebpay {
             if ($tokenWs == null) {
                 throw new Exception("El token webpay es requerido");
             }
-            return WebpayPlus\Transaction::commit($tokenWs);
+            return $this->transaction->commit($tokenWs);
         } catch(Exception $e) {
             $result = array(
                 "error" => 'Error al confirmar la transacción',
