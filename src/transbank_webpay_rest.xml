@@ -3,7 +3,7 @@
     <name>Transbank Webpay REST</name>
     <author>Transbank</author>
     <license>https://github.com/TransbankDevelopers/transbank-plugin-virtuemart-webpay-rest/LICENCE</license>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <description>Transbank Webpay REST</description>
     <creationDate>November 2019</creationDate>
     <files>
@@ -15,6 +15,8 @@
         <fields name="params">
             <fieldset name="basic" addfieldpath="/plugins/vmpayment/transbank_webpay_rest/transbank_webpay_rest/fields">
                 <field type="WebpayLogo"/>
+		        <field type="ModalInformation"/>
+
                 <field name="ambiente" type="list" label="Ambiente" required="true" default="TEST">
                     <option value="TEST">INTEGRACIÓN</option>
                     <option value="LIVE">PRODUCCIÓN</option>
