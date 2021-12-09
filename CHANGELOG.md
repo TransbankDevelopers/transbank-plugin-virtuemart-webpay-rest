@@ -7,7 +7,7 @@ y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 ### Added
 - Se actualiza SDK de PHP a versión 2.0.8
 - Se actualiza la versión de TCPDF a 6.4.2
-- Soporte de versión PHP superior a 7.0.0
+- Soporte para PHP desde la versión a 7.0.0
 
 ## [1.1.0] - 2021-04-09
 ### Added
