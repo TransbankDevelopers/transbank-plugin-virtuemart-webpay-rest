@@ -8,6 +8,8 @@ y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 - Se actualiza SDK de PHP a versión 2.0.8
 - Se actualiza la versión de TCPDF a 6.4.2
 - Soporte para PHP desde la versión  7.0.0
+- Se soluciona problema que impedía mostrar el modal de diagnóstico.
+- Se elimina soporte de SOAP del modal de diagnóstico.
 
 ## [1.1.0] - 2021-04-09
 ### Added
