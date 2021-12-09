@@ -35,53 +35,10 @@ class HealthCheck
         ];
     }
 
-    // validacion certificado publico versus la llave
-    private function getValidateCertificates()
-    {
-        $this->certinfo = [
-            'subject_commerce_code' => $this->commerceCode,
-            'version'               => 'Error',
-            'is_valid'              => 'Error',
-            'valid_from'            => 'Error',
-            'valid_to'              => 'Error',
-        ];
-        $this->certificates = [
-            'cert_vs_private_key'    => 'Error!: Certificados inconsistentes',
-            'commerce_code_validate' => 'Error',
-        ];
-        if ($var = openssl_x509_parse($this->publicCert)) {
-            $today = date('Y-m-d H:i:s');
-            $from = date('Y-m-d H:i:s', $var['validFrom_time_t']);
-            $to = date('Y-m-d H:i:s', $var['validTo_time_t']);
-            if ($today >= $from and $today <= $to) {
-                $val = 'OK';
-            } else {
-                $val = 'Error!: Certificado Inválido por Fecha';
-            }
-            $this->certinfo = [
-                'subject_commerce_code' => $var['subject']['CN'],
-                'version'               => $var['version'],
-                'is_valid'              => $val,
-                'valid_from'            => date('Y-m-d H:i:s', $var['validFrom_time_t']),
-                'valid_to'              => date('Y-m-d H:i:s', $var['validTo_time_t']),
-            ];
-        }
-        if (openssl_x509_check_private_key($this->publicCert, $this->privateKey)) {
-            if ($this->commerceCode == $this->certinfo['subject_commerce_code']) {
-                $this->certificates = [
-                    'cert_vs_private_key'    => 'OK',
-                    'commerce_code_validate' => 'OK',
-                ];
-            }
-        }
-
-        return ['consistency' => $this->certificates, 'cert_info' => $this->certinfo];
-    }
-
     // valida version de php
     private function getValidatephp()
     {
-        if (version_compare(phpversion(), '7.2.1', '<=') and version_compare(phpversion(), '5.5.0', '>=')) {
+        if (version_compare(phpversion(), '7.4', '<=') and version_compare(phpversion(), '7.0.0', '>=')) {
             $this->versioninfo = [
                 'status'  => 'OK',
                 'version' => phpversion(),
@@ -278,7 +235,6 @@ class HealthCheck
     private function getFullResume()
     {
         $this->fullResume = [
-            'validate_certificates'  => $this->getValidateCertificates(),
             'server_resume'          => $this->getServerResume(),
             'php_extensions_status'  => $this->getExtensionsValidate(),
             'commerce_info'          => $this->getCommerceInfo(),

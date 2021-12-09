@@ -192,6 +192,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
         $paymentOk = $session->get('webpay_payment_ok');
         $orderId = $session->get('webpay_order_id');
         $tokenWs = $session->get('webpay_token_ws');
+
         if ($this->orderWasCancelledByUser($tbkToken, $buyOrder) || $this->AnErrorOcurredOnPaymentForm(
             $tokenWs,
             $tbkToken,
