@@ -14831,8 +14831,7 @@ class TCPDF
         $signature = '/Modify',
         $ef = '/Create/Delete/Modify/Import',
         $formex = ''
-    )
-    {
+    ) {
         $this->ur['enabled'] = $enable;
         $this->ur['document'] = $document;
         $this->ur['annots'] = $annots;
