@@ -2,35 +2,34 @@
 
 require_once 'TransbankSdkWebpay.php';
 
+use Transbank\Webpay\WebpayPlus;
+
+
 class HealthCheck
 {
-    public $publicCert;
-    public $privateKey;
-    public $webpayCert;
     public $commerceCode;
+    public $apiKey;
     public $environment;
     public $extensions;
     public $versioninfo;
     public $resume;
     public $fullResume;
-    public $certficados;
     public $ecommerce;
     public $config;
 
     public function __construct($config)
     {
         $this->config = $config;
+        $config['COMMERCE_CODE'] = WebpayPlus::DEFAULT_COMMERCE_CODE;
+        $config['API_KEY'] = WebpayPlus::DEFAULT_API_KEY;
         $this->environment = $config['MODO'];
         $this->commerceCode = $config['COMMERCE_CODE'];
-        $this->publicCert = $config['PUBLIC_CERT'];
-        $this->privateKey = $config['PRIVATE_KEY'];
-        $this->webpayCert = $config['WEBPAY_CERT'];
+        $this->apiKey = $config['API_KEY'];
         $this->ecommerce = $config['ECOMMERCE'];
         // extensiones necesarias
         $this->extensions = [
             'openssl',
             'SimpleXML',
-            'soap',
             'dom',
         ];
     }
@@ -181,9 +180,7 @@ class HealthCheck
         $result = [
             'environment'   => $this->environment,
             'commerce_code' => $this->commerceCode,
-            'public_cert'   => $this->publicCert,
-            'private_key'   => $this->privateKey,
-            'webpay_cert'   => $this->webpayCert,
+            'api_key'   => $this->apiKey,
         ];
 
         return ['data' => $result];
@@ -203,15 +200,14 @@ class HealthCheck
         return $return;
     }
 
-    public function setInitTransaction()
+    public function setCreateTransaction()
     {
         $transbankSdkWebpay = new TransbankSdkWebpay($this->config);
         $amount = 990;
         $buyOrder = '_Healthcheck_';
         $sessionId = uniqid();
         $returnUrl = 'https://webpay3gint.transbank.cl/filtroUnificado/initTransaction';
-        $finalUrl = 'https://webpay3gint.transbank.cl/filtroUnificado/initTransaction';
-        $result = $transbankSdkWebpay->initTransaction($amount, $sessionId, $buyOrder, $returnUrl, $finalUrl);
+        $result = $transbankSdkWebpay->createTransaction($amount, $sessionId, $buyOrder, $returnUrl);
         if ($result) {
             if (!empty($result['error']) && isset($result['error'])) {
                 $status = 'Error';
@@ -284,9 +280,9 @@ class HealthCheck
         return json_encode($this->getFullResume());
     }
 
-    public function getInitTransaction()
+    public function getCreateTransaction()
     {
-        return json_encode($this->setInitTransaction());
+        return json_encode($this->setCreateTransaction());
     }
 
     public function getpostinstallinfo()

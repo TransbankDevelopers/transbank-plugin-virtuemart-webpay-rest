@@ -143,7 +143,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
         $config = $this->getAllConfig();
 
         $transbankSdkWebpay = new TransbankSdkWebpay($config);
-        $result = $transbankSdkWebpay->initTransaction($amount, $sessionId, $orderNumber, $returnUrl);
+        $result = $transbankSdkWebpay->createTransaction($amount, $sessionId, $orderNumber, $returnUrl);
 
         $session->set('webpay_order_id', $orderId);
 
@@ -739,7 +739,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
     {
         $config = $this->getAllConfig();
         $healthcheck = new HealthCheck($config);
-        $response = $healthcheck->setInitTransaction();
+        $response = $healthcheck->setCreateTransaction();
         echo json_encode($response);
         exit;
     }
