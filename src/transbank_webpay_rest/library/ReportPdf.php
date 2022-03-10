@@ -1,6 +1,6 @@
 <?php
 
-require_once 'tcpdf/TCPDF/tcpdf.php';
+require_once(JPATH_LIBRARIES.DS.'vendor'.DS.'tecnickcom'.DS.'tcpdf'.DS.'tcpdf.php');
 
 class ReportPdf
 {

@@ -32,9 +32,7 @@ if (!isset($configBd['ambiente']) or trim($configBd['ambiente']) == '') {
 $config = [
     'MODO'          => $configBd['ambiente'],
     'COMMERCE_CODE' => $configBd['id_comercio'],
-    'PUBLIC_CERT'   => $configBd['cert_public'],
-    'PRIVATE_KEY'   => $configBd['key_secret'],
-    'WEBPAY_CERT'   => $configBd['cert_transbank'],
+    'API_KEY'   => $configBd['api_key'],
     'ECOMMERCE'     => 'virtuemart',
 ];
 
@@ -291,15 +289,6 @@ if ($logs->config->status === true) {
                                         </td>
                                         <td>
                                             <?php echo $res->php_extensions_status->SimpleXML->version; ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>soap</b></td>
-                                        <td>
-                                            <?php echo showOkOrError($res->php_extensions_status->soap->status); ?>
-                                        </td>
-                                        <td>
-                                            <?php echo $res->php_extensions_status->soap->version; ?>
                                         </td>
                                     </tr>
                                     <tr>

@@ -24,16 +24,16 @@ class TransbankSdkWebpay
         }
     }
 
-    public function initTransaction($amount, $sessionId, $buyOrder, $returnUrl)
+    public function createTransaction($amount, $sessionId, $buyOrder, $returnUrl)
     {
         try {
             $txDate = date('d-m-Y');
             $txTime = date('H:i:s');
-            $this->log->logInfo('initTransaction - amount: '.$amount.', sessionId: '.$sessionId.
+            $this->log->logInfo('createTransaction - amount: '.$amount.', sessionId: '.$sessionId.
                 ', buyOrder: '.$buyOrder.', txDate: '.$txDate.', txTime: '.$txTime);
 
             $response = $this->transaction->create($buyOrder, $sessionId, $amount, $returnUrl);
-            $this->log->logInfo('initTransaction - initResult: '.json_encode($response));
+            $this->log->logInfo('createTransaction - result: '.json_encode($response));
             if (isset($response) && isset($response->url) && isset($response->token)) {
                 return [
                     'url'      => $response->url,
