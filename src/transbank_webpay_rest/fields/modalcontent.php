@@ -438,8 +438,8 @@ if ($logs->config->status === true) {
                 <!--FIN modalbody-->
             </div>
             <div class="modal-footer">
-                <a class="btn btn-danger btn-lg" id="boton_pdf" href="<?php echo $urlCreaPdfReport; ?>" target="_blank">Crear PDF</a>
-                <a class="btn btn-danger btn-lg" id="boton_php_info" href="<?php echo $urlCreaPdfPhpInfo; ?>" target="_blank">Crear PHP info</a>
+                <a class="btn btn-danger btn-lg" id="boton_pdf" href="<?php echo $urlCreaPdfReport; ?>" target="_blank" rel="noopener">Crear PDF</a>
+                <a class="btn btn-danger btn-lg" id="boton_php_info" href="<?php echo $urlCreaPdfPhpInfo; ?>" target="_blank" rel="noopener">Crear PHP info</a>
                 <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
