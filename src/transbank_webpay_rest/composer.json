@@ -1,6 +1,6 @@
 {
     "require": {
-        "transbank/transbank-sdk": "2.0.8"
+        "transbank/transbank-sdk": "~2.0"
     },
     "config": {
         "platform": {
