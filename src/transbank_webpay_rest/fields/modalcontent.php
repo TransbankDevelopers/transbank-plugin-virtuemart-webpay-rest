@@ -160,7 +160,7 @@ if ($logs->config->status === true) {
     }
 </style>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/js/bootstrap-switch.min.js" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/js/bootstrap-switch.min.js" integrity="sha512-J+763o/bd3r9iW+gFEqTaeyi+uAphmzkE/zU8FxY6iAvD3nQKXa+ZAWkBI9QS9QkYEKddQoiy0I5GDxKf/ORBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet" >
 
 <div class="modal fade" id="tb_commerce_mod_info" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
@@ -438,8 +438,8 @@ if ($logs->config->status === true) {
                 <!--FIN modalbody-->
             </div>
             <div class="modal-footer">
-                <a class="btn btn-danger btn-lg" id="boton_pdf" href="<?php echo $urlCreaPdfReport; ?>" target="_blank">Crear PDF</a>
-                <a class="btn btn-danger btn-lg" id="boton_php_info" href="<?php echo $urlCreaPdfPhpInfo; ?>" target="_blank">Crear PHP info</a>
+                <a class="btn btn-danger btn-lg" id="boton_pdf" href="<?php echo $urlCreaPdfReport; ?>" target="_blank" rel="noopener">Crear PDF</a>
+                <a class="btn btn-danger btn-lg" id="boton_php_info" href="<?php echo $urlCreaPdfPhpInfo; ?>" target="_blank" rel="noopener">Crear PHP info</a>
                 <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Cerrar</button>
             </div>
         </div>

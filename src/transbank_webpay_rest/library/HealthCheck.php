@@ -83,7 +83,7 @@ class HealthCheck
     // NOTE: lastrelasevirtuemart
     private function getLastVirtuemartVersion()
     {
-        $request_url = 'http://virtuemart.net/releases/vm3/virtuemart_update.xml';
+        $request_url = 'https://virtuemart.net/releases/vm3/virtuemart_update.xml';
 
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $request_url);
