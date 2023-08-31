@@ -2,7 +2,7 @@
 defined('JPATH_BASE') or exit();
 
 if (!class_exists('vmPSPlugin')) {
-    require JPATH_VM_PLUGINS.DS.'vmpsplugin.php';
+    require_once JPATH_VM_PLUGINS.DS.'vmpsplugin.php';
 }
 
 include_once dirname(dirname(__FILE__)).'/library/HealthCheck.php';
