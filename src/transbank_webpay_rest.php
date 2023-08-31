@@ -642,7 +642,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
     private function getCurrentCart()
     {
         if (!class_exists('VirtueMartCart')) {
-            require JPATH_VM_SITE.DS.'helpers'.DS.'cart.php';
+            require_once JPATH_VM_SITE.DS.'helpers'.DS.'cart.php';
         }
 
         return VirtueMartCart::getCart();
@@ -654,7 +654,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
     private function getModelOrder()
     {
         if (!class_exists('VirtueMartModelOrders')) {
-            require JPATH_VM_ADMINISTRATOR.DS.'models'.DS.'orders.php';
+            require_once JPATH_VM_ADMINISTRATOR.DS.'models'.DS.'orders.php';
         }
 
         return new VirtueMartModelOrders();
