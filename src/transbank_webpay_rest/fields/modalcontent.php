@@ -158,12 +158,69 @@ if ($logs->config->status === true) {
     .tbk_table_trans{
         width:60%;
     }
+    .modal-tbk{
+        overflow-y: auto;
+        max-height: 90vh;
+    }
+    .tbk-response-container{
+        display: grid;
+        grid-template-columns: 20px 300px 1fr;
+        grid-gap: 5px;
+        align-items: flex-start;
+        overflow: hidden;
+    }
+    .info-column {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        text-align: left;
+        word-wrap: break-word;
+    }
+    .highlight-text {
+        font-weight: bold;
+    }
+    .label.label-info {
+        padding: 5px;
+        float: left;
+        margin-right: 5px;
+        background: #666;
+        border-radius: 7px;
+        width: 7px;
+        height: 7px;
+        color: #fff;
+        font-size: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .info-value {
+        text-align: left;
+    }
+
+    .label-success {
+        background: #5cb85c;
+        border-radius: 5px;
+        padding: 5px;
+        color: #fff;
+        font-weight: bold;
+        font-size: 10px;
+    }
+
+    .label-danger {
+        background: #ec3206;
+        border-radius: 5px;
+        padding: 5px;
+        color: #fff;
+        font-weight: bold;
+        font-size: 10px;
+    }
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/js/bootstrap-switch.min.js" integrity="sha512-J+763o/bd3r9iW+gFEqTaeyi+uAphmzkE/zU8FxY6iAvD3nQKXa+ZAWkBI9QS9QkYEKddQoiy0I5GDxKf/ORBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet" >
 
-<div class="modal fade" id="tb_commerce_mod_info" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+<div class="modal fade modal-tbk" id="tb_commerce_mod_info" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -184,46 +241,66 @@ if ($logs->config->status === true) {
                     <div class="container-fluid">
                         <div class="no-border">
                             <h3 class="menu-head">Informacion de Plugin / Ambiente</h3>
-                            <table class="tbk_table_info">
-                                <tr>
-                                    <td>
-                                        <div title="Nombre del E-commerce instalado en el servidor" class="label label-info">?</div>
-                                        <b>Software E-commerce</b>
-                                    </td>
-                                    <td class="tbk_table_td">
+                            <div class="tbk-response-container" id="div_plugin-info">
+                                <div class="info-column">
+                                    <div title="Nombre del E-commerce instalado en el servidor"
+                                         class="label label-info">?
+                                    </div>
+                                </div>
+                                <div class="info-column">
+                                    <span class="highlight-text">Software E-commerce </span>
+                                </div>
+                                <div class="info-column">
+                                    <span class="info-value">
                                         <?php echo $res->server_resume->plugin_info->ecommerce; ?>
-                                    </td>
-                                    <input type="hidden" name="tb_ecommerce" id="tb_ecommerce"
-                                            value=<?php echo '"'.$res->server_resume->plugin_info->ecommerce.'"'; ?>>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div title="Versión de <?php echo $res->server_resume->plugin_info->ecommerce; ?> instalada en el servidor"
-                                            class="label label-info">?</div> <b>Version E-commerce</b>
-                                    </td>
-                                    <td class="tbk_table_td">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="tbk-response-container" id="div_version_plugin">
+                                <div class="info-column">
+                                    <div title="Versión del e-commerce instalado en el servidor"
+                                         class="label label-info">?
+                                    </div>
+                                </div>
+                                <div class="info-column">
+                                    <span class="highlight-text">Version E-commerce</span>
+                                </div>
+                                <div class="info-column">
+                                    <span class="info-value">
                                         <?php echo $res->server_resume->plugin_info->ecommerce_version; ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div title="Versión del plugin Webpay para <?php echo $res->server_resume->plugin_info->ecommerce; ?> instalada actualmente"
-                                            class="label label-info">?</div> <b>Version Plugin Webpay Instalada</b>
-                                    </td>
-                                    <td class="tbk_table_td">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="tbk-response-container" id="div_version_webpay_plugin">
+                                <div class="info-column">
+                                    <div title="Versión del plugin Webpay instalada actualmente"
+                                         class="label label-info">?
+                                    </div>
+                                </div>
+                                <div class="info-column">
+                                    <span class="highlight-text">Version Plugin Webpay Instalada</span>
+                                </div>
+                                <div class="info-column">
+                                    <span class="info-value">
                                         <?php echo $res->server_resume->plugin_info->current_plugin_version; ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div title="Última versión del plugin Webpay para <?php echo $res->server_resume->plugin_info->ecommerce; ?> disponible"
-                                            class="label label-info">?</div> <b>Ultima Version de Plugin Disponible</b>
-                                    </td>
-                                    <td class="tbk_table_td">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="tbk-response-container" id="div_last_version_webpay">
+                                <div class="info-column">
+                                    <div title="Última versión del plugin Webpay disponible"
+                                         class="label label-info">?
+                                    </div>
+                                </div>
+                                <div class="info-column">
+                                    <span class="highlight-text">Última Versión de Plugin Disponible</span>
+                                </div>
+                                <div class="info-column">
+                                    <span class="info-value">
                                         <?php echo $res->server_resume->plugin_info->last_plugin_version; ?>
-                                    </td>
-                                </tr>
-                            </table>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="no-border">
