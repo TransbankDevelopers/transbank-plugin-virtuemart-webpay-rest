@@ -342,8 +342,8 @@ if ($logs->config->status === true) {
                             </table>
 
                             <hr>
-                            <h4>Extensiones PHP requeridas</h4>
-                            <table class="table table-responsive table-striped">
+                            <h4 id="php_req_extensions">Extensiones PHP requeridas</h4>
+                            <table aria-describedby="php_req_extensions" class="table table-responsive table-striped">
                                 <thead>
                                     <th>Extension</th>
                                     <th>Estado</th>
