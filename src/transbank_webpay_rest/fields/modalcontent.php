@@ -306,41 +306,52 @@ if ($logs->config->status === true) {
                         <div class="no-border">
                             <h3 class="menu-head">Información de Servidor</h3>
                             <h4>Informacion Principal</h4>
-                            <table class="tbk_table_info">
-                                <tr>
-                                    <td>
-                                        <div title="Descripción del Servidor Web instalado" class="label label-info">?</div>
-                                        <b>Software Servidor</b>
-                                    </td>
-                                    <td class="tbk_table_td">
+                            <div class="tbk-response-container" id="div_web_server_info">
+                                <div class="info-column">
+                                    <div title="Descripción del Servidor Web instalado"
+                                         class="label label-info">?
+                                    </div>
+                                </div>
+                                <div class="info-column">
+                                    <span class="highlight-text">Software Servidor</span>
+                                </div>
+                                <div class="info-column">
+                                    <span class="info-value">
                                         <?php echo $res->server_resume->server_version->server_software; ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <h4>PHP</h4>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div title="Informa si la versión de PHP instalada en el servidor es compatible con el plugin de Webpay"
-                                            class="label label-info">?</div> <b>Estado</b>
-                                    </td>
-                                    <td class="tbk_table_td">
+                                    </span>
+                                </div>
+                            </div>
+                            <h4>PHP</h4>
+                            <div class="tbk-response-container" id="div_php_status_webpay">
+                                <div class="info-column">
+                                    <div title="Informa si la versión de PHP instalada en el servidor es compatible con el plugin de Webpay"
+                                         class="label label-info">?
+                                    </div>
+                                </div>
+                                <div class="info-column">
+                                    <span class="highlight-text">Estado</span>
+                                </div>
+                                <div class="info-column">
+                                    <span class="info-value">
                                         <?php echo showOkOrError($res->server_resume->php_version->status); ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div title="Versión de PHP instalada en el servidor" class="label label-info">?</div>
-                                        <b>Version</b>
-                                    </td>
-                                    <td class="tbk_table_td">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="tbk-response-container" id="div_php_info">
+                                <div class="info-column">
+                                    <div title="Versión de PHP instalada en el servidor"
+                                         class="label label-info">?
+                                    </div>
+                                </div>
+                                <div class="info-column">
+                                    <span class="highlight-text">Versión</span>
+                                </div>
+                                <div class="info-column">
+                                    <span class="info-value">
                                         <?php echo $res->server_resume->php_version->version; ?>
-                                    </td>
-                                </tr>
-                            </table>
-
+                                    </span>
+                                </div>
+                            </div>
                             <hr>
                             <h4 id="php_req_extensions">Extensiones PHP requeridas</h4>
                             <table aria-describedby="php_req_extensions" class="table table-responsive table-striped">
@@ -384,43 +395,50 @@ if ($logs->config->status === true) {
                         <div class="no-border">
                             <h3 class="menu-head">Validación Transacción</h3>
                             <h4>Petición a Transbank</h4>
-                            <table class="tbk_table_info">
-                                <tbody>
-                                    <tr>
-										<td class="tbk_table_td">
-                                            <button id="btn-check-transaction" class="btn btn-sm btn-primary">Verificar Conexión</button>
-                                        </td>
-									</tr>
-								</tbody>
-                            </table>
+                            <div>
+                                <button id="btn-check-transaction" class="btn btn-sm btn-primary">Verificar Conexión</button>
+                            </div>
                             <h4>Respuesta de Transbank</h4>
-                            <table class="tbk_table_info">
-                                <tr>
-                                    <td>
-                                        <div title="Informa el estado de la comunicación con Transbank mediante método init_transaction"
-                                            class="label label-info">?</div> <b>Estado: </b>
-                                    </td>
-                                    <td class='tbk_table_td' id="txt-transaction-status">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div title='URL entregada por Transbank para realizar la transacción' class='label label-info'>?</div>
-                                        <b>URL: </b>
-                                    </td>
-                                    <td class='tbk_table_trans' id="txt-transaction-url">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div title='Token entregada por Transbank para realizar la transacción' class='label label-info'>?</div>
-                                        <b>Token: </b>
-                                    </td>
-                                    <td class='tbk_table_trans'>
-                                        <code id="txt-transaction-token"></code>
-                                    </td>
-                                </tr>
-                            </table>
+                            <div class="tbk-status" id="div_status_tbk">
+                                <div class="tbk-response-container" id="div_status">
+                                    <div class="info-column">
+                                        <div title="Informa el estado de la comunicación con Transbank mediante método create_transaction"
+                                            class="label label-info">?
+                                        </div>
+                                    </div>
+                                    <div class="info-column">
+                                        <span class="highlight-text"> Estado: </span>
+                                    </div>
+                                    <div class="info-column">
+                                        <span id="response_status_text"></span>
+                                    </div>
+                                </div>
+                                <div class="tbk-response-container" id="div_response_url">
+                                    <div class="info-column">
+                                        <div title="URL entregada por Transbank para realizar la transacción"
+                                            class="label label-info">?
+                                        </div>
+                                    </div>
+                                    <div class="info-column">
+                                        <span class="highlight-text"> URL: </span>
+                                    </div>
+                                    <div class="info-column" id="response_url_text">
+                                    </div>
+                                </div>
+                                <div class="tbk-response-container" id="div_response_token">
+                                    <div class="info-column">
+                                        <div title="Token entregada por Transbank para realizar la transacción"
+                                            class="label label-info">?
+                                        </div>
+                                    </div>
+                                    <div class="info-column">
+                                        <span class="highlight-text"> Token: </span>
+                                    </div>
+                                    <div class="info-column">
+                                        <code id="response_token_text"></code>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!--fin container-fluid -->
@@ -607,9 +625,9 @@ if ($logs->config->status === true) {
                 } else {
                     status = "<span class='label label-danger'>Error</span>";
                 }
-                $('#txt-transaction-status').empty().append(status);
-                $('#txt-transaction-url').text(resp.response.url || resp.response.error);
-                $('#txt-transaction-token').text(resp.response.token_ws || resp.response.detail);
+                $('#response_status_text').empty().append(status);
+                $('#response_url_text').text(resp.response.url || resp.response.error);
+                $('#response_token_text').text(resp.response.token_ws || resp.response.detail);
             });
             evt.preventDefault();
         });
