@@ -452,41 +452,6 @@ if ($logs->config->status === true) {
                 </div>
                 <div class="tab-pane fade" id="tb_logs">
                     <div class="container-fluid">
-                        <div class="form_validate" style="display:none;">
-                            <h3 class="menu-head">Configuracion</h3>
-                            <table class="tbk_table_info">
-                                <tr>
-                                    <td>
-                                        <div title="Al activar esta opción se habilita que se guarden los datos de cada compra mediante Webpay"
-                                            class="label label-info">?</div> <b>Activar Registro: </b>
-                                    </td>
-                                    <td class="tbk_table_td">
-                                        <?php echo $tb_check_regs; ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div title="Cantidad de días que se conservan los datos de cada compra mediante Webpay"
-                                            class="label label-info">?</div> <b>Cantidad de Dias a Registrar</b>
-                                    </td>
-                                    <td class="tbk_table_td"><input type="number" name="tb_regs_days" id="tb_regs_days"
-                                            value=<?php echo '"'.(int) $tb_max_logs_days.'"'; ?> placeholder="1"
-                                        maxlength="2" size="2" min="1" max="30"> <span>Dias</span></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div title="Peso máximo (en Megabytes) de cada archivo que guarda los datos de las compras mediante Webpay"
-                                            class="label label-info">?</div> <b>Peso maximo de Registros: </b>
-                                    </td>
-                                    <td class="tbk_table_td"> <input type="number" name="tb_regs_weight" id="tb_regs_weight"
-                                            value=<?php echo '"'.(int) $tb_max_logs_weight.'"'; ?> placeholder="2"
-                                        maxlength="2" size="2" min="2" max="10"> <span>Mb</span></td>
-                                </tr>
-                                <tr>
-                                    <?php echo $tb_btn_update; ?>
-                                </tr>
-                            </table>
-                        </div>
                         <div id="maininfo">
                             <h3 class="menu-head">Información de Registros</h3>
                             <?php echo $logs_main_info; ?>
