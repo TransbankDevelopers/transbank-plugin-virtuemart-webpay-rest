@@ -77,38 +77,6 @@ if (is_array($logs->logs_list) || is_object($logs->logs_list)) {
 }
 $logs_list .= '</ul>';
 
-$logs_main_info =
-        "<table>
-            <tr style='display: none;'>
-                <td>
-                    <div title='Informa si actualmente se guarda la información de cada compra mediante Webpay' class='label label-info'>?</div>
-                    <b>Estado de Registros: </b>
-                </td>
-                <td class='tbk_table_td' id='log-status'>{$status}</td>
-            </tr>
-            <tr>
-                <td>
-                    <div title='Carpeta en el servidor en donde se guardan los archivos con la informacón de cada compra mediante Webpay' class='label label-info'>?</div>
-                    <b>Directorio de Registros: </b>
-                </td>
-                <td class='tbk_table_td'>".stripslashes(json_encode($logs->log_dir))."</td>
-            </tr>
-            <tr>
-                <td>
-                    <div title='Cantidad de archivos que guardan la información de cada compra mediante Webpay' class='label label-info'>?</div>
-                    <b>Cantidad de Registros en Directorio: </b>
-                </td>
-                <td class='tbk_table_td'>".json_encode($logs->logs_count->log_count)."</td>
-            </tr>
-            <tr>
-                <td>
-                    <div title='Lista los archivos archivos que guardan la información de cada compra mediante Webpay' class='label label-info'>?</div>
-                    <b>Listado de Registros Disponibles: </b>
-                </td>
-                <td class='tbk_table_td'>{$logs_list}</td>
-            </tr>
-        </table>";
-
 $tb_max_logs_days = $logs->config->max_logs_days;
 $tb_max_logs_weight = $logs->config->max_log_weight;
 if ($logs->config->status === true) {
@@ -436,7 +404,51 @@ if ($logs->config->status === true) {
                     <div class="container-fluid">
                         <div id="maininfo">
                             <h3 class="menu-head">Información de Registros</h3>
-                            <?php echo $logs_main_info; ?>
+                            <div class="tbk-response-container" id="div_logs_path">
+                                <div class="info-column">
+                                    <div title="Carpeta en el servidor en donde se guardan los archivos con la informacón de cada compra mediante Webpay"
+                                         class="label label-info">?
+                                    </div>
+                                </div>
+                                <div class="info-column">
+                                    <span class="highlight-text">Directorio de Registros: </span>
+                                </div>
+                                <div class="info-column" id="log-status">
+                                    <span>
+                                        <?php echo stripslashes(json_encode($logs->log_dir)); ?>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="tbk-response-container" id="div_numbers_of_file">
+                                <div class="info-column">
+                                    <div title="Cantidad de archivos que guardan la información de cada compra mediante Webpay"
+                                         class="label label-info">?
+                                    </div>
+                                </div>
+                                <div class="info-column">
+                                    <span class="highlight-text">Cantidad de Registros en Directorio: </span>
+                                </div>
+                                <div class="info-column" id="log-status">
+                                    <span>
+                                        <?php echo json_encode($logs->logs_count->log_count); ?>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="tbk-response-container" id="div_logs_list">
+                                <div class="info-column">
+                                    <div title="Lista los archivos archivos que guardan la información de cada compra mediante Webpay"
+                                         class="label label-info">?
+                                    </div>
+                                </div>
+                                <div class="info-column">
+                                    <span class="highlight-text">Listado de Registros Disponibles: </span>
+                                </div>
+                                <div class="info-column" id="log-status">
+                                    <span>
+                                        <?php echo $logs_list; ?>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                         <h3 class="menu-head">Ultimos Registros</h3>
                         <div class="tbk-response-container" id="div_last_log">
