@@ -170,7 +170,8 @@ if ($logs->config->status === true) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/js/bootstrap-switch.min.js" integrity="sha512-J+763o/bd3r9iW+gFEqTaeyi+uAphmzkE/zU8FxY6iAvD3nQKXa+ZAWkBI9QS9QkYEKddQoiy0I5GDxKf/ORBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet" >
 
-<div class="modal fade modal-tbk" id="tb_commerce_mod_info" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+<div class="modal fade modal-tbk" id="tb_commerce_mod_info" tabindex="-1" role="dialog"
+     aria-labelledby="" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -352,7 +353,7 @@ if ($logs->config->status === true) {
                             <div class="tbk-status" id="div_status_tbk">
                                 <div class="tbk-response-container" id="div_status">
                                     <div class="info-column">
-                                        <div title="Informa el estado de la comunicación con Transbank mediante método create_transaction"
+                                        <div title="Estado de comunicación con Transbank mediante create_transaction"
                                             class="label label-info">?
                                         </div>
                                     </div>
@@ -406,7 +407,7 @@ if ($logs->config->status === true) {
                             <h3 class="menu-head">Información de Registros</h3>
                             <div class="tbk-response-container" id="div_logs_path">
                                 <div class="info-column">
-                                    <div title="Carpeta en el servidor en donde se guardan los archivos con la informacón de cada compra mediante Webpay"
+                                    <div title="Carpeta que almacena logs con información de transacciones Webpay"
                                          class="label label-info">?
                                     </div>
                                 </div>
@@ -421,7 +422,7 @@ if ($logs->config->status === true) {
                             </div>
                             <div class="tbk-response-container" id="div_numbers_of_file">
                                 <div class="info-column">
-                                    <div title="Cantidad de archivos que guardan la información de cada compra mediante Webpay"
+                                    <div title="Cantidad de archivos que guardan información de transacciones Webpay"
                                          class="label label-info">?
                                     </div>
                                 </div>
@@ -436,7 +437,7 @@ if ($logs->config->status === true) {
                             </div>
                             <div class="tbk-response-container" id="div_logs_list">
                                 <div class="info-column">
-                                    <div title="Lista los archivos archivos que guardan la información de cada compra mediante Webpay"
+                                    <div title="Lista los archivos que guardan la información de transacciones Webpay"
                                          class="label label-info">?
                                     </div>
                                 </div>
