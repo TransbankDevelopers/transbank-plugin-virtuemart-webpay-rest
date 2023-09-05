@@ -457,35 +457,51 @@ if ($logs->config->status === true) {
                             <?php echo $logs_main_info; ?>
                         </div>
                         <h3 class="menu-head">Ultimos Registros</h3>
-                        <table class="tbk_table_info">
-                            <tr>
-                                <td>
-                                    <div title="Nombre del útimo archivo de registro creado" class="label label-info">?</div>
-                                    <b>Último Documento: </b>
-                                </td>
-                                <td class="tbk_table_td">
+                        <div class="tbk-response-container" id="div_last_log">
+                            <div class="info-column">
+                                <div title="Nombre del útimo archivo de registro creado"
+                                    class="label label-info">?
+                                </div>
+                            </div>
+                            <div class="info-column">
+                                <span class="highlight-text">Último Documento: </span>
+                            </div>
+                            <div class="info-column">
+                                <span>
                                     <?php echo $log_file; ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div title="Peso del último archivo de registro creado" class="label label-info">?</div>
-                                    <b>Peso de Documento: </b>
-                                </td>
-                                <td class="tbk_table_td">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="tbk-response-container" id="div_last_log_size">
+                            <div class="info-column">
+                                <div title="Peso del último archivo de registro creado"
+                                    class="label label-info">?
+                                </div>
+                            </div>
+                            <div class="info-column">
+                                <span class="highlight-text">Peso de Documento: </span>
+                            </div>
+                            <div class="info-column">
+                                <span>
                                     <?php echo $log_file_weight; ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div title="Cantidad de líneas que posee el último archivo de registro creado"
-                                        class="label label-info">?</div> <b>Cantidad de Líneas: </b>
-                                </td>
-                                <td class="tbk_table_td">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="tbk-response-container" id="div_log_file_regs">
+                            <div class="info-column">
+                                <div title="Cantidad de líneas que posee el último archivo de registro creado"
+                                    class="label label-info">?
+                                </div>
+                            </div>
+                            <div class="info-column">
+                                <span class="highlight-text">Cantidad de Líneas:  </span>
+                            </div>
+                            <div class="info-column">
+                                <span>
                                     <?php echo $log_file_regs; ?>
-                                </td>
-                            </tr>
-                        </table>
+                                </span>
+                            </div>
+                        </div>
                         <br>
                         <b>Contenido último Log: </b>
                         <div class="log_content">
