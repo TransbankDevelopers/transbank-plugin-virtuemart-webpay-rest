@@ -109,24 +109,6 @@ $logs_main_info =
             </tr>
         </table>";
 
-$plugininfo =
-            "<tr>
-                <td><b>E-commerce</b></td>
-                <td>{$res->server_resume->plugin_info->ecommerce}</td>
-            </tr>
-            <tr>
-                <td><b>Version E-commerce</b></td>
-                <td>{$res->server_resume->plugin_info->ecommerce_version}</td>
-            </tr>
-            <tr>
-                <td><b>Version Plugin Webpay Instalada</b></td>
-                <td>{$res->server_resume->plugin_info->current_plugin_version}</td>
-            </tr>
-            <tr>
-                <td><b>Ultima Version disponible para este E-commerce</b></td>
-                <td>{$res->server_resume->plugin_info->last_plugin_version}</td>
-            </tr>";
-
 $tb_max_logs_days = $logs->config->max_logs_days;
 $tb_max_logs_weight = $logs->config->max_log_weight;
 if ($logs->config->status === true) {
