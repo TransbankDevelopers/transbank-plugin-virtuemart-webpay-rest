@@ -110,12 +110,12 @@ class LogHandler
         }
     }
 
-    private function setLockFile()
+    private function setLockFile($days)
     {
         if (!file_exists($this->lockfile)) {
             $file = fopen($this->lockfile, 'w') or exit('No se puede crear archivo de bloqueo');
             if (!is_numeric($this->confdays) or $this->confdays == null or $this->confdays == '' or $this->confdays === false) {
-                $this->confdays = 7;
+                $this->confdays = $days;
             }
             $txt = "{$this->confdays}\n";
             fwrite($file, $txt);
