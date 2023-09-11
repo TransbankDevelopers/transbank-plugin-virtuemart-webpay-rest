@@ -2,7 +2,7 @@
 defined('JPATH_BASE') or exit();
 
 if (!class_exists('vmPSPlugin')) {
-    require JPATH_VM_PLUGINS.DS.'vmpsplugin.php';
+    require_once JPATH_VM_PLUGINS.DS.'vmpsplugin.php';
 }
 
 include_once dirname(dirname(__FILE__)).'/library/HealthCheck.php';
@@ -77,56 +77,6 @@ if (is_array($logs->logs_list) || is_object($logs->logs_list)) {
 }
 $logs_list .= '</ul>';
 
-$logs_main_info =
-        "<table>
-            <tr style='display: none;'>
-                <td>
-                    <div title='Informa si actualmente se guarda la información de cada compra mediante Webpay' class='label label-info'>?</div>
-                    <b>Estado de Registros: </b>
-                </td>
-                <td class='tbk_table_td' id='log-status'>{$status}</td>
-            </tr>
-            <tr>
-                <td>
-                    <div title='Carpeta en el servidor en donde se guardan los archivos con la informacón de cada compra mediante Webpay' class='label label-info'>?</div>
-                    <b>Directorio de Registros: </b>
-                </td>
-                <td class='tbk_table_td'>".stripslashes(json_encode($logs->log_dir))."</td>
-            </tr>
-            <tr>
-                <td>
-                    <div title='Cantidad de archivos que guardan la información de cada compra mediante Webpay' class='label label-info'>?</div>
-                    <b>Cantidad de Registros en Directorio: </b>
-                </td>
-                <td class='tbk_table_td'>".json_encode($logs->logs_count->log_count)."</td>
-            </tr>
-            <tr>
-                <td>
-                    <div title='Lista los archivos archivos que guardan la información de cada compra mediante Webpay' class='label label-info'>?</div>
-                    <b>Listado de Registros Disponibles: </b>
-                </td>
-                <td class='tbk_table_td'>{$logs_list}</td>
-            </tr>
-        </table>";
-
-$plugininfo =
-            "<tr>
-                <td><b>E-commerce</b></td>
-                <td>{$res->server_resume->plugin_info->ecommerce}</td>
-            </tr>
-            <tr>
-                <td><b>Version E-commerce</b></td>
-                <td>{$res->server_resume->plugin_info->ecommerce_version}</td>
-            </tr>
-            <tr>
-                <td><b>Version Plugin Webpay Instalada</b></td>
-                <td>{$res->server_resume->plugin_info->current_plugin_version}</td>
-            </tr>
-            <tr>
-                <td><b>Ultima Version disponible para este E-commerce</b></td>
-                <td>{$res->server_resume->plugin_info->last_plugin_version}</td>
-            </tr>";
-
 $tb_max_logs_days = $logs->config->max_logs_days;
 $tb_max_logs_weight = $logs->config->max_log_weight;
 if ($logs->config->status === true) {
@@ -158,12 +108,70 @@ if ($logs->config->status === true) {
     .tbk_table_trans{
         width:60%;
     }
+    .modal-tbk{
+        overflow-y: auto;
+        max-height: 90vh;
+    }
+    .tbk-response-container{
+        display: grid;
+        grid-template-columns: 20px 300px 1fr;
+        grid-gap: 5px;
+        align-items: flex-start;
+        overflow: hidden;
+    }
+    .info-column {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        text-align: left;
+        word-wrap: break-word;
+    }
+    .highlight-text {
+        font-weight: bold;
+    }
+    .label.label-info {
+        padding: 5px;
+        float: left;
+        margin-right: 5px;
+        background: #666;
+        border-radius: 7px;
+        width: 7px;
+        height: 7px;
+        color: #fff;
+        font-size: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .info-value {
+        text-align: left;
+    }
+
+    .label-success {
+        background: #5cb85c;
+        border-radius: 5px;
+        padding: 5px;
+        color: #fff;
+        font-weight: bold;
+        font-size: 10px;
+    }
+
+    .label-danger {
+        background: #ec3206;
+        border-radius: 5px;
+        padding: 5px;
+        color: #fff;
+        font-weight: bold;
+        font-size: 10px;
+    }
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/js/bootstrap-switch.min.js" integrity="sha512-J+763o/bd3r9iW+gFEqTaeyi+uAphmzkE/zU8FxY6iAvD3nQKXa+ZAWkBI9QS9QkYEKddQoiy0I5GDxKf/ORBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet" >
 
-<div class="modal fade" id="tb_commerce_mod_info" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+<div class="modal fade modal-tbk" id="tb_commerce_mod_info" tabindex="-1" role="dialog"
+     aria-labelledby="" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -184,89 +192,120 @@ if ($logs->config->status === true) {
                     <div class="container-fluid">
                         <div class="no-border">
                             <h3 class="menu-head">Informacion de Plugin / Ambiente</h3>
-                            <table class="tbk_table_info">
-                                <tr>
-                                    <td>
-                                        <div title="Nombre del E-commerce instalado en el servidor" class="label label-info">?</div>
-                                        <b>Software E-commerce</b>
-                                    </td>
-                                    <td class="tbk_table_td">
+                            <div class="tbk-response-container" id="div_plugin-info">
+                                <div class="info-column">
+                                    <div title="Nombre del E-commerce instalado en el servidor"
+                                         class="label label-info">?
+                                    </div>
+                                </div>
+                                <div class="info-column">
+                                    <span class="highlight-text">Software E-commerce </span>
+                                </div>
+                                <div class="info-column">
+                                    <span class="info-value">
                                         <?php echo $res->server_resume->plugin_info->ecommerce; ?>
-                                    </td>
-                                    <input type="hidden" name="tb_ecommerce" id="tb_ecommerce"
-                                            value=<?php echo '"'.$res->server_resume->plugin_info->ecommerce.'"'; ?>>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div title="Versión de <?php echo $res->server_resume->plugin_info->ecommerce; ?> instalada en el servidor"
-                                            class="label label-info">?</div> <b>Version E-commerce</b>
-                                    </td>
-                                    <td class="tbk_table_td">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="tbk-response-container" id="div_version_plugin">
+                                <div class="info-column">
+                                    <div title="Versión del e-commerce instalado en el servidor"
+                                         class="label label-info">?
+                                    </div>
+                                </div>
+                                <div class="info-column">
+                                    <span class="highlight-text">Version E-commerce</span>
+                                </div>
+                                <div class="info-column">
+                                    <span class="info-value">
                                         <?php echo $res->server_resume->plugin_info->ecommerce_version; ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div title="Versión del plugin Webpay para <?php echo $res->server_resume->plugin_info->ecommerce; ?> instalada actualmente"
-                                            class="label label-info">?</div> <b>Version Plugin Webpay Instalada</b>
-                                    </td>
-                                    <td class="tbk_table_td">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="tbk-response-container" id="div_version_webpay_plugin">
+                                <div class="info-column">
+                                    <div title="Versión del plugin Webpay instalada actualmente"
+                                         class="label label-info">?
+                                    </div>
+                                </div>
+                                <div class="info-column">
+                                    <span class="highlight-text">Version Plugin Webpay Instalada</span>
+                                </div>
+                                <div class="info-column">
+                                    <span class="info-value">
                                         <?php echo $res->server_resume->plugin_info->current_plugin_version; ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div title="Última versión del plugin Webpay para <?php echo $res->server_resume->plugin_info->ecommerce; ?> disponible"
-                                            class="label label-info">?</div> <b>Ultima Version de Plugin Disponible</b>
-                                    </td>
-                                    <td class="tbk_table_td">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="tbk-response-container" id="div_last_version_webpay">
+                                <div class="info-column">
+                                    <div title="Última versión del plugin Webpay disponible"
+                                         class="label label-info">?
+                                    </div>
+                                </div>
+                                <div class="info-column">
+                                    <span class="highlight-text">Última Versión de Plugin Disponible</span>
+                                </div>
+                                <div class="info-column">
+                                    <span class="info-value">
                                         <?php echo $res->server_resume->plugin_info->last_plugin_version; ?>
-                                    </td>
-                                </tr>
-                            </table>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="no-border">
                             <h3 class="menu-head">Información de Servidor</h3>
                             <h4>Informacion Principal</h4>
-                            <table class="tbk_table_info">
-                                <tr>
-                                    <td>
-                                        <div title="Descripción del Servidor Web instalado" class="label label-info">?</div>
-                                        <b>Software Servidor</b>
-                                    </td>
-                                    <td class="tbk_table_td">
+                            <div class="tbk-response-container" id="div_web_server_info">
+                                <div class="info-column">
+                                    <div title="Descripción del Servidor Web instalado"
+                                         class="label label-info">?
+                                    </div>
+                                </div>
+                                <div class="info-column">
+                                    <span class="highlight-text">Software Servidor</span>
+                                </div>
+                                <div class="info-column">
+                                    <span class="info-value">
                                         <?php echo $res->server_resume->server_version->server_software; ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <h4>PHP</h4>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div title="Informa si la versión de PHP instalada en el servidor es compatible con el plugin de Webpay"
-                                            class="label label-info">?</div> <b>Estado</b>
-                                    </td>
-                                    <td class="tbk_table_td">
+                                    </span>
+                                </div>
+                            </div>
+                            <h4>PHP</h4>
+                            <div class="tbk-response-container" id="div_php_status_webpay">
+                                <div class="info-column">
+                                    <div title="Informa si la versión de PHP instalada en el servidor es compatible con el plugin de Webpay"
+                                         class="label label-info">?
+                                    </div>
+                                </div>
+                                <div class="info-column">
+                                    <span class="highlight-text">Estado</span>
+                                </div>
+                                <div class="info-column">
+                                    <span class="info-value">
                                         <?php echo showOkOrError($res->server_resume->php_version->status); ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div title="Versión de PHP instalada en el servidor" class="label label-info">?</div>
-                                        <b>Version</b>
-                                    </td>
-                                    <td class="tbk_table_td">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="tbk-response-container" id="div_php_info">
+                                <div class="info-column">
+                                    <div title="Versión de PHP instalada en el servidor"
+                                         class="label label-info">?
+                                    </div>
+                                </div>
+                                <div class="info-column">
+                                    <span class="highlight-text">Versión</span>
+                                </div>
+                                <div class="info-column">
+                                    <span class="info-value">
                                         <?php echo $res->server_resume->php_version->version; ?>
-                                    </td>
-                                </tr>
-                            </table>
-
+                                    </span>
+                                </div>
+                            </div>
                             <hr>
-                            <h4>Extensiones PHP requeridas</h4>
-                            <table class="table table-responsive table-striped">
+                            <h4 id="php_req_extensions">Extensiones PHP requeridas</h4>
+                            <table aria-describedby="php_req_extensions" class="table table-responsive table-striped">
                                 <thead>
                                     <th>Extension</th>
                                     <th>Estado</th>
@@ -307,43 +346,50 @@ if ($logs->config->status === true) {
                         <div class="no-border">
                             <h3 class="menu-head">Validación Transacción</h3>
                             <h4>Petición a Transbank</h4>
-                            <table class="tbk_table_info">
-                                <tbody>
-                                    <tr>
-										<td class="tbk_table_td">
-                                            <button id="btn-check-transaction" class="btn btn-sm btn-primary">Verificar Conexión</button>
-                                        </td>
-									</tr>
-								</tbody>
-                            </table>
+                            <div>
+                                <button id="btn-check-transaction" class="btn btn-sm btn-primary">Verificar Conexión</button>
+                            </div>
                             <h4>Respuesta de Transbank</h4>
-                            <table class="tbk_table_info">
-                                <tr>
-                                    <td>
-                                        <div title="Informa el estado de la comunicación con Transbank mediante método init_transaction"
-                                            class="label label-info">?</div> <b>Estado: </b>
-                                    </td>
-                                    <td class='tbk_table_td' id="txt-transaction-status">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div title='URL entregada por Transbank para realizar la transacción' class='label label-info'>?</div>
-                                        <b>URL: </b>
-                                    </td>
-                                    <td class='tbk_table_trans' id="txt-transaction-url">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div title='Token entregada por Transbank para realizar la transacción' class='label label-info'>?</div>
-                                        <b>Token: </b>
-                                    </td>
-                                    <td class='tbk_table_trans'>
-                                        <code id="txt-transaction-token"></code>
-                                    </td>
-                                </tr>
-                            </table>
+                            <div class="tbk-status" id="div_status_tbk">
+                                <div class="tbk-response-container" id="div_status">
+                                    <div class="info-column">
+                                        <div title="Estado de comunicación con Transbank mediante create_transaction"
+                                            class="label label-info">?
+                                        </div>
+                                    </div>
+                                    <div class="info-column">
+                                        <span class="highlight-text"> Estado: </span>
+                                    </div>
+                                    <div class="info-column">
+                                        <span id="response_status_text"></span>
+                                    </div>
+                                </div>
+                                <div class="tbk-response-container" id="div_response_url">
+                                    <div class="info-column">
+                                        <div title="URL entregada por Transbank para realizar la transacción"
+                                            class="label label-info">?
+                                        </div>
+                                    </div>
+                                    <div class="info-column">
+                                        <span class="highlight-text"> URL: </span>
+                                    </div>
+                                    <div class="info-column" id="response_url_text">
+                                    </div>
+                                </div>
+                                <div class="tbk-response-container" id="div_response_token">
+                                    <div class="info-column">
+                                        <div title="Token entregada por Transbank para realizar la transacción"
+                                            class="label label-info">?
+                                        </div>
+                                    </div>
+                                    <div class="info-column">
+                                        <span class="highlight-text"> Token: </span>
+                                    </div>
+                                    <div class="info-column">
+                                        <code id="response_token_text"></code>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!--fin container-fluid -->
@@ -357,75 +403,100 @@ if ($logs->config->status === true) {
                 </div>
                 <div class="tab-pane fade" id="tb_logs">
                     <div class="container-fluid">
-                        <div class="form_validate" style="display:none;">
-                            <h3 class="menu-head">Configuracion</h3>
-                            <table class="tbk_table_info">
-                                <tr>
-                                    <td>
-                                        <div title="Al activar esta opción se habilita que se guarden los datos de cada compra mediante Webpay"
-                                            class="label label-info">?</div> <b>Activar Registro: </b>
-                                    </td>
-                                    <td class="tbk_table_td">
-                                        <?php echo $tb_check_regs; ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div title="Cantidad de días que se conservan los datos de cada compra mediante Webpay"
-                                            class="label label-info">?</div> <b>Cantidad de Dias a Registrar</b>
-                                    </td>
-                                    <td class="tbk_table_td"><input type="number" name="tb_regs_days" id="tb_regs_days"
-                                            value=<?php echo '"'.(int) $tb_max_logs_days.'"'; ?> placeholder="1"
-                                        maxlength="2" size="2" min="1" max="30"> <span>Dias</span></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div title="Peso máximo (en Megabytes) de cada archivo que guarda los datos de las compras mediante Webpay"
-                                            class="label label-info">?</div> <b>Peso maximo de Registros: </b>
-                                    </td>
-                                    <td class="tbk_table_td"> <input type="number" name="tb_regs_weight" id="tb_regs_weight"
-                                            value=<?php echo '"'.(int) $tb_max_logs_weight.'"'; ?> placeholder="2"
-                                        maxlength="2" size="2" min="2" max="10"> <span>Mb</span></td>
-                                </tr>
-                                <tr>
-                                    <?php echo $tb_btn_update; ?>
-                                </tr>
-                            </table>
-                        </div>
                         <div id="maininfo">
                             <h3 class="menu-head">Información de Registros</h3>
-                            <?php echo $logs_main_info; ?>
+                            <div class="tbk-response-container" id="div_logs_path">
+                                <div class="info-column">
+                                    <div title="Carpeta que almacena logs con información de transacciones Webpay"
+                                         class="label label-info">?
+                                    </div>
+                                </div>
+                                <div class="info-column">
+                                    <span class="highlight-text">Directorio de Registros: </span>
+                                </div>
+                                <div class="info-column" id="log-status">
+                                    <span>
+                                        <?php echo stripslashes(json_encode($logs->log_dir)); ?>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="tbk-response-container" id="div_numbers_of_file">
+                                <div class="info-column">
+                                    <div title="Cantidad de archivos que guardan información de transacciones Webpay"
+                                         class="label label-info">?
+                                    </div>
+                                </div>
+                                <div class="info-column">
+                                    <span class="highlight-text">Cantidad de Registros en Directorio: </span>
+                                </div>
+                                <div class="info-column" id="log-status">
+                                    <span>
+                                        <?php echo json_encode($logs->logs_count->log_count); ?>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="tbk-response-container" id="div_logs_list">
+                                <div class="info-column">
+                                    <div title="Lista los archivos que guardan la información de transacciones Webpay"
+                                         class="label label-info">?
+                                    </div>
+                                </div>
+                                <div class="info-column">
+                                    <span class="highlight-text">Listado de Registros Disponibles: </span>
+                                </div>
+                                <div class="info-column" id="log-status">
+                                    <span>
+                                        <?php echo $logs_list; ?>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                         <h3 class="menu-head">Ultimos Registros</h3>
-                        <table class="tbk_table_info">
-                            <tr>
-                                <td>
-                                    <div title="Nombre del útimo archivo de registro creado" class="label label-info">?</div>
-                                    <b>Último Documento: </b>
-                                </td>
-                                <td class="tbk_table_td">
+                        <div class="tbk-response-container" id="div_last_log">
+                            <div class="info-column">
+                                <div title="Nombre del útimo archivo de registro creado"
+                                    class="label label-info">?
+                                </div>
+                            </div>
+                            <div class="info-column">
+                                <span class="highlight-text">Último Documento: </span>
+                            </div>
+                            <div class="info-column">
+                                <span>
                                     <?php echo $log_file; ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div title="Peso del último archivo de registro creado" class="label label-info">?</div>
-                                    <b>Peso de Documento: </b>
-                                </td>
-                                <td class="tbk_table_td">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="tbk-response-container" id="div_last_log_size">
+                            <div class="info-column">
+                                <div title="Peso del último archivo de registro creado"
+                                    class="label label-info">?
+                                </div>
+                            </div>
+                            <div class="info-column">
+                                <span class="highlight-text">Peso de Documento: </span>
+                            </div>
+                            <div class="info-column">
+                                <span>
                                     <?php echo $log_file_weight; ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div title="Cantidad de líneas que posee el último archivo de registro creado"
-                                        class="label label-info">?</div> <b>Cantidad de Líneas: </b>
-                                </td>
-                                <td class="tbk_table_td">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="tbk-response-container" id="div_log_file_regs">
+                            <div class="info-column">
+                                <div title="Cantidad de líneas que posee el último archivo de registro creado"
+                                    class="label label-info">?
+                                </div>
+                            </div>
+                            <div class="info-column">
+                                <span class="highlight-text">Cantidad de Líneas:  </span>
+                            </div>
+                            <div class="info-column">
+                                <span>
                                     <?php echo $log_file_regs; ?>
-                                </td>
-                            </tr>
-                        </table>
+                                </span>
+                            </div>
+                        </div>
                         <br>
                         <b>Contenido último Log: </b>
                         <div class="log_content">
@@ -530,9 +601,9 @@ if ($logs->config->status === true) {
                 } else {
                     status = "<span class='label label-danger'>Error</span>";
                 }
-                $('#txt-transaction-status').empty().append(status);
-                $('#txt-transaction-url').text(resp.response.url || resp.response.error);
-                $('#txt-transaction-token').text(resp.response.token_ws || resp.response.detail);
+                $('#response_status_text').empty().append(status);
+                $('#response_url_text').text(resp.response.url || resp.response.error);
+                $('#response_token_text').text(resp.response.token_ws || resp.response.detail);
             });
             evt.preventDefault();
         });
