@@ -624,7 +624,8 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
 
     private function toRedirect($url, $data)
     {
-        echo "<form action='$url' method='POST' name='webpayForm'>";
+        $sanitizedURL = htmlspecialchars($url,ENT_QUOTES, 'UTF-8');
+        echo "<form action='$sanitizedURL' method='POST' name='webpayForm'>";
         foreach ($data as $name => $value) {
             echo "<input type='hidden' name='".htmlentities($name)."' value='".htmlentities($value)."'>";
         }
