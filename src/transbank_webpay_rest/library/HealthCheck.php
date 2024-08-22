@@ -144,7 +144,7 @@ class HealthCheck
             'ecommerce'              => $ecommerce,
             'ecommerce_version'      => $data['current_ecommerce_version'],
             'current_plugin_version' => $data['current_plugin_version'],
-            'last_plugin_version'    => $this->getPluginLastVersion($ecommerce, $data['current_ecommerce_version']), // ultimo declarado
+            'last_plugin_version'    => $this->getLastGitHubReleaseVersion('TransbankDevelopers/transbank-plugin-virtuemart-webpay-rest')
         ];
 
         return $result;
