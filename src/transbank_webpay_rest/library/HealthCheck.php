@@ -140,14 +140,12 @@ class HealthCheck
     private function getPluginInfo($ecommerce)
     {
         $data = $this->getEcommerceInfo($ecommerce);
-        $result = [
+        return [
             'ecommerce'              => $ecommerce,
             'ecommerce_version'      => $data['current_ecommerce_version'],
             'current_plugin_version' => $data['current_plugin_version'],
             'last_plugin_version'    => $this->getLastGitHubReleaseVersion('TransbankDevelopers/transbank-plugin-virtuemart-webpay-rest')
         ];
-
-        return $result;
     }
 
     // lista y valida extensiones/ modulos de php en servidor ademas mostrar version
