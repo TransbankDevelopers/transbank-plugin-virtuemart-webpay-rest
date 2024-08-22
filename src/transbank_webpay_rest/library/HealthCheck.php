@@ -61,7 +61,7 @@ class HealthCheck
             } else {
                 $version = phpversion($extension);
                 if (empty($version) or $version == null or $version === false or $version == ' ' or $version == '') {
-                    $version = 'PHP Extension Compiled. ver:'.phpversion();
+                    $version = 'PHP Extension Compiled. ver:' . phpversion();
                 }
             }
             $status = 'OK';
@@ -104,13 +104,13 @@ class HealthCheck
     // funcion para obtener info de cada ecommerce, si el ecommerce es incorrecto o no esta seteado se escapa como respuesta "NO APLICA"
     private function getEcommerceInfo($ecommerce)
     {
-        include_once JPATH_ROOT.'/administrator/components/com_virtuemart/version.php';
+        include_once JPATH_ROOT . '/administrator/components/com_virtuemart/version.php';
         $actualversion = vmVersion::$RELEASE; // NOTE: confirmar si es como obtiene la version de ecommerce
         $lastversion = $this->getLastVirtuemartVersion();
-        if (!file_exists(JPATH_PLUGINS.'/vmpayment/transbank_webpay_rest/transbank_webpay_rest.xml')) {
+        if (!file_exists(JPATH_PLUGINS . '/vmpayment/transbank_webpay_rest/transbank_webpay_rest.xml')) {
             exit;
         } else {
-            $xml = simplexml_load_file(JPATH_PLUGINS.'/vmpayment/transbank_webpay_rest/transbank_webpay_rest.xml', null, LIBXML_NOCDATA);
+            $xml = simplexml_load_file(JPATH_PLUGINS . '/vmpayment/transbank_webpay_rest/transbank_webpay_rest.xml', null, LIBXML_NOCDATA);
             $json = json_encode($xml);
             $arr = json_decode($json, true);
             $currentplugin = $arr['version'];
@@ -124,32 +124,37 @@ class HealthCheck
         return $result;
     }
 
+    /**
+     * Gets the latest public release version from a specified GitHub repository.
+     *
+     * @param string $repository In the format 'user/repo'.
+     *
+     * @return string The latest release version.
+     */
+    private function getLastGitHubReleaseVersion($repository): string
+    {
+        $baseurl = 'https://api.github.com/repos/' . $repository . '/releases/latest';
+        $agent = 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $baseurl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, $agent);
+        $content = curl_exec($ch);
+        curl_close($ch);
+        $con = json_decode($content, true);
+        return $con['tag_name'] ?? '';
+    }
     // creacion de retornos
     // arma array que entrega informacion del ecommerce: nombre, version instalada, ultima version disponible
     private function getPluginInfo($ecommerce)
     {
         $data = $this->getEcommerceInfo($ecommerce);
-        $result = [
+        return [
             'ecommerce'              => $ecommerce,
             'ecommerce_version'      => $data['current_ecommerce_version'],
             'current_plugin_version' => $data['current_plugin_version'],
-            'last_plugin_version'    => $this->getPluginLastVersion($ecommerce, $data['current_ecommerce_version']), // ultimo declarado
+            'last_plugin_version'    => $this->getLastGitHubReleaseVersion('TransbankDevelopers/transbank-plugin-virtuemart-webpay-rest')
         ];
-
-        return $result;
-    }
-
-    // arma array con informacion del ultimo plugin compatible con el ecommerce
-    /*
-    vers_product:
-    1 => WebPay Soap
-    2 => WebPay REST
-    3 => PatPass
-    4 => OnePay
-    */
-    private function getPluginLastVersion($ecommerce, $currentversion)
-    {
-        return 'Indefinido';
     }
 
     // lista y valida extensiones/ modulos de php en servidor ademas mostrar version
