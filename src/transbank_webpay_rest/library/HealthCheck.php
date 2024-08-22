@@ -123,8 +123,8 @@ class HealthCheck
 
         return $result;
     }
-        private function getLastGitHubReleaseVersion($string): string{
-        $baseurl = 'https://api.github.com/repos/'.$string.'/releases/latest';
+        private function getLastGitHubReleaseVersion($repository): string{
+        $baseurl = 'https://api.github.com/repos/'.$repository.'/releases/latest';
         $agent = 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $baseurl);
