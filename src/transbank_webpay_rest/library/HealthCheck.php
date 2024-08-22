@@ -139,19 +139,6 @@ class HealthCheck
         return $result;
     }
 
-    // arma array con informacion del ultimo plugin compatible con el ecommerce
-    /*
-    vers_product:
-    1 => WebPay Soap
-    2 => WebPay REST
-    3 => PatPass
-    4 => OnePay
-    */
-    private function getPluginLastVersion($ecommerce, $currentversion)
-    {
-        return 'Indefinido';
-    }
-
     // lista y valida extensiones/ modulos de php en servidor ademas mostrar version
     private function getExtensionsValidate()
     {
