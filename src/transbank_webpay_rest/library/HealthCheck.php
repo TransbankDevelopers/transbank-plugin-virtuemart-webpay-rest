@@ -123,6 +123,14 @@ class HealthCheck
 
         return $result;
     }
+
+    /**
+    * Gets the latest public release version from a specified GitHub repository.
+    *
+    * @param string $repository In the format 'user/repo'.
+    *
+    * @return string The latest release version.
+    */
         private function getLastGitHubReleaseVersion($repository): string{
         $baseurl = 'https://api.github.com/repos/'.$repository.'/releases/latest';
         $agent = 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)';
