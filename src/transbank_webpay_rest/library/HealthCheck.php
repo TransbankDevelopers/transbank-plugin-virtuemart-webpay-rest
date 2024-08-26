@@ -172,13 +172,13 @@ class HealthCheck
     // crea array con la informacion de comercio para posteriormente exportarla via json
     private function getCommerceInfo()
     {
-        $result = [
-            'environment'   => $this->environment,
-            'commerce_code' => $this->commerceCode,
-            'api_key'   => $this->apiKey,
+        return [
+            'data' => [
+                'environment'   => $this->environment,
+                'commerce_code' => $this->commerceCode,
+                'api_key'       => $this->apiKey,
+            ]
         ];
-
-        return ['data' => $result];
     }
 
     // guarda en array informacion de funcion phpinfo
