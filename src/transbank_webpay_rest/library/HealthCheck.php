@@ -140,11 +140,11 @@ class HealthCheck
     // arma array que entrega informacion del ecommerce: nombre, version instalada, ultima version disponible
     private function getPluginInfo($ecommerce)
     {
-        $data = $this->getEcommerceInfo($ecommerce);
+        $ecommerceInfo = $this->getEcommerceInfo();
         return [
             'ecommerce'              => $ecommerce,
-            'ecommerce_version'      => $data['current_ecommerce_version'],
-            'current_plugin_version' => $data['current_plugin_version'],
+            'ecommerce_version'      => $ecommerceInfo['current_ecommerce_version'],
+            'current_plugin_version' => $ecommerceInfo['current_plugin_version'],
             'last_plugin_version'    => $this->getLastGitHubReleaseVersion('TransbankDevelopers/transbank-plugin-virtuemart-webpay-rest')
         ];
     }
