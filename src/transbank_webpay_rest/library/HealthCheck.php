@@ -53,17 +53,12 @@ class HealthCheck
     private function getCheckExtension($extension)
     {
         if (extension_loaded($extension)) {
-            if ($extension == 'openssl') {
-                $version = OPENSSL_VERSION_TEXT;
-            } else {
-                $version = phpversion($extension);
-                if (empty($version) or $version == null or $version === false or $version == ' ' or $version == '') {
-                    $version = 'PHP Extension Compiled. ver:' . phpversion();
-                }
+            $version = $extension === 'openssl' ? OPENSSL_VERSION_TEXT : phpversion($extension);
+            if (empty($version)) {
+                $version = 'PHP Extension Compiled. ver:' . phpversion();
             }
-            $status = 'OK';
             $result = [
-                'status'  => $status,
+                'status'  => 'OK',
                 'version' => $version,
             ];
         } else {
@@ -72,7 +67,6 @@ class HealthCheck
                 'version' => 'No Disponible',
             ];
         }
-
         return $result;
     }
 
