@@ -93,25 +93,26 @@ class HealthCheck
     }
 
     // funcion para obtener info de cada ecommerce, si el ecommerce es incorrecto o no esta seteado se escapa como respuesta "NO APLICA"
-    private function getEcommerceInfo($ecommerce)
+    private function getEcommerceInfo()
     {
         include_once JPATH_ROOT . '/administrator/components/com_virtuemart/version.php';
         $actualversion = vmVersion::$RELEASE; // NOTE: confirmar si es como obtiene la version de ecommerce
         $lastversion = $this->getLastVirtuemartVersion();
-        if (!file_exists(JPATH_PLUGINS . '/vmpayment/transbank_webpay_rest/transbank_webpay_rest.xml')) {
+        $pluginPath = JPATH_PLUGINS . '/vmpayment/transbank_webpay_rest/transbank_webpay_rest.xml';
+
+        if (!file_exists($pluginPath)) {
             exit;
-        } else {
-            $xml = simplexml_load_file(JPATH_PLUGINS . '/vmpayment/transbank_webpay_rest/transbank_webpay_rest.xml', null, LIBXML_NOCDATA);
-            $json = json_encode($xml);
-            $arr = json_decode($json, true);
-            $currentplugin = $arr['version'];
         }
+        $xml = simplexml_load_file($pluginPath, null, LIBXML_NOCDATA);
+        if ($xml === false) {
+            exit;
+        }
+        $currentPluginVersion = (string) $xml->version;
         $result = [
             'current_ecommerce_version' => $actualversion,
             'last_ecommerce_version'    => $lastversion,
-            'current_plugin_version'    => $currentplugin,
+            'current_plugin_version'    => $currentPluginVersion,
         ];
-
         return $result;
     }
 
