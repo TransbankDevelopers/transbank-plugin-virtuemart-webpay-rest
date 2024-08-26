@@ -37,17 +37,14 @@ class HealthCheck
     // valida version de php
     private function getValidatephp()
     {
-        if (version_compare(phpversion(), '7.4', '<=') and version_compare(phpversion(), '7.0.0', '>=')) {
-            $this->versioninfo = [
-                'status'  => 'OK',
-                'version' => phpversion(),
-            ];
-        } else {
-            $this->versioninfo = [
-                'status'  => 'Error!: Versión no soportada',
-                'version' => phpversion(),
-            ];
-        }
+        $minVersion = '7.0.0';
+        $maxVersion = '7.4.0';
+        $currentVersion = phpversion();
+        $isValidVersion = version_compare($currentVersion, $minVersion, '>=') && version_compare($currentVersion, $maxVersion, '<=');
+        $this->versioninfo = [
+            'status'  => $isValidVersion ? 'OK' : 'Error!: Versión no soportada',
+            'version' => $currentVersion,
+        ];
 
         return $this->versioninfo;
     }
