@@ -200,10 +200,10 @@ class HealthCheck
     }
 
     /**
-    * Creates an array with commerce information
-    *
-    * @return array  Array containing the environment, commerce code, and API key.
-    */
+     * Creates an array with commerce information
+     *
+     * @return array  Array containing the environment, commerce code, and API key.
+     */
     private function getCommerceInfo()
     {
         return [
@@ -215,11 +215,11 @@ class HealthCheck
         ];
     }
 
-   /**
-    * Creates an array with PHP information.
-    *
-    * @return array Array containing the PHP information
-    */
+    /**
+     * Creates an array with PHP information.
+     *
+     * @return array Array containing the PHP information
+     */
     private function getPhpInfo()
     {
         ob_start();
@@ -269,14 +269,13 @@ class HealthCheck
         ];
     }
 
-   /**
-    * Return the full resume information in JSON format.
-    *
-    * @return string A JSON containing the full resume information.
-    */
+    /**
+     * Return the full resume information in JSON format.
+     *
+     * @return string A JSON containing the full resume information.
+     */
     public function printFullResume()
     {
         return json_encode($this->getFullResume());
     }
-
 }
