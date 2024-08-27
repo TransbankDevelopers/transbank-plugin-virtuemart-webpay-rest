@@ -26,7 +26,6 @@ class HealthCheck
         $this->commerceCode = $config['COMMERCE_CODE'];
         $this->apiKey = $config['API_KEY'];
         $this->ecommerce = $config['ECOMMERCE'];
-        // extensiones necesarias
         $this->extensions = [
             'openssl',
             'SimpleXML',
@@ -34,7 +33,11 @@ class HealthCheck
         ];
     }
 
-    // valida version de php
+    /**
+     * Validates the current PHP version.
+     *
+     * @return array The status and the current PHP version.
+     */
     private function getValidatephp()
     {
         $minVersion = '7.0.0';
@@ -49,7 +52,13 @@ class HealthCheck
         return $this->versioninfo;
     }
 
-    // verifica si existe la extension y cual es la version de esta
+    /**
+     * Checks if an extension is loaded and retrieves its version.
+     *
+     * @param string $extension The name of the extension to check.
+     *
+     * @return array The status and the extension version.
+     */
     private function getCheckExtension($extension)
     {
         if (!extension_loaded($extension)) {
@@ -68,8 +77,11 @@ class HealthCheck
         ];
     }
 
-    // obtiene ultima version exclusivamente para virtuemart
-    // NOTE: lastrelasevirtuemart
+    /**
+     * Gets the currently installed Virtuemart version.
+     *
+     * @return string The installed Virtuemart version
+     */
     private function getLastVirtuemartVersion()
     {
         $request_url = 'https://virtuemart.net/releases/vm3/virtuemart_update.xml';
@@ -90,7 +102,12 @@ class HealthCheck
         return $version;
     }
 
-    // funcion para obtener info de cada ecommerce, si el ecommerce es incorrecto o no esta seteado se escapa como respuesta "NO APLICA"
+    /**
+     * Retrieves information about the current ecommerce setup.
+     *
+     * @return array Array containing the current Virtuemart version,
+     *               the current Transbank plugin version, and the latest Virtuemart version.
+     */
     private function getEcommerceInfo()
     {
         include_once JPATH_ROOT . '/administrator/components/com_virtuemart/version.php';
@@ -134,8 +151,15 @@ class HealthCheck
         $con = json_decode($content, true);
         return $con['tag_name'] ?? '';
     }
-    // creacion de retornos
-    // arma array que entrega informacion del ecommerce: nombre, version instalada, ultima version disponible
+
+    /**
+     * Constructs an array providing information about the eCommerce platform and the plugin.
+     *
+     * @param string $ecommerce
+     *
+     * @return array Array containing the eCommerce name,
+     *               the installed version, the current plugin version, and the latest plugin version available.
+     */
     private function getPluginInfo($ecommerce)
     {
         $ecommerceInfo = $this->getEcommerceInfo();
@@ -147,7 +171,11 @@ class HealthCheck
         ];
     }
 
-    // lista y valida extensiones/ modulos de php en servidor ademas mostrar version
+    /**
+     * Lists and validates PHP extensions/modules
+     *
+     * @return array The values are arrays containing the status and version of each extension.
+     */
     private function getExtensionsValidate()
     {
         foreach ($this->extensions as $value) {
@@ -157,7 +185,11 @@ class HealthCheck
         return $this->resExtensions;
     }
 
-    // crea resumen de informacion del servidor. NO incluye a PHP info
+    /**
+     * Gets server information. Does not include PHP info.
+     *
+     * @return array Array containing the PHP version, server version, and plugin information
+     */
     private function getServerResume()
     {
         return [
@@ -167,7 +199,11 @@ class HealthCheck
         ];
     }
 
-    // crea array con la informacion de comercio para posteriormente exportarla via json
+    /**
+    * Creates an array with commerce information
+    *
+    * @return array  Array containing the environment, commerce code, and API key.
+    */
     private function getCommerceInfo()
     {
         return [
@@ -179,7 +215,11 @@ class HealthCheck
         ];
     }
 
-    // guarda en array informacion de funcion phpinfo
+   /**
+    * Creates an array with PHP information.
+    *
+    * @return array Array containing the PHP information
+    */
     private function getPhpInfo()
     {
         ob_start();
@@ -193,6 +233,11 @@ class HealthCheck
         return $return;
     }
 
+    /**
+     * Initializes a transaction.
+     *
+     * @return array Array containing the status and the response.
+     */
     public function setCreateTransaction()
     {
         $transbankSdkWebpay = new TransbankSdkWebpay($this->config);
@@ -208,7 +253,12 @@ class HealthCheck
         ];
     }
 
-    //compila en solo un metodo toda la informacion obtenida, lista para imprimir
+    /**
+     * Gets all information into a single method.
+     *
+     * @return array Array containing server resume, PHP extensions status,
+     *               commerce information, and PHP info.
+     */
     private function getFullResume()
     {
         return [
