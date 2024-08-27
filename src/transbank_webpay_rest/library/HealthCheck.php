@@ -52,22 +52,20 @@ class HealthCheck
     // verifica si existe la extension y cual es la version de esta
     private function getCheckExtension($extension)
     {
-        if (extension_loaded($extension)) {
-            $version = $extension === 'openssl' ? OPENSSL_VERSION_TEXT : phpversion($extension);
-            if (empty($version)) {
-                $version = 'PHP Extension Compiled. ver:' . phpversion();
-            }
-            $result = [
-                'status'  => 'OK',
-                'version' => $version,
-            ];
-        } else {
-            $result = [
-                'status'  => 'Error!',
-                'version' => 'No Disponible',
+        if (!extension_loaded($extension)) {
+            return [
+                'status' => 'Error!',
+                'version' => 'No disponible'
             ];
         }
-        return $result;
+        $extensionIsSsl = $extension === 'openssl';
+        $extensionVersion = $extensionIsSsl ? OPENSSL_VERSION_TEXT : phpversion($extension);
+        $version = $extensionVersion ?: 'Extensión PHP compilada. ver:' . phpversion();
+
+        return [
+            'status' => 'OK',
+            'version' => $version
+        ];
     }
 
     // obtiene ultima version exclusivamente para virtuemart
