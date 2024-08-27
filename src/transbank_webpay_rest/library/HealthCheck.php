@@ -67,11 +67,9 @@ class HealthCheck
         }
         $extensionIsSsl = $extension === 'openssl';
         $extensionVersion = $extensionIsSsl ? OPENSSL_VERSION_TEXT : phpversion($extension);
-        $version = $extensionVersion ?: 'Extensión PHP compilada. ver:' . phpversion();
-
         return [
             'status' => 'OK',
-            'version' => $version
+            'version' => $extensionVersion
         ];
     }
 
