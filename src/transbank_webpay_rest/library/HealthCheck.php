@@ -269,53 +269,10 @@ class HealthCheck
         ];
     }
 
-    private function setpostinstall()
-    {
-        return false;
-    }
-
-    // imprime informacion de comercio y llaves
-    public function printCommerceInfo()
-    {
-        return json_encode($this->getCommerceInfo());
-    }
-
-    public function printPhpInfo()
-    {
-        return json_encode($this->getPhpInfo());
-    }
-
-    // imprime resultado la consistencia de certificados y llabves
-    public function printCertificatesStatus()
-    {
-        return json_encode($this->getValidateCertificates());
-    }
-
-    // imprime en formato json la validacion de extensiones / modulos de php
-    public function printExtensionStatus()
-    {
-        return json_encode($this->getExtensionsValidate());
-    }
-
-    // imprime en formato json informacion del servidor
-    public function printServerResume()
-    {
-        return json_encode($this->getServerResume());
-    }
-
     // imprime en formato json el resumen completo
     public function printFullResume()
     {
         return json_encode($this->getFullResume());
     }
 
-    public function getCreateTransaction()
-    {
-        return json_encode($this->setCreateTransaction());
-    }
-
-    public function getpostinstallinfo()
-    {
-        return json_encode($this->setpostinstall());
-    }
 }
