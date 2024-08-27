@@ -44,12 +44,10 @@ class HealthCheck
         $maxVersion = '7.4.0';
         $currentVersion = phpversion();
         $isValidVersion = version_compare($currentVersion, $minVersion, '>=') && version_compare($currentVersion, $maxVersion, '<=');
-        $this->versioninfo = [
+        return [
             'status'  => $isValidVersion ? 'OK' : 'Error!: Versión no soportada',
             'version' => $currentVersion,
         ];
-
-        return $this->versioninfo;
     }
 
     /**
