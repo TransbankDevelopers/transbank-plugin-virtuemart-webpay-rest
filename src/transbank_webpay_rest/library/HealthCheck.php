@@ -203,23 +203,11 @@ class HealthCheck
         $sessionId = uniqid();
         $returnUrl = 'https://webpay3gint.transbank.cl/filtroUnificado/initTransaction';
         $result = $transbankSdkWebpay->createTransaction($amount, $sessionId, $buyOrder, $returnUrl);
-        if ($result) {
-            if (!empty($result['error']) && isset($result['error'])) {
-                $status = 'Error';
-            } else {
-                $status = 'OK';
-            }
-        } else {
-            if (array_key_exists('error', $result)) {
-                $status = 'Error';
-            }
-        }
-        $response = [
-            'status'   => ['string' => $status],
-            'response' => preg_replace('/<!--(.*)-->/Uis', '', $result),
+        $status = (isset($result["error"])) ? 'Error' : 'OK';
+        return [
+            'status' => ['string' => $status],
+            'response' => preg_replace('/<!--(.*)-->/Uis', '', $result)
         ];
-
-        return $response;
     }
 
     //compila en solo un metodo toda la informacion obtenida, lista para imprimir
