@@ -269,7 +269,11 @@ class HealthCheck
         ];
     }
 
-    // imprime en formato json el resumen completo
+   /**
+    * Return the full resume information in JSON format.
+    *
+    * @return string A JSON containing the full resume information.
+    */
     public function printFullResume()
     {
         return json_encode($this->getFullResume());
