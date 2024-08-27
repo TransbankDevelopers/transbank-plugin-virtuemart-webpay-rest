@@ -74,9 +74,9 @@ class HealthCheck
     }
 
     /**
-     * Gets the currently installed Virtuemart version.
+     * Gets the currently last Virtuemart version.
      *
-     * @return string The installed Virtuemart version
+     * @return string The last Virtuemart version
      */
     private function getLastVirtuemartVersion()
     {
