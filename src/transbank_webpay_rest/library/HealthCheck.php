@@ -38,7 +38,7 @@ class HealthCheck
      *
      * @return array The status and the current PHP version.
      */
-    private function getValidatephp()
+    private function validatePhpVersion()
     {
         $minVersion = '7.0.0';
         $maxVersion = '7.4.0';
@@ -188,7 +188,7 @@ class HealthCheck
     private function getServerResume()
     {
         return [
-            'php_version'    => $this->getValidatephp(),
+            'php_version'    => $this->validatePhpVersion(),
             'server_version' => ['server_software' => $_SERVER['SERVER_SOFTWARE']],
             'plugin_info'    => $this->getPluginInfo($this->ecommerce),
         ];
