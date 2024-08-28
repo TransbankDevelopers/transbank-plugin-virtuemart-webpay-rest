@@ -57,7 +57,7 @@ class HealthCheck
      *
      * @return array The status and the extension version.
      */
-    private function getCheckExtension($extension): array
+    private function checkExtension($extension): array
     {
         if (!extension_loaded($extension)) {
             return [
@@ -174,7 +174,7 @@ class HealthCheck
     private function getExtensionsValidate(): array
     {
         foreach ($this->extensions as $value) {
-            $this->resExtensions[$value] = $this->getCheckExtension($value);
+            $this->resExtensions[$value] = $this->checkExtension($value);
         }
 
         return $this->resExtensions;
@@ -233,7 +233,7 @@ class HealthCheck
      *
      * @return array Array containing the status and the response.
      */
-    public function setCreateTransaction(): array
+    public function createTransaction(): array
     {
         $transbankSdkWebpay = new TransbankSdkWebpay($this->config);
         $amount = 990;
