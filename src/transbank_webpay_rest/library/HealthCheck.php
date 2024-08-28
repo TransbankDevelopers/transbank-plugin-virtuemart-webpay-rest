@@ -16,6 +16,7 @@ class HealthCheck
     public $fullResume;
     public $ecommerce;
     public $config;
+    private $resExtensions;
 
     public function __construct($config)
     {
