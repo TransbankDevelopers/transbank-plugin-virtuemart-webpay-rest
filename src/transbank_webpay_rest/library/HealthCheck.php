@@ -38,7 +38,7 @@ class HealthCheck
      *
      * @return array The status and the current PHP version.
      */
-    private function validatePhpVersion()
+    private function validatePhpVersion(): array
     {
         $minVersion = '7.0.0';
         $maxVersion = '7.4.0';
@@ -57,7 +57,7 @@ class HealthCheck
      *
      * @return array The status and the extension version.
      */
-    private function getCheckExtension($extension)
+    private function getCheckExtension($extension): array
     {
         if (!extension_loaded($extension)) {
             return [
@@ -78,7 +78,7 @@ class HealthCheck
      *
      * @return string The last Virtuemart version
      */
-    private function getLastVirtuemartVersion()
+    private function getLastVirtuemartVersion(): string
     {
         $request_url = 'https://virtuemart.net/releases/vm3/virtuemart_update.xml';
 
@@ -104,7 +104,7 @@ class HealthCheck
      * @return array Array containing the current Virtuemart version,
      *               the current Transbank plugin version, and the latest Virtuemart version.
      */
-    private function getEcommerceInfo()
+    private function getEcommerceInfo(): array
     {
         include_once JPATH_ROOT . '/administrator/components/com_virtuemart/version.php';
         $currentEcommerceVersion = vmVersion::$RELEASE;
@@ -155,7 +155,7 @@ class HealthCheck
      * @return array Array containing the eCommerce name,
      *               the installed version, the current plugin version, and the latest plugin version available.
      */
-    private function getPluginInfo($ecommerce)
+    private function getPluginInfo($ecommerce): array
     {
         $ecommerceInfo = $this->getEcommerceInfo();
         return [
@@ -171,7 +171,7 @@ class HealthCheck
      *
      * @return array The values are arrays containing the status and version of each extension.
      */
-    private function getExtensionsValidate()
+    private function getExtensionsValidate(): array
     {
         foreach ($this->extensions as $value) {
             $this->resExtensions[$value] = $this->getCheckExtension($value);
@@ -185,7 +185,7 @@ class HealthCheck
      *
      * @return array Array containing the PHP version, server version, and plugin information
      */
-    private function getServerResume()
+    private function getServerResume(): array
     {
         return [
             'php_version'    => $this->validatePhpVersion(),
@@ -199,7 +199,7 @@ class HealthCheck
      *
      * @return array  Array containing the environment, commerce code, and API key.
      */
-    private function getCommerceInfo()
+    private function getCommerceInfo(): array
     {
         return [
             'data' => [
@@ -215,7 +215,7 @@ class HealthCheck
      *
      * @return array Array containing the PHP information
      */
-    private function getPhpInfo()
+    private function getPhpInfo(): array
     {
         ob_start();
         phpinfo();
@@ -233,7 +233,7 @@ class HealthCheck
      *
      * @return array Array containing the status and the response.
      */
-    public function setCreateTransaction()
+    public function setCreateTransaction(): array
     {
         $transbankSdkWebpay = new TransbankSdkWebpay($this->config);
         $amount = 990;
@@ -254,7 +254,7 @@ class HealthCheck
      * @return array Array containing server resume, PHP extensions status,
      *               commerce information, and PHP info.
      */
-    private function getFullResume()
+    private function getFullResume(): array
     {
         return [
             'server_resume'          => $this->getServerResume(),
