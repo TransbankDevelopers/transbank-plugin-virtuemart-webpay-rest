@@ -113,11 +113,11 @@ class HealthCheck
         $pluginXmlFile = JPATH_PLUGINS . '/vmpayment/transbank_webpay_rest/transbank_webpay_rest.xml';
 
         if (!file_exists($pluginXmlFile)) {
-            throw new Exception("No se encontró el archivo XML: $pluginXmlFile");
+            return[];
         }
         $xml = simplexml_load_file($pluginXmlFile, null, LIBXML_NOCDATA);
         if ($xml === false) {
-            throw new Exception("No se pudo cargar el archivo XML: $pluginXmlFile");
+            return[];
         }
         $currentPluginVersion = (string) $xml->version;
         return [
@@ -161,8 +161,8 @@ class HealthCheck
         $ecommerceInfo = $this->getEcommerceInfo();
         return [
             'ecommerce'              => $ecommerce,
-            'ecommerce_version'      => $ecommerceInfo['current_ecommerce_version'],
-            'current_plugin_version' => $ecommerceInfo['current_plugin_version'],
+            'ecommerce_version'      => $ecommerceInfo ? $ecommerceInfo['current_ecommerce_version']: 'ERROR: No se pudo recuperar la versión de Ecommerce',
+            'current_plugin_version' => $ecommerceInfo ? $ecommerceInfo['current_plugin_version']: 'ERROR: No se pudo recuperar la versión de Ecommerce',
             'last_plugin_version'    => $this->getLastGitHubReleaseVersion('TransbankDevelopers/transbank-plugin-virtuemart-webpay-rest')
         ];
     }
