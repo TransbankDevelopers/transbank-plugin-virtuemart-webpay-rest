@@ -82,7 +82,6 @@ class HealthCheck
     private function getLastVirtuemartVersion(): string
     {
         $request_url = 'https://virtuemart.net/releases/vm3/virtuemart_update.xml';
-
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $request_url);
         curl_setopt($curl, CURLOPT_TIMEOUT, 130);
@@ -90,13 +89,19 @@ class HealthCheck
 
         $response = curl_exec($curl);
         curl_close($curl);
-
+        if ($response === false) {
+            return 'Error: No se pudo obtener la versión';
+        }
         $xml = simplexml_load_string($response);
+        if ($xml === false) {
+            return 'Error: XML no válido';
+        }
         $json = json_encode($xml);
         $arr = json_decode($json, true);
-        $version = $arr['update']['version'];
-
-        return $version;
+        if (isset($arr['update']['version'])) {
+            return  $arr['update']['version'];
+        }
+        return 'Error: No se encontró la versión';
     }
 
     /**
