@@ -86,7 +86,6 @@ class HealthCheck
         curl_setopt($curl, CURLOPT_URL, $request_url);
         curl_setopt($curl, CURLOPT_TIMEOUT, 130);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-
         $response = curl_exec($curl);
         curl_close($curl);
         if ($response === false) {
@@ -96,12 +95,8 @@ class HealthCheck
         if ($xml === false) {
             return 'Error: XML no válido';
         }
-        $json = json_encode($xml);
-        $arr = json_decode($json, true);
-        if (isset($arr['update']['version'])) {
-            return  $arr['update']['version'];
-        }
-        return 'Error: No se encontró la versión';
+        $arr = json_decode(json_encode($xml), true);
+        return $arr['update']['version'] ?? 'Error: No se encontró la versión';
     }
 
     /**
