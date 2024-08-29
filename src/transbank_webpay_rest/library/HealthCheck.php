@@ -167,7 +167,7 @@ class HealthCheck
         return [
             'ecommerce'              => $ecommerce,
             'ecommerce_version'      => $ecommerceInfo ? $ecommerceInfo['current_ecommerce_version'] : 'ERROR: No se pudo recuperar la versión de Ecommerce',
-            'current_plugin_version' => $ecommerceInfo ? $ecommerceInfo['current_plugin_version'] : 'ERROR: No se pudo recuperar la versión de Ecommerce',
+            'current_plugin_version' => $ecommerceInfo ? $ecommerceInfo['current_plugin_version'] : 'ERROR: No se pudo recuperar la versión del Plugin',
             'last_plugin_version'    => $this->getLastGitHubReleaseVersion('TransbankDevelopers/transbank-plugin-virtuemart-webpay-rest')
         ];
     }
