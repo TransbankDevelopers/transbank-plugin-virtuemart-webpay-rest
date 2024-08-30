@@ -740,7 +740,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
     {
         $config = $this->getAllConfig();
         $healthcheck = new HealthCheck($config);
-        $response = $healthcheck->setCreateTransaction();
+        $response = $healthcheck->createTransaction();
         echo json_encode($response);
         exit;
     }
