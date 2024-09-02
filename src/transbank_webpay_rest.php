@@ -3,33 +3,33 @@
 defined('_JEXEC') or exit('Restricted access');
 
 if (!class_exists('vmPSPlugin')) {
-    require_once VMPATH_PLUGINLIBS.DS.'vmpsplugin.php';
+    require_once VMPATH_PLUGINLIBS . DS . 'vmpsplugin.php';
 }
 
 if (!class_exists('ShopFunctions')) {
-    require_once JPATH_VM_ADMINISTRATOR.DS.'helpers'.DS.'shopfunctions.php';
+    require_once JPATH_VM_ADMINISTRATOR . DS . 'helpers' . DS . 'shopfunctions.php';
 }
 
-defined('DIR_SYSTEM') or define('DIR_SYSTEM', VMPATH_PLUGINS.'/vmpayment/transbank_webpay_rest/transbank_webpay_rest/');
+defined('DIR_SYSTEM') or define('DIR_SYSTEM', VMPATH_PLUGINS . '/vmpayment/transbank_webpay_rest/transbank_webpay_rest/');
 
 if (!class_exists('TransbankSdkWebpay')) {
-    require_once DIR_SYSTEM.'library/TransbankSdkWebpay.php';
+    require_once DIR_SYSTEM . 'library/TransbankSdkWebpay.php';
 }
 
 if (!class_exists('LogHandler')) {
-    require_once DIR_SYSTEM.'library/LogHandler.php';
+    require_once DIR_SYSTEM . 'library/LogHandler.php';
 }
 
 if (!class_exists('HealthCheck')) {
-    require_once DIR_SYSTEM.'library/HealthCheck.php';
+    require_once DIR_SYSTEM . 'library/HealthCheck.php';
 }
 
 if (!class_exists('ReportPdfLog')) {
-    require_once DIR_SYSTEM.'library/ReportPdfLog.php';
+    require_once DIR_SYSTEM . 'library/ReportPdfLog.php';
 }
 
 if (!class_exists('ConfigProvider')) {
-    require_once DIR_SYSTEM.'library/ConfigProvider.php';
+    require_once DIR_SYSTEM . 'library/ConfigProvider.php';
 }
 
 /**
@@ -132,9 +132,9 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
         $orderId = $order['details']['BT']->virtuemart_order_id;
         $orderNumber = $order['details']['BT']->order_number;
 
-        $baseUrl = JURI::root().'index.php?option=com_virtuemart&view=pluginresponse'.
-            '&task=pluginresponsereceived'.
-            '&cid='.$paymentMethodId;
+        $baseUrl = JURI::root() . 'index.php?option=com_virtuemart&view=pluginresponse' .
+            '&task=pluginresponsereceived' .
+            '&cid=' . $paymentMethodId;
 
         $returnUrl = $baseUrl;
 
@@ -235,7 +235,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
                 ];
 
                 $order['order_status'] = $this->getConfig('status_success');
-                $order['comments'] = 'Pago exitoso: '.json_encode($comment);
+                $order['comments'] = 'Pago exitoso: ' . json_encode($comment);
 
                 $modelOrder = VmModel::getModel('orders');
                 $modelOrder->updateStatusForOneOrder($orderId, $order, true);
@@ -258,7 +258,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
                 }
 
                 $order['order_status'] = $this->getConfig('status_canceled');
-                $order['comments'] = 'Pago fallido: '.json_encode($comment);
+                $order['comments'] = 'Pago fallido: ' . json_encode($comment);
 
                 $modelOrder = VmModel::getModel('orders');
                 $modelOrder->updateStatusForOneOrder($orderId, $order, true);
@@ -275,7 +275,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
                 $order['order_status'] = $this->getConfig('status_canceled');
                 $order['virtuemart_order_id'] = $orderId;
                 $order['customer_notified'] = 1;
-                $order['comments'] = $result->error.', '.$result->detail;
+                $order['comments'] = $result->error . ', ' . $result->detail;
 
                 $modelOrder = VmModel::getModel('orders');
                 $modelOrder->updateStatusForOneOrder($orderId, $order, true);
@@ -303,8 +303,10 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
             $transactionResponse = 'Transacci&oacute;n Rechazada';
         }
 
-        if ($result->paymentTypeCode == 'SI' || $result->paymentTypeCode == 'S2' ||
-            $result->paymentTypeCode == 'NC' || $result->paymentTypeCode == 'VC') {
+        if (
+            $result->paymentTypeCode == 'SI' || $result->paymentTypeCode == 'S2' ||
+            $result->paymentTypeCode == 'NC' || $result->paymentTypeCode == 'VC'
+        ) {
             $tipoCuotas = $this->paymentTypeCodearray[$result->paymentTypeCode];
         } else {
             $tipoCuotas = 'Sin cuotas';
@@ -324,8 +326,8 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
             <b>C&oacute;digo de la Transacci&oacute;n: </b>{$result->responseCode}<br>
             <b>Monto:</b> $ {$result->amount}<br>
             <b>Order de Compra: </b> {$result->buyOrder}<br>
-            <b>Fecha de la transacci&oacute;n: </b>".date('d-m-Y', strtotime($result->transactionDate)).'<br>
-            <b>Hora de la transacci&oacute;n: </b>'.date('H:i:s', strtotime($result->transactionDate))."<br>
+            <b>Fecha de la transacci&oacute;n: </b>" . date('d-m-Y', strtotime($result->transactionDate)) . '<br>
+            <b>Hora de la transacci&oacute;n: </b>' . date('H:i:s', strtotime($result->transactionDate)) . "<br>
             <b>Tarjeta: </b>************{$result->cardDetail->cardNumber}<br>
             <b>C&oacute;digo de autorizaci&oacute;n: </b>{$result->authorizationCode}<br>
             <b>Tipo de Pago: </b>{$paymentType}<br>
@@ -344,7 +346,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
     public function redirectToCart($msg = null)
     {
         $app = JFactory::getApplication();
-        $app->redirect(JRoute::_('index.php?option=com_virtuemart&view=cart&Itemid='.vRequest::getInt('Itemid'), false), $msg);
+        $app->redirect(JRoute::_('index.php?option=com_virtuemart&view=cart&Itemid=' . vRequest::getInt('Itemid'), false), $msg);
     }
 
     private function getRejectMessage($result)
@@ -366,8 +368,8 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
                 <b>Respuesta de la Transacci&oacute;n: </b>{$result->responseCode}<br>
                 <b>Monto:</b> $ {$result->amount}<br>
                 <b>Order de Compra: </b> {$result->buyOrder}<br>
-                <b>Fecha de la Transacci&oacute;n: </b>".date('d-m-Y', strtotime($result->transactionDate)).'<br>
-                <b>Hora de la Transacci&oacute;n: </b>'.date('H:i:s', strtotime($result->transactionDate))."<br>
+                <b>Fecha de la Transacci&oacute;n: </b>" . date('d-m-Y', strtotime($result->transactionDate)) . '<br>
+                <b>Hora de la Transacci&oacute;n: </b>' . date('H:i:s', strtotime($result->transactionDate)) . "<br>
                 <b>Tarjeta: </b>************{$result->cardDetail->card_number}<br>
                 <b>Mensaje de Rechazo: </b>{$result->responseDescription}
             </p>";
@@ -622,15 +624,15 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
 
     private function toRedirect($url, $data)
     {
-        $sanitizedURL = htmlspecialchars($url,ENT_QUOTES, 'UTF-8');
+        $sanitizedURL = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
         echo "<form action='$sanitizedURL' method='POST' name='webpayForm'>";
         foreach ($data as $name => $value) {
-            echo "<input type='hidden' name='".htmlentities($name)."' value='".htmlentities($value)."'>";
+            echo "<input type='hidden' name='" . htmlentities($name) . "' value='" . htmlentities($value) . "'>";
         }
         echo '</form>';
         echo "<script language='JavaScript'>"
-            .'document.webpayForm.submit();'
-            .'</script>';
+            . 'document.webpayForm.submit();'
+            . '</script>';
 
         return true;
     }
@@ -641,7 +643,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
     private function getCurrentCart()
     {
         if (!class_exists('VirtueMartCart')) {
-            require_once JPATH_VM_SITE.DS.'helpers'.DS.'cart.php';
+            require_once JPATH_VM_SITE . DS . 'helpers' . DS . 'cart.php';
         }
 
         return VirtueMartCart::getCart();
@@ -653,7 +655,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
     private function getModelOrder()
     {
         if (!class_exists('VirtueMartModelOrders')) {
-            require_once JPATH_VM_ADMINISTRATOR.DS.'models'.DS.'orders.php';
+            require_once JPATH_VM_ADMINISTRATOR . DS . 'models' . DS . 'orders.php';
         }
 
         return new VirtueMartModelOrders();
