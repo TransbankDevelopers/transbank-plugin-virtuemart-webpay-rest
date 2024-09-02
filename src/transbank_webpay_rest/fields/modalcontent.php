@@ -179,7 +179,6 @@ if ($logs->config->status === true) {
                 <h4 class="modal-title" id="">
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#tb_main_info" data-toggle="tab">Información</a></li>
-                        <li><a href="#tb_php_info" data-toggle="tab">PHP info</a></li>
                         <li><a href="#tb_logs" data-toggle="tab">Registros</a></li>
                     </ul>
                 </h4>
@@ -395,11 +394,6 @@ if ($logs->config->status === true) {
                         <!--fin container-fluid -->
                     </div>
                     <!-- fin main info -->
-                </div>
-                <div class="tab-pan fade" id="tb_php_info">
-                    <div class="container-fluid">
-                        <?php echo $res->php_info->string->content; ?>
-                    </div>
                 </div>
                 <div class="tab-pane fade" id="tb_logs">
                     <div class="container-fluid">
