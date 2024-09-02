@@ -66,9 +66,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
             $this->setConfigParameterable($this->_configTableFieldName, $varsToPush);
             $this->setCryptedFields(['key']);
 
-            if (isset($_GET['createPdf'])) {
-                $this->createPdf();
-            } elseif (isset($_GET['updateConfig'])) {
+            if (isset($_GET['updateConfig'])) {
                 $this->updateConfig();
             } elseif (isset($_GET['checkTransaction'])) {
                 $this->checkTransaction();
@@ -706,26 +704,6 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
         ];
 
         return $config;
-    }
-
-    private function createPdf()
-    {
-        $config = $this->getAllConfig();
-
-        $healthcheck = new HealthCheck($config);
-        $json = $healthcheck->printFullResume();
-
-        $document = $_GET['document'];
-        $temp = json_decode($json);
-        if ($document == 'report') {
-            unset($temp->php_info);
-        } else {
-            $temp = ['php_info' => $temp->php_info];
-        }
-
-        $rl = new ReportPdfLog($document);
-        $rl->getReport(json_encode($temp));
-        exit;
     }
 
     private function updateConfig()
