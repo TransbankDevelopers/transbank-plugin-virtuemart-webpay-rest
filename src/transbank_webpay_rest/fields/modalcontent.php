@@ -527,31 +527,18 @@ if ($logs->config->status === true) {
             $('.modal .modal-body').css('min-height', $(window).height() * 0.6);
         });
 
-        $('#tb_php_info').hide();
         $('#tb_logs').hide();
-        $('#boton_php_info').hide();
 
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             var target = $(e.target).attr("href");
             if (target == '#tb_main_info') {
-                $('#boton_pdf').show();
-                $('#boton_php_info').hide();
                 $('#tb_main_info').show();
-                $('#tb_php_info').hide();
                 $('#tb_logs').hide();
                 console.log('se habilita boton de imprimir resultados');
             } else {
-                $('#boton_pdf').hide();
-                if (target == '#tb_php_info') {
-                    $('#boton_php_info').show();
-                    $('#tb_main_info').hide();
-                    $('#tb_logs').hide();
-                    $('#tb_php_info').show();
-                } else {
+
                     $('#tb_main_info').hide();
                     $('#tb_logs').show();
-                    $('#tb_php_info').hide();
-                }
             }
         });
 
