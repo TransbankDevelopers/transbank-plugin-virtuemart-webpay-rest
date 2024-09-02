@@ -17,8 +17,6 @@ if (is_array($cid)) {
 }
 
 $baseUrl = "index.php?option=com_virtuemart&view=paymentmethod&task=edit&cid[]={$virtuemart_paymentmethod_id}";
-$urlCreaPdfReport = $baseUrl.'&createPdf=true&document=report';
-$urlCreaPdfPhpInfo = $baseUrl.'&createPdf=true&document=php_info';
 $urlUpdateConfig = $baseUrl.'&updateConfig=true';
 $urlCheckTransaction = $baseUrl.'&checkTransaction=true';
 
