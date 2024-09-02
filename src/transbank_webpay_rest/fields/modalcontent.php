@@ -2,12 +2,12 @@
 defined('JPATH_BASE') or exit();
 
 if (!class_exists('vmPSPlugin')) {
-    require_once JPATH_VM_PLUGINS.DS.'vmpsplugin.php';
+    require_once JPATH_VM_PLUGINS . DS . 'vmpsplugin.php';
 }
 
-include_once dirname(dirname(__FILE__)).'/library/HealthCheck.php';
-include_once dirname(dirname(__FILE__)).'/library/LogHandler.php';
-include_once dirname(dirname(__FILE__)).'/library/ConfigProvider.php';
+include_once dirname(dirname(__FILE__)) . '/library/HealthCheck.php';
+include_once dirname(dirname(__FILE__)) . '/library/LogHandler.php';
+include_once dirname(dirname(__FILE__)) . '/library/ConfigProvider.php';
 
 $cid = vRequest::getvar('cid', null, 'array');
 if (is_array($cid)) {
@@ -17,8 +17,8 @@ if (is_array($cid)) {
 }
 
 $baseUrl = "index.php?option=com_virtuemart&view=paymentmethod&task=edit&cid[]={$virtuemart_paymentmethod_id}";
-$urlUpdateConfig = $baseUrl.'&updateConfig=true';
-$urlCheckTransaction = $baseUrl.'&checkTransaction=true';
+$urlUpdateConfig = $baseUrl . '&updateConfig=true';
+$urlCheckTransaction = $baseUrl . '&checkTransaction=true';
 
 $confProv = new ConfigProvider();
 $configBd = $confProv->getConfig();
@@ -87,45 +87,54 @@ if ($logs->config->status === true) {
 ?>
 
 <style media="screen">
-    .no-border{
-    }
-    H3.menu-head{
+    .no-border {}
+
+    H3.menu-head {
         background-color: #d6012f;
         color: #ffffff;
     }
-    .invisible{
-        visibility:hidden;
+
+    .invisible {
+        visibility: hidden;
     }
-    .tbk_table_info{
-        width:100% !important;
+
+    .tbk_table_info {
+        width: 100% !important;
         line-height: 18pt;
     }
-    .tbk_table_td{
-        width:40%;
+
+    .tbk_table_td {
+        width: 40%;
     }
-    .tbk_table_trans{
-        width:60%;
+
+    .tbk_table_trans {
+        width: 60%;
     }
-    .modal-tbk{
+
+    .modal-tbk {
         overflow-y: auto;
         max-height: 90vh;
     }
-    .tbk-response-container{
+
+    .tbk-response-container {
         display: grid;
         grid-template-columns: 20px 300px 1fr;
         grid-gap: 5px;
         align-items: flex-start;
         overflow: hidden;
     }
+
     .info-column {
         padding-top: 5px;
         padding-bottom: 5px;
         text-align: left;
         word-wrap: break-word;
     }
+
     .highlight-text {
         font-weight: bold;
     }
+
     .label.label-info {
         padding: 5px;
         float: left;
@@ -166,10 +175,10 @@ if ($logs->config->status === true) {
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/js/bootstrap-switch.min.js" integrity="sha512-J+763o/bd3r9iW+gFEqTaeyi+uAphmzkE/zU8FxY6iAvD3nQKXa+ZAWkBI9QS9QkYEKddQoiy0I5GDxKf/ORBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet" >
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet">
 
 <div class="modal fade modal-tbk" id="tb_commerce_mod_info" tabindex="-1" role="dialog"
-     aria-labelledby="" aria-hidden="true">
+    aria-labelledby="" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -192,7 +201,7 @@ if ($logs->config->status === true) {
                             <div class="tbk-response-container" id="div_plugin-info">
                                 <div class="info-column">
                                     <div title="Nombre del E-commerce instalado en el servidor"
-                                         class="label label-info">?
+                                        class="label label-info">?
                                     </div>
                                 </div>
                                 <div class="info-column">
@@ -207,7 +216,7 @@ if ($logs->config->status === true) {
                             <div class="tbk-response-container" id="div_version_plugin">
                                 <div class="info-column">
                                     <div title="Versión del e-commerce instalado en el servidor"
-                                         class="label label-info">?
+                                        class="label label-info">?
                                     </div>
                                 </div>
                                 <div class="info-column">
@@ -222,7 +231,7 @@ if ($logs->config->status === true) {
                             <div class="tbk-response-container" id="div_version_webpay_plugin">
                                 <div class="info-column">
                                     <div title="Versión del plugin Webpay instalada actualmente"
-                                         class="label label-info">?
+                                        class="label label-info">?
                                     </div>
                                 </div>
                                 <div class="info-column">
@@ -237,7 +246,7 @@ if ($logs->config->status === true) {
                             <div class="tbk-response-container" id="div_last_version_webpay">
                                 <div class="info-column">
                                     <div title="Última versión del plugin Webpay disponible"
-                                         class="label label-info">?
+                                        class="label label-info">?
                                     </div>
                                 </div>
                                 <div class="info-column">
@@ -257,7 +266,7 @@ if ($logs->config->status === true) {
                             <div class="tbk-response-container" id="div_web_server_info">
                                 <div class="info-column">
                                     <div title="Descripción del Servidor Web instalado"
-                                         class="label label-info">?
+                                        class="label label-info">?
                                     </div>
                                 </div>
                                 <div class="info-column">
@@ -273,7 +282,7 @@ if ($logs->config->status === true) {
                             <div class="tbk-response-container" id="div_php_status_webpay">
                                 <div class="info-column">
                                     <div title="Informa si la versión de PHP instalada en el servidor es compatible con el plugin de Webpay"
-                                         class="label label-info">?
+                                        class="label label-info">?
                                     </div>
                                 </div>
                                 <div class="info-column">
@@ -288,7 +297,7 @@ if ($logs->config->status === true) {
                             <div class="tbk-response-container" id="div_php_info">
                                 <div class="info-column">
                                     <div title="Versión de PHP instalada en el servidor"
-                                         class="label label-info">?
+                                        class="label label-info">?
                                     </div>
                                 </div>
                                 <div class="info-column">
@@ -400,7 +409,7 @@ if ($logs->config->status === true) {
                             <div class="tbk-response-container" id="div_logs_path">
                                 <div class="info-column">
                                     <div title="Carpeta que almacena logs con información de transacciones Webpay"
-                                         class="label label-info">?
+                                        class="label label-info">?
                                     </div>
                                 </div>
                                 <div class="info-column">
@@ -415,7 +424,7 @@ if ($logs->config->status === true) {
                             <div class="tbk-response-container" id="div_numbers_of_file">
                                 <div class="info-column">
                                     <div title="Cantidad de archivos que guardan información de transacciones Webpay"
-                                         class="label label-info">?
+                                        class="label label-info">?
                                     </div>
                                 </div>
                                 <div class="info-column">
@@ -430,7 +439,7 @@ if ($logs->config->status === true) {
                             <div class="tbk-response-container" id="div_logs_list">
                                 <div class="info-column">
                                     <div title="Lista los archivos que guardan la información de transacciones Webpay"
-                                         class="label label-info">?
+                                        class="label label-info">?
                                     </div>
                                 </div>
                                 <div class="info-column">
@@ -481,7 +490,7 @@ if ($logs->config->status === true) {
                                 </div>
                             </div>
                             <div class="info-column">
-                                <span class="highlight-text">Cantidad de Líneas:  </span>
+                                <span class="highlight-text">Cantidad de Líneas: </span>
                             </div>
                             <div class="info-column">
                                 <span>
@@ -505,8 +514,7 @@ if ($logs->config->status === true) {
 </div>
 
 <script type="text/javascript">
-
-    jQuery().ready(function($){
+    jQuery().ready(function($) {
 
         var options = {
             onText: "Si",
@@ -521,7 +529,7 @@ if ($logs->config->status === true) {
 
         $('#tb_commerce_mod_info').hide();
 
-        $('#tb_commerce_mod_info').on('show.bs.modal', function () {
+        $('#tb_commerce_mod_info').on('show.bs.modal', function() {
             $('.modal .modal-body').css('overflow-y', 'auto');
             $('.modal .modal-body').css('max-height', $(window).height() * 0.6);
             $('.modal .modal-body').css('min-height', $(window).height() * 0.6);
@@ -529,7 +537,7 @@ if ($logs->config->status === true) {
 
         $('#tb_logs').hide();
 
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
             var target = $(e.target).attr("href");
             if (target == '#tb_main_info') {
                 $('#tb_main_info').show();
@@ -537,8 +545,8 @@ if ($logs->config->status === true) {
                 console.log('se habilita boton de imprimir resultados');
             } else {
 
-                    $('#tb_main_info').hide();
-                    $('#tb_logs').show();
+                $('#tb_main_info').hide();
+                $('#tb_logs').show();
             }
         });
 
@@ -555,9 +563,9 @@ if ($logs->config->status === true) {
             el.text('Actualizar Parametros...');
             $.get("<?php echo $urlUpdateConfig; ?>", data, function(resp) {
                 el.text('Actualizar Parametros');
-                if (status === false ) {
+                if (status === false) {
                     $('#log-status').empty().append("<span class='label label-warning'>Desactivado sistema de Registros</span>");
-                }else{
+                } else {
                     $('#log-status').empty().append("<span class='label label-success'>Activado sistema de Registros</span>");
                 }
             });
@@ -581,6 +589,5 @@ if ($logs->config->status === true) {
             });
             evt.preventDefault();
         });
-})
-
+    })
 </script>
