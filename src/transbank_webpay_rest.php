@@ -24,10 +24,6 @@ if (!class_exists('HealthCheck')) {
     require_once DIR_SYSTEM . 'library/HealthCheck.php';
 }
 
-if (!class_exists('ReportPdfLog')) {
-    require_once DIR_SYSTEM . 'library/ReportPdfLog.php';
-}
-
 if (!class_exists('ConfigProvider')) {
     require_once DIR_SYSTEM . 'library/ConfigProvider.php';
 }
