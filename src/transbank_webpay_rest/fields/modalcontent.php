@@ -542,7 +542,6 @@ if ($logs->config->status === true) {
             if (target == '#tb_main_info') {
                 $('#tb_main_info').show();
                 $('#tb_logs').hide();
-                console.log('se habilita boton de imprimir resultados');
             } else {
 
                 $('#tb_main_info').hide();
