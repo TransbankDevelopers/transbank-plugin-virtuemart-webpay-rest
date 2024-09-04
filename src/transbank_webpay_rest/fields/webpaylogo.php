@@ -17,9 +17,9 @@ class JFormFieldWebpayLogo extends JFormField
     {
         vmJsApi::addJScript('/plugins/vmpayment/transbank_webpay_rest/transbank_webpay_rest/assets/js/admin.js');
         $url = 'https://www.transbank.cl/';
-        $logo = '<img src="/plugins/vmpayment/transbank_webpay_rest/transbank_webpay_rest/assets/images/logo-small-new.png" width="100" height="91"/>';
+        $logo = '<img src="' . JURI::root() . 'plugins/vmpayment/transbank_webpay_rest/transbank_webpay_rest/assets/images/logo-small-new.png" width="100" height="91"/>';
         $html = '<p>
-                    <a target="_blank" href="'.$url.'"  >'.$logo.'</a>
+                    <a target="_blank" href="' . $url . '"  >' . $logo . '</a>
                 </p>
                 <span>
                     <button class="btn btn-lg btn-danger" data-toggle="modal" data-target="#tb_commerce_mod_info">Información</button>
