@@ -659,16 +659,14 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
 
     // Actions
 
-    private function getAllConfig()
+    private function getAllConfig(): array
     {
-        $config = [
+        return [
             'MODO'          => $this->getConfig('ambiente'),
             'COMMERCE_CODE' => $this->getConfig('id_comercio'),
             'API_KEY'       => $this->getConfig('api_key'),
             'ECOMMERCE'     => 'virtuemart',
         ];
-
-        return $config;
     }
 
     private function updateConfig()
