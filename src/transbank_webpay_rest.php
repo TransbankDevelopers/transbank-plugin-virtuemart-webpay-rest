@@ -408,7 +408,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
      * @param $cart_prices
      * @Override
      */
-    protected function checkConditions($cart, $method, $cart_prices)
+    protected function checkConditions($cart, $method, $cart_prices) :bool
     {
         //enable transbank webpay only for Chile and salesPrice > 0
         $salesPrice = round($cart_prices['salesPrice']);
