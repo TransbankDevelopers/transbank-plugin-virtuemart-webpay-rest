@@ -641,17 +641,10 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
     private function getMethodPayment()
     {
         $cid = vRequest::getvar('cid', null, 'array');
-        if (is_array($cid)) {
-            $virtuemart_paymentmethod_id = $cid[0];
-        } else {
-            $virtuemart_paymentmethod_id = $cid;
-        }
-        if (!($method = $this->getVmPluginMethod($virtuemart_paymentmethod_id))) {
-            return null; // Another method was selected, do nothing
-        }
-
-        return $method;
+        $virtuemart_paymentmethod_id = is_array($cid) ? $cid[0] : $cid;
+        return $this->getVmPluginMethod($virtuemart_paymentmethod_id) ?: null;
     }
+
 
     //get configurations
 
