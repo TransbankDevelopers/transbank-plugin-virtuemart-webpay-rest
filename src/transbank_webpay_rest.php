@@ -334,20 +334,15 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
         $app->redirect(JRoute::_('index.php?option=com_virtuemart&view=cart&Itemid=' . vRequest::getInt('Itemid'), false), $msg);
     }
 
-    private function getRejectMessage($result)
+    private function getRejectMessage($result): string
     {
-        if (is_string($result)) {
-            $result = json_decode($result);
-        } else {
-            $result = json_encode($result);
-            $result = json_decode($result);
-        }
+        $result = is_string($result) ? json_decode($result) : json_decode(json_encode($result));
 
         $app = JFactory::getApplication();
         $app->enqueueMessage('Pago rechazado', 'error');
 
         if (isset($result->detailOutput)) {
-            $message = "<h2>Transacci&oacute;n rechazada con Webpay</h2>
+            return "<h2>Transacci&oacute;n rechazada con Webpay</h2>
             <p>
                 <br>
                 <b>Respuesta de la Transacci&oacute;n: </b>{$result->responseCode}<br>
@@ -358,24 +353,18 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
                 <b>Tarjeta: </b>************{$result->cardDetail->card_number}<br>
                 <b>Mensaje de Rechazo: </b>{$result->responseDescription}
             </p>";
-
-            return $message;
-        } elseif (isset($result->error)) {
+        }
+        if (isset($result->error)) {
             $error = $result->error;
             $detail = isset($result->detail) ? $result->detail : 'Sin detalles';
-            $message = "<h2>Transacci&oacute;n fallida con Webpay</h2>
+            return "<h2>Transacci&oacute;n fallida con Webpay</h2>
             <p>
                 <br>
                 <b>Respuesta de la Transacci&oacute;n: </b>{$error}<br>
                 <b>Mensaje: </b>{$detail}
             </p>";
-
-            return $message;
-        } else {
-            $message = '<h2>Transacci&oacute;n Fallida</h2>';
-
-            return $message;
         }
+        return '<h2>Transacci&oacute;n Fallida</h2>';
     }
 
     /**
