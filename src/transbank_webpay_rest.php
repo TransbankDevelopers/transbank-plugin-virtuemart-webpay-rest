@@ -102,7 +102,6 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
             'tax_id'                      => 'smallint(1)',
             'transbank_webpay_metadata'   => 'varchar(2000)',
         ];
-
     }
 
     /**
@@ -408,7 +407,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
      * @param $cart_prices
      * @Override
      */
-    protected function checkConditions($cart, $method, $cart_prices) :bool
+    protected function checkConditions($cart, $method, $cart_prices): bool
     {
         //enable transbank webpay only for Chile and salesPrice > 0
         $salesPrice = round($cart_prices['salesPrice']);
@@ -580,7 +579,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
      *
      * @Override
      */
-    public function emptyCart($session_id = null, $order_number = null) :bool
+    public function emptyCart($session_id = null, $order_number = null): bool
     {
         if ($session_id != null) {
             $session = JFactory::getSession();
@@ -596,7 +595,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
 
     //Helpers
 
-    private function toRedirect($url, $data) : bool
+    private function toRedirect($url, $data): bool
     {
         $sanitizedURL = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
         echo "<form action='$sanitizedURL' method='POST' name='webpayForm'>";
