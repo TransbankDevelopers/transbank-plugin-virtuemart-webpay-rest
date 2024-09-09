@@ -62,9 +62,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
             $this->setConfigParameterable($this->_configTableFieldName, $varsToPush);
             $this->setCryptedFields(['key']);
 
-            if (isset($_GET['updateConfig'])) {
-                $this->updateConfig();
-            } elseif (isset($_GET['checkTransaction'])) {
+            if (isset($_GET['checkTransaction'])) {
                 $this->checkTransaction();
             }
         }
@@ -665,14 +663,6 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
             'API_KEY'       => $this->getConfig('api_key'),
             'ECOMMERCE'     => 'virtuemart',
         ];
-    }
-
-    private function updateConfig()
-    {
-        $logHandler = new LogHandler();
-        $logHandler->setLockStatus($_GET['status'] == 'true' ? true : false);
-        $logHandler->setnewconfig((int) $_GET['max_days'], (int) $_GET['max_weight']);
-        exit;
     }
 
     private function checkTransaction()
