@@ -681,6 +681,6 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
         $healthcheck = new HealthCheck($config);
         $response = $healthcheck->createTransaction();
         echo json_encode($response);
-        exit;
+        JFactory::getApplication()->close();
     }
 }
