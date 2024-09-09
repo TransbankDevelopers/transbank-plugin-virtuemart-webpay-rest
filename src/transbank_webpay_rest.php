@@ -652,8 +652,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
      */
     public function getConfig($key): ?string
     {
-        $v = $this->confProv->getConfig($key) ?? $this->confProv->getConfigFromXml($key);
-        return $v;
+        return $this->confProv->getConfig($key) ?? $this->confProv->getConfigFromXml($key);
     }
 
     // Actions
