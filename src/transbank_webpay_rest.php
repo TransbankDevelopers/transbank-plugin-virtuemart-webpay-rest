@@ -87,9 +87,9 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
      * @return array
      * @Override
      */
-    public function getTableSQLFields()
+    public function getTableSQLFields(): array
     {
-        $SQLfields = [
+        return [
             'id'                          => 'int(1) UNSIGNED NOT NULL AUTO_INCREMENT',
             'virtuemart_order_id'         => 'int(1) UNSIGNED',
             'order_number'                => 'char(64)',
@@ -103,7 +103,6 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
             'transbank_webpay_metadata'   => 'varchar(2000)',
         ];
 
-        return $SQLfields;
     }
 
     /**
