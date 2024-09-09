@@ -281,7 +281,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
         return null;
     }
 
-    private function getSuccessMessage($result)
+    private function getSuccessMessage($result): string
     {
         if (is_string($result)) {
             $result = json_decode($result);
@@ -292,11 +292,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
         $app = JFactory::getApplication();
         $app->enqueueMessage('Pago exitoso', 'message');
 
-        if ($result->responseCode == 0) {
-            $transactionResponse = 'Transacci&oacute;n Aprobada';
-        } else {
-            $transactionResponse = 'Transacci&oacute;n Rechazada';
-        }
+        $transactionResponse = $result->responseCode == 0 ? 'Transacci&oacute;n Aprobada' : 'Transacci&oacute;n Rechazada';
 
         if (
             $result->paymentTypeCode == 'SI' || $result->paymentTypeCode == 'S2' ||
@@ -307,14 +303,10 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
             $tipoCuotas = 'Sin cuotas';
         }
 
-        if ($result->paymentTypeCode == 'VD') {
-            $paymentType = 'Débito';
-        } else {
-            $paymentType = 'Crédito';
-        }
+        $paymentType = $result->paymentTypeCode == 'VD' ? 'Débito' : 'Crédito';
 
         $installmentsCount = $result->installmentsNumber > 0 ? $result->installmentsNumber : '0';
-        $message = "<h2>Detalles del pago con Webpay</h2>
+        return "<h2>Detalles del pago con Webpay</h2>
         <p>
             <br>
             <b>Respuesta de la Transacci&oacute;n: </b>{$transactionResponse}<br>
@@ -329,8 +321,6 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
             <b>Tipo de Cuotas: </b>{$tipoCuotas}<br>
             <b>N&uacute;mero de cuotas: </b>{$installmentsCount}
         </p>";
-
-        return $message;
     }
 
     /**
