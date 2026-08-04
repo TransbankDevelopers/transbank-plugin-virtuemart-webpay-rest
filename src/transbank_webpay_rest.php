@@ -119,7 +119,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
             return false;
         }
 
-        $amount = $order['details']['BT']->order_total;
+        $amount = round($order['details']['BT']->order_total);
         $sessionId = (string) intval(microtime(true));
         $orderId = $order['details']['BT']->virtuemart_order_id;
         $orderNumber = $order['details']['BT']->order_number;
