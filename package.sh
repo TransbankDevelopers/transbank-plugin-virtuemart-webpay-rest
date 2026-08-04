@@ -1,23 +1,19 @@
 #!/usr/bin/env bash
 
-set -Eeuo pipefail
-
 #Script for create the plugin artifact
-TAG="${TAG:-}"
+echo "Travis tag: $TRAVIS_TAG"
 
-if [[ "$TAG" = "" ]]
+if [ "$TRAVIS_TAG" = "" ]
 then
-   TAG='1.0.0'
+   TRAVIS_TAG='1.0.0'
 fi
-
-echo "Plugin tag: $TAG"
 
 SRC_DIR="src"
 FILE1="transbank_webpay_rest.xml"
 
-sed -i.bkp "s/<version>1.0.0/<version>${TAG}/g" "$SRC_DIR/$FILE1"
+sed -i.bkp "s/<version>1.0.0/<version>${TRAVIS_TAG}/g" "$SRC_DIR/$FILE1"
 
-PLUGIN_FILE="plugin-transbank-webpay-virtuemart3-rest-$TAG.zip"
+PLUGIN_FILE="plugin-transbank-webpay-virtuemart3-rest-$TRAVIS_TAG.zip"
 
 cp CHANGELOG.md $SRC_DIR
 cp LICENSE $SRC_DIR
@@ -30,5 +26,5 @@ rm "$SRC_DIR/LICENSE"
 cp "$SRC_DIR/$FILE1.bkp" "$SRC_DIR/$FILE1"
 rm "$SRC_DIR/$FILE1.bkp"
 
-echo "Plugin version: $TAG"
+echo "Plugin version: $TRAVIS_TAG"
 echo "Plugin file: $PLUGIN_FILE"
