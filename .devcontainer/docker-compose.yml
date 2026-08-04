@@ -1,0 +1,50 @@
+services:
+  db:
+    image: mysql:8.4
+    container_name: webpay_virtuemart_db
+    restart: on-failure:2
+    command: >
+      --mysql-native-password=ON
+      --authentication-policy=mysql_native_password
+      --default-time-zone=America/Santiago
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uvirtuemart", "-padmin"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: virtuemart
+      MYSQL_USER: virtuemart
+      MYSQL_PASSWORD: admin
+    volumes:
+      - db_data:/var/lib/mysql
+
+  web:
+    container_name: webpay_virtuemart_web
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    restart: on-failure:2
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      JOOMLA_DB_HOST: db
+      JOOMLA_DB_NAME: virtuemart
+      JOOMLA_DB_USER: virtuemart
+      JOOMLA_DB_PASSWORD: admin
+      JOOMLA_ADMIN_USER: admin
+      JOOMLA_ADMIN_PASSWORD: password
+      JOOMLA_ADMIN_EMAIL: admin@example.com
+    ports:
+      - "8081:80"
+    volumes:
+      - vm_data:/var/www/html
+      - ..:/workspace:cached
+      - ${HOME}/.ssh:/root/.ssh:cached
+      - ./logs:/var/www/html/administrator/logs
+
+volumes:
+  db_data:
+  vm_data:
