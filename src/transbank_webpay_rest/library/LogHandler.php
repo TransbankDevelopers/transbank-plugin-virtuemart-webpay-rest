@@ -167,12 +167,9 @@ class LogHandler
     private function setLogList()
     {
         $arr = array_diff(scandir($this->logDir), ['.', '..']);
-        $dira = str_replace($_SERVER['DOCUMENT_ROOT'], '', $this->logDir);
-        foreach ($arr as $key => $value) {
-            $var[] = "<a href='{$dira}/{$value}' download>{$value}</a>";
-        }
-        if (isset($var)) {
-            $this->logList = $var;
+
+        if (!empty($arr)) {
+            $this->logList = array_values($arr);
         } else {
             $this->logList = null;
         }
@@ -272,6 +269,14 @@ class LogHandler
         $result = ['log_count' => $count];
 
         return $result;
+    }
+
+    private function sanitizeMessage($msg): string
+    {
+        $msg = strip_tags((string) $msg);
+        $msg = preg_replace('/[\r\n]+/', ' ', $msg);
+
+        return trim($msg);
     }
 
     /** Funciones de mantencion de directorio de logs**/
@@ -405,7 +410,7 @@ class LogHandler
     public function logDebug($msg)
     {
         if (self::LOG_DEBUG_ENABLED) {
-            $this->logger->debug('DEBUG: '.$msg);
+            $this->logger->debug('DEBUG: '.$this->sanitizeMessage($msg));
         }
     }
 
@@ -415,7 +420,7 @@ class LogHandler
     public function logInfo($msg)
     {
         if (self::LOG_INFO_ENABLED) {
-            $this->logger->info('INFO: '.$msg);
+            $this->logger->info('INFO: '.$this->sanitizeMessage($msg));
         }
     }
 
@@ -425,7 +430,7 @@ class LogHandler
     public function logError($msg)
     {
         if (self::LOG_ERROR_ENABLED) {
-            $this->logger->error('ERROR: '.$msg);
+            $this->logger->error('ERROR: '.$this->sanitizeMessage($msg));
         }
     }
 }
