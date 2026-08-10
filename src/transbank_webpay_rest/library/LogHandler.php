@@ -27,6 +27,7 @@ class LogHandler
             if (!file_exists($this->logDir)) {
                 mkdir($this->logDir, 0777, true);
             }
+            $this->protectLogDir();
         } catch (Exception $e) {
         }
 
@@ -87,8 +88,18 @@ class LogHandler
     {
         if ($this->getIsLogDir() === false) {
             mkdir($this->logDir, 0777, true);
+            $this->protectLogDir();
         } else {
             exit;
+        }
+    }
+
+    private function protectLogDir()
+    {
+        $htaccess = $this->logDir.'/.htaccess';
+
+        if (!file_exists($htaccess)) {
+            file_put_contents($htaccess, "Require all denied\nDeny from all\n");
         }
     }
 
@@ -329,6 +340,16 @@ class LogHandler
     public function getLogDir()
     {
         return json_encode($this->setLogDir());
+    }
+
+    /**
+     * Raw (non-JSON-encoded) log directory path, for internal use.
+     *
+     * @return string
+     */
+    public function getLogDirPath()
+    {
+        return $this->logDir;
     }
 
     // obtiene conteo de logs en logdir definido

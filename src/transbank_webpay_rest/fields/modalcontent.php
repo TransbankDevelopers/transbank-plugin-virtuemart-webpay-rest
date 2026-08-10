@@ -20,6 +20,7 @@ $virtuemart_paymentmethod_id = (int) $virtuemart_paymentmethod_id;
 $baseUrl = "index.php?option=com_virtuemart&view=paymentmethod&task=edit&cid[]={$virtuemart_paymentmethod_id}";
 $urlUpdateConfig = $baseUrl . '&updateConfig=true';
 $urlCheckTransaction = $baseUrl . '&checkTransaction=true';
+$urlDownloadLog = $baseUrl . '&downloadLog=true';
 
 $confProv = new ConfigProvider();
 $configBd = $confProv->getConfig();
@@ -68,12 +69,11 @@ if ($logs->config->status === false) {
     $status = "<span class='label label-success'>Activado sistema de Registros</span>";
 }
 
-$logDirRelative = str_replace($_SERVER['DOCUMENT_ROOT'], '', $logs->log_dir);
 $logs_list = '<ul>';
 
 if (is_array($logs->logs_list) || is_object($logs->logs_list)) {
     foreach ($logs->logs_list as $value) {
-        $fileHref = htmlspecialchars($logDirRelative . '/' . $value, ENT_QUOTES, 'UTF-8');
+        $fileHref = htmlspecialchars($urlDownloadLog . '&file=' . rawurlencode($value), ENT_QUOTES, 'UTF-8');
         $fileName = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
         $logs_list .= "<li><a href='{$fileHref}' download>{$fileName}</a></li>";
     }
