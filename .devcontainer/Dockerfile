@@ -1,11 +1,8 @@
 ############################
 # image with
-# Joomla 3.8 + VirtueMart 3.2 (offline installer bundle taken from the
-# unmaintained opentools/docker-virtuemart:j3vm3 image, which is frozen on
-# an end-of-life Debian 9 "stretch" base whose apt repos no longer resolve)
-# PHP 7.3 + Apache (Joomla 3.8.x predates official PHP 7.4 support)
+# Joomla 3.8 + VirtueMart 3.2
+# PHP 7.3 + Apache
 # Composer 2.x
-# Node 22.x + pnpm
 # mariadb-client
 ############################
 FROM opentools/docker-virtuemart:j3vm3 AS vmsrc
@@ -16,13 +13,11 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV TZ=America/Santiago
 
 # Install utilities + PHP extensions needed by Joomla / VirtueMart / the Webpay
-# plugin, Node 22.x (active LTS, used to generate docs/INSTALLATION.pdf with
-# markdown-pdf) without executing remote setup scripts, and Composer
+# plugin, and Composer
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     curl \
     git \
-    gnupg \
     less \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
@@ -41,15 +36,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && a2enmod rewrite \
  && ln -snf /usr/share/zoneinfo/"$TZ" /etc/localtime \
  && echo "$TZ" > /etc/timezone \
- && mkdir -p /etc/apt/keyrings \
- && curl --proto "=https" -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
-    | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
- && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main" \
-    > /etc/apt/sources.list.d/nodesource.list \
- && apt-get update \
- && apt-get install -y --no-install-recommends nodejs \
- && corepack enable \
- && corepack prepare pnpm@11.20.0 --activate \
  && rm -rf /var/lib/apt/lists/* \
  && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
  && EXPECTED_SIGNATURE="$(curl --proto "=https" -fsSL https://composer.github.io/installer.sig)" \

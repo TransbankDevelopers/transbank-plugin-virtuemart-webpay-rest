@@ -11,10 +11,9 @@ Este devcontainer proporciona un entorno completo de desarrollo para el plugin W
 
 ## 📋 Servicios incluidos
 
-- **Joomla 3.8 + VirtueMart 3.2** con PHP 7.3 (Joomla 3.8.x no soporta oficialmente PHP 7.4+, por eso no se usa una versión más nueva). El contenido de Joomla/VirtueMart se toma del instalador offline que traía la imagen [opentools/docker-virtuemart:j3vm3](https://hub.docker.com/r/opentools/docker-virtuemart/) (abandonada, basada en Debian 9 sin soporte), pero corriendo sobre `php:7.3-apache`, una base mantenida.
+- **Joomla 3.8 + VirtueMart 3.2** con PHP 7.3. El contenido de Joomla/VirtueMart se toma del instalador offline que traía la imagen [opentools/docker-virtuemart:j3vm3](https://hub.docker.com/r/opentools/docker-virtuemart/), pero corriendo sobre `php:7.3-apache`.
 - **Apache** para servir el contenido.
 - **MySQL 8.4** (LTS) como base de datos.
-- **Node 22.x** (con pnpm vía corepack).
 - **Extensiones de VS Code** para trabajar con PHP.
 - **Composer** para gestión de dependencias PHP.
 
@@ -138,7 +137,7 @@ composer require nueva-dependencia
 
 ## 📝 Notas de desarrollo
 
-1. **Permisos**: El usuario del contenedor `web` es root, por lo que tiene acceso completo. Apache y el proceso de instalación de Joomla necesitan root para arrancar y ajustar permisos, por eso no se define un usuario no privilegiado.
+1. **Permisos**: El usuario del contenedor `web` es root.
 2. **Persistencia**: A diferencia del setup anterior basado en `docker-virtuemart3`, los datos de VirtueMart (`vm_data`) y de la base de datos (`db_data`) **sí persisten** entre reinicios del contenedor gracias a los volúmenes de Docker; solo se reinstala VirtueMart si se borran esos volúmenes.
 3. **Refresco de código**: los cambios no se reflejan automáticamente en la tienda — hay que reempaquetar e instalar el `.zip` (ver [Empaquetar e instalar el plugin](#empaquetar-e-instalar-el-plugin)).
 4. **Logs del plugin**: revisa `.devcontainer/logs/webpay-log.log.php` desde el host, o dentro del contenedor: `docker compose -f .devcontainer/docker-compose.yml exec web bash`.
@@ -163,4 +162,4 @@ Basado en el instalador offline de Joomla + VirtueMart de:
 
 [Repository Virtuemart](https://github.com/open-tools/docker-virtuemart)
 
-corriendo sobre la imagen oficial [php:7.3-apache](https://hub.docker.com/_/php), ya que la imagen `opentools/docker-virtuemart` está abandonada desde 2018 y su base (Debian 9) ya no tiene repositorios `apt` accesibles.
+corriendo sobre la imagen oficial [php:7.3-apache](https://hub.docker.com/_/php).

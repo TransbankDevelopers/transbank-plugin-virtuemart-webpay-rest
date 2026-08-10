@@ -13,9 +13,6 @@
     },
     "shutdownAction": "stopCompose",
     "postCreateCommand": "/workspace/.devcontainer/vm-setup.sh",
-    "mounts": [
-        "source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind,consistency=cached"
-    ],
     "features": {
         "ghcr.io/devcontainers-extra/features/zsh-plugins:0": {
             "plugins": "git zsh-autosuggestions zsh-syntax-highlighting",

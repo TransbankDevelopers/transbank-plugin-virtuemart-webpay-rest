@@ -19,9 +19,6 @@ if [[ ! -f "$WEBROOT/configuration.php" ]]; then
   echo "Copiando Joomla + VirtueMart a ${WEBROOT}..."
   tar cf - --one-file-system -C /usr/src/virtuemart . | tar xf - -C "$WEBROOT"
 
-  # The installer runs as www-data and needs to be able to write configuration.php;
-  # if the webroot is still owned by root, Joomla fails silently (createConfiguration()
-  # still returns true, but never writes the file).
   chown -R www-data:www-data "$WEBROOT"
 
   cd "$WEBROOT"
