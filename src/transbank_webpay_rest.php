@@ -677,25 +677,34 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
         JFactory::getApplication()->close();
     }
 
-    private function downloadLog()
+    private function requireAdminAccess(): bool
     {
         $user = JFactory::getUser();
 
         if ($user->guest || !$user->authorise('core.manage', 'com_virtuemart')) {
             JFactory::getApplication()->close();
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private function downloadLog()
+    {
+        if (!$this->requireAdminAccess()) {
+            return;
         }
 
         $filename = basename((string) ($_GET['file'] ?? ''));
 
-        if (!$this->log->isLogFilename($filename)) {
+        if (!$this->log->canReadLogFile($filename, self::MAX_DOWNLOADABLE_LOG_SIZE)) {
             JFactory::getApplication()->close();
+
+            return;
         }
 
         $filePath = $this->log->getLogDirValue() . '/' . $filename;
-
-        if (!is_file($filePath) || filesize($filePath) > self::MAX_DOWNLOADABLE_LOG_SIZE) {
-            JFactory::getApplication()->close();
-        }
 
         header('Content-Type: text/plain');
         header('Content-Disposition: attachment; filename="' . $filename . '"');
