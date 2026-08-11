@@ -177,7 +177,10 @@ class LogHandler
 
     private function setLogList()
     {
-        $arr = array_diff(scandir($this->logDir), ['.', '..']);
+        $arr = array_filter(
+            array_diff(scandir($this->logDir), ['.', '..']),
+            [$this, 'isLogFilename']
+        );
 
         if (!empty($arr)) {
             $this->logList = array_values($arr);
@@ -269,11 +272,6 @@ class LogHandler
         }
     }
 
-    private function setLogDir()
-    {
-        return $this->logDir;
-    }
-
     private function setLogCount()
     {
         $count = count($this->setLogList());
@@ -339,15 +337,15 @@ class LogHandler
     // obtiene directorio de log
     public function getLogDir()
     {
-        return json_encode($this->setLogDir());
+        return json_encode($this->getLogDirValue());
     }
 
     /**
-     * Raw (non-JSON-encoded) log directory path, for internal use.
+     * Returns the raw (non-JSON-encoded) log directory path.
      *
      * @return string
      */
-    public function getLogDirPath()
+    public function getLogDirValue()
     {
         return $this->logDir;
     }
@@ -356,6 +354,19 @@ class LogHandler
     public function getLogCount()
     {
         return json_encode($this->setLogCount());
+    }
+
+    /**
+     * Checks whether a filename matches the naming convention for log files
+     * managed by this handler, including rotated backups.
+     *
+     * @param string $filename
+     *
+     * @return bool
+     */
+    public function isLogFilename($filename)
+    {
+        return preg_match('/^log_transbank_[A-Za-z0-9_\-]+\.log(\.\d+)?$/', $filename) === 1;
     }
 
     // obtiene listado de logs en logdir
@@ -411,7 +422,7 @@ class LogHandler
     {
         $result = [
             'config'     => $this->getValidateLockFile(),
-            'log_dir'    => $this->setLogDir(),
+            'log_dir'    => $this->getLogDirValue(),
             'logs_count' => $this->setLogCount(),
             'logs_list'  => $this->setLogList(),
             'last_log'   => $this->setLastLog(),

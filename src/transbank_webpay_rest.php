@@ -687,11 +687,11 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
 
         $filename = basename((string) ($_GET['file'] ?? ''));
 
-        if (!preg_match('/^log_transbank_[A-Za-z0-9_\-]+\.log$/', $filename)) {
+        if (!$this->log->isLogFilename($filename)) {
             JFactory::getApplication()->close();
         }
 
-        $filePath = $this->log->getLogDirPath() . '/' . $filename;
+        $filePath = $this->log->getLogDirValue() . '/' . $filename;
 
         if (!is_file($filePath) || filesize($filePath) > self::MAX_DOWNLOADABLE_LOG_SIZE) {
             JFactory::getApplication()->close();
