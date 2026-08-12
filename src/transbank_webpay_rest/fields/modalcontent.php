@@ -16,6 +16,7 @@ if (is_array($cid)) {
     $virtuemart_paymentmethod_id = $cid;
 }
 
+$virtuemart_paymentmethod_id = (int) $virtuemart_paymentmethod_id;
 $baseUrl = "index.php?option=com_virtuemart&view=paymentmethod&task=edit&cid[]={$virtuemart_paymentmethod_id}";
 $urlUpdateConfig = $baseUrl . '&updateConfig=true';
 $urlCheckTransaction = $baseUrl . '&checkTransaction=true';
@@ -66,14 +67,6 @@ if ($logs->config->status === false) {
 } else {
     $status = "<span class='label label-success'>Activado sistema de Registros</span>";
 }
-
-$logs_list = '<ul>';
-if (is_array($logs->logs_list) || is_object($logs->logs_list)) {
-    foreach ($logs->logs_list as $value) {
-        $logs_list .= "<li>{$value}</li>";
-    }
-}
-$logs_list .= '</ul>';
 
 $tb_max_logs_days = $logs->config->max_logs_days;
 $tb_max_logs_weight = $logs->config->max_log_weight;
@@ -417,7 +410,7 @@ if ($logs->config->status === true) {
                                 </div>
                                 <div class="info-column" id="log-status">
                                     <span>
-                                        <?php echo stripslashes(json_encode($logs->log_dir)); ?>
+                                        <?php echo htmlspecialchars(json_encode($logs->log_dir), ENT_QUOTES, 'UTF-8'); ?>
                                     </span>
                                 </div>
                             </div>
@@ -433,21 +426,6 @@ if ($logs->config->status === true) {
                                 <div class="info-column" id="log-status">
                                     <span>
                                         <?php echo json_encode($logs->logs_count->log_count); ?>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="tbk-response-container" id="div_logs_list">
-                                <div class="info-column">
-                                    <div title="Lista los archivos que guardan la información de transacciones Webpay"
-                                        class="label label-info">?
-                                    </div>
-                                </div>
-                                <div class="info-column">
-                                    <span class="highlight-text">Listado de Registros Disponibles: </span>
-                                </div>
-                                <div class="info-column" id="log-status">
-                                    <span>
-                                        <?php echo $logs_list; ?>
                                     </span>
                                 </div>
                             </div>
@@ -502,7 +480,7 @@ if ($logs->config->status === true) {
                         <b>Contenido último Log: </b>
                         <div class="log_content">
                             <pre>
-                                <code><?php echo stripslashes((string) $res_logcontent); ?></code>
+                                <code><?php echo htmlspecialchars((string) $res_logcontent, ENT_QUOTES, 'UTF-8'); ?></code>
                             </pre>
                         </div>
                     </div>
@@ -560,7 +538,7 @@ if ($logs->config->status === true) {
             };
             var el = $(this);
             el.text('Actualizar Parametros...');
-            $.get("<?php echo $urlUpdateConfig; ?>", data, function(resp) {
+            $.get(<?php echo json_encode($urlUpdateConfig); ?>, data, function(resp) {
                 el.text('Actualizar Parametros');
                 if (status === false) {
                     $('#log-status').empty().append("<span class='label label-warning'>Desactivado sistema de Registros</span>");
@@ -574,7 +552,7 @@ if ($logs->config->status === true) {
         $('#btn-check-transaction').click(function(evt) {
             var el = $(this);
             el.text('Verificar conexión...');
-            $.getJSON("<?php echo $urlCheckTransaction; ?>", function(resp) {
+            $.getJSON(<?php echo json_encode($urlCheckTransaction); ?>, function(resp) {
                 el.text('Verificar conexión');
                 var status = '';
                 if (resp.status.string == 'OK') {

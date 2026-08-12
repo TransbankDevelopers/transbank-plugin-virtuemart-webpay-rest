@@ -27,7 +27,9 @@ class LogHandler
             if (!file_exists($this->logDir)) {
                 mkdir($this->logDir, 0777, true);
             }
+            $this->protectLogDir();
         } catch (Exception $e) {
+            error_log('Transbank Webpay: '.$e->getMessage()); 
         }
 
         $dia = date('Y-m-d');
@@ -87,8 +89,20 @@ class LogHandler
     {
         if ($this->getIsLogDir() === false) {
             mkdir($this->logDir, 0777, true);
+            $this->protectLogDir();
         } else {
             exit;
+        }
+    }
+
+    private function protectLogDir()
+    {
+        $htaccess = $this->logDir.'/.htaccess';
+
+        if ((!file_exists($htaccess) || filesize($htaccess) === 0)
+            && file_put_contents($htaccess, "Require all denied\nDeny from all\n") === false)
+        {
+            error_log('Transbank Webpay: could not write .htaccess to log directory: '.$this->logDir);
         }
     }
 
@@ -166,13 +180,13 @@ class LogHandler
 
     private function setLogList()
     {
-        $arr = array_diff(scandir($this->logDir), ['.', '..']);
-        $dira = str_replace($_SERVER['DOCUMENT_ROOT'], '', $this->logDir);
-        foreach ($arr as $key => $value) {
-            $var[] = "<a href='{$dira}/{$value}' download>{$value}</a>";
-        }
-        if (isset($var)) {
-            $this->logList = $var;
+        $arr = array_filter(
+            array_diff(scandir($this->logDir), ['.', '..']),
+            [$this, 'isLogFilename']
+        );
+
+        if (!empty($arr)) {
+            $this->logList = array_values($arr);
         } else {
             $this->logList = null;
         }
@@ -261,17 +275,20 @@ class LogHandler
         }
     }
 
-    private function setLogDir()
-    {
-        return $this->logDir;
-    }
-
     private function setLogCount()
     {
         $count = count($this->setLogList());
         $result = ['log_count' => $count];
 
         return $result;
+    }
+
+    private function sanitizeMessage($msg): string
+    {
+        $msg = strip_tags((string) $msg);
+        $msg = preg_replace('/[\r\n]+/', ' ', $msg);
+
+        return trim($msg);
     }
 
     /** Funciones de mantencion de directorio de logs**/
@@ -323,13 +340,36 @@ class LogHandler
     // obtiene directorio de log
     public function getLogDir()
     {
-        return json_encode($this->setLogDir());
+        return json_encode($this->getLogDirValue());
+    }
+
+    /**
+     * Returns the raw (non-JSON-encoded) log directory path.
+     *
+     * @return string
+     */
+    public function getLogDirValue()
+    {
+        return $this->logDir;
     }
 
     // obtiene conteo de logs en logdir definido
     public function getLogCount()
     {
         return json_encode($this->setLogCount());
+    }
+
+    /**
+     * Checks whether a filename matches the naming convention for log files
+     * managed by this handler, including rotated backups.
+     *
+     * @param string $filename
+     *
+     * @return bool
+     */
+    public function isLogFilename($filename)
+    {
+        return preg_match('/^log_transbank_[A-Za-z0-9_\-]+\.log(\.\d+)?$/', $filename) === 1;
     }
 
     // obtiene listado de logs en logdir
@@ -385,7 +425,7 @@ class LogHandler
     {
         $result = [
             'config'     => $this->getValidateLockFile(),
-            'log_dir'    => $this->setLogDir(),
+            'log_dir'    => $this->getLogDirValue(),
             'logs_count' => $this->setLogCount(),
             'logs_list'  => $this->setLogList(),
             'last_log'   => $this->setLastLog(),
@@ -405,7 +445,7 @@ class LogHandler
     public function logDebug($msg)
     {
         if (self::LOG_DEBUG_ENABLED) {
-            $this->logger->debug('DEBUG: '.$msg);
+            $this->logger->debug('DEBUG: '.$this->sanitizeMessage($msg));
         }
     }
 
@@ -415,7 +455,7 @@ class LogHandler
     public function logInfo($msg)
     {
         if (self::LOG_INFO_ENABLED) {
-            $this->logger->info('INFO: '.$msg);
+            $this->logger->info('INFO: '.$this->sanitizeMessage($msg));
         }
     }
 
@@ -425,7 +465,7 @@ class LogHandler
     public function logError($msg)
     {
         if (self::LOG_ERROR_ENABLED) {
-            $this->logger->error('ERROR: '.$msg);
+            $this->logger->error('ERROR: '.$this->sanitizeMessage($msg));
         }
     }
 }
