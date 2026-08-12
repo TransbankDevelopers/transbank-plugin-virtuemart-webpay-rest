@@ -99,7 +99,7 @@ class LogHandler
     {
         $htaccess = $this->logDir.'/.htaccess';
 
-        if (!file_exists($htaccess)
+        if ((!file_exists($htaccess) || filesize($htaccess) === 0)
             && file_put_contents($htaccess, "Require all denied\nDeny from all\n") === false)
         {
             error_log('Transbank Webpay: could not write .htaccess to log directory: '.$this->logDir);
