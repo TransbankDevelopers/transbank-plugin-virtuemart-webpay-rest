@@ -36,7 +36,6 @@ if (!class_exists('ConfigProvider')) {
 class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
 {
     const PLUGIN_CODE = 'transbank_webpay_rest'; //code of plugin for virtuemart
-    const MAX_DOWNLOADABLE_LOG_SIZE = 10485760; // 10MB
 
     private $paymentTypeCodearray = [
         'VD' => 'Venta Debito',
@@ -65,8 +64,6 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
 
             if (isset($_GET['checkTransaction'])) {
                 $this->checkTransaction();
-            } elseif (isset($_GET['downloadLog'])) {
-                $this->downloadLog();
             }
         }
     }
@@ -674,43 +671,6 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
         $healthcheck = new HealthCheck($config);
         $response = $healthcheck->createTransaction();
         echo json_encode($response);
-        JFactory::getApplication()->close();
-    }
-
-    private function requireAdminAccess(): bool
-    {
-        $user = JFactory::getUser();
-
-        if ($user->guest || !$user->authorise('core.manage', 'com_virtuemart')) {
-            JFactory::getApplication()->close();
-
-            return false;
-        }
-
-        return true;
-    }
-
-    private function downloadLog()
-    {
-        if (!$this->requireAdminAccess()) {
-            return;
-        }
-
-        $filename = basename((string) ($_GET['file'] ?? ''));
-
-        if (!$this->log->canReadLogFile($filename, self::MAX_DOWNLOADABLE_LOG_SIZE)) {
-            JFactory::getApplication()->close();
-
-            return;
-        }
-
-        $filePath = $this->log->getLogDirValue() . '/' . $filename;
-
-        header('Content-Type: text/plain');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
-        header('Content-Length: ' . filesize($filePath));
-        readfile($filePath);
-
         JFactory::getApplication()->close();
     }
 }

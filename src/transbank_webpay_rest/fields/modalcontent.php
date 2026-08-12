@@ -20,7 +20,6 @@ $virtuemart_paymentmethod_id = (int) $virtuemart_paymentmethod_id;
 $baseUrl = "index.php?option=com_virtuemart&view=paymentmethod&task=edit&cid[]={$virtuemart_paymentmethod_id}";
 $urlUpdateConfig = $baseUrl . '&updateConfig=true';
 $urlCheckTransaction = $baseUrl . '&checkTransaction=true';
-$urlDownloadLog = $baseUrl . '&downloadLog=true';
 
 $confProv = new ConfigProvider();
 $configBd = $confProv->getConfig();
@@ -68,17 +67,6 @@ if ($logs->config->status === false) {
 } else {
     $status = "<span class='label label-success'>Activado sistema de Registros</span>";
 }
-
-$logs_list = '<ul>';
-
-if (is_array($logs->logs_list) || is_object($logs->logs_list)) {
-    foreach ($logs->logs_list as $value) {
-        $fileHref = htmlspecialchars($urlDownloadLog . '&file=' . rawurlencode($value), ENT_QUOTES, 'UTF-8');
-        $fileName = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
-        $logs_list .= "<li><a href='{$fileHref}' download>{$fileName}</a></li>";
-    }
-}
-$logs_list .= '</ul>';
 
 $tb_max_logs_days = $logs->config->max_logs_days;
 $tb_max_logs_weight = $logs->config->max_log_weight;
@@ -438,21 +426,6 @@ if ($logs->config->status === true) {
                                 <div class="info-column" id="log-status">
                                     <span>
                                         <?php echo json_encode($logs->logs_count->log_count); ?>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="tbk-response-container" id="div_logs_list">
-                                <div class="info-column">
-                                    <div title="Lista los archivos que guardan la información de transacciones Webpay"
-                                        class="label label-info">?
-                                    </div>
-                                </div>
-                                <div class="info-column">
-                                    <span class="highlight-text">Listado de Registros Disponibles: </span>
-                                </div>
-                                <div class="info-column" id="log-status">
-                                    <span>
-                                        <?php echo $logs_list; ?>
                                     </span>
                                 </div>
                             </div>

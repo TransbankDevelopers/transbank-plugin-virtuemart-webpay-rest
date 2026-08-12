@@ -369,26 +369,6 @@ class LogHandler
         return preg_match('/^log_transbank_[A-Za-z0-9_\-]+\.log(\.\d+)?$/', $filename) === 1;
     }
 
-    /**
-     * Checks whether a filename is a valid log file managed by this handler,
-     * it exists, and its size does not exceed the given limit.
-     *
-     * @param string $filename
-     * @param int    $maxBytes
-     *
-     * @return bool
-     */
-    public function canReadLogFile($filename, $maxBytes)
-    {
-        if (!$this->isLogFilename($filename)) {
-            return false;
-        }
-
-        $filePath = $this->getLogDirValue() . '/' . $filename;
-
-        return is_file($filePath) && filesize($filePath) <= $maxBytes;
-    }
-
     // obtiene listado de logs en logdir
     public function getLogList()
     {
