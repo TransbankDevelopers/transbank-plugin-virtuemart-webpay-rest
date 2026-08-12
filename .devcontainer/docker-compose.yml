@@ -42,7 +42,6 @@ services:
     volumes:
       - vm_data:/var/www/html
       - ..:/workspace:cached
-      - ${HOME}/.ssh:/root/.ssh:cached
       - ./logs:/var/www/html/administrator/logs
 
 volumes:

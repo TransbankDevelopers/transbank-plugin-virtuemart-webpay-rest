@@ -29,6 +29,7 @@ class LogHandler
             }
             $this->protectLogDir();
         } catch (Exception $e) {
+            error_log('Transbank Webpay: '.$e->getMessage()); 
         }
 
         $dia = date('Y-m-d');
@@ -98,8 +99,10 @@ class LogHandler
     {
         $htaccess = $this->logDir.'/.htaccess';
 
-        if (!file_exists($htaccess)) {
-            file_put_contents($htaccess, "Require all denied\nDeny from all\n");
+        if (!file_exists($htaccess)
+            && file_put_contents($htaccess, "Require all denied\nDeny from all\n") === false)
+        {
+            error_log('Transbank Webpay: could not write .htaccess to log directory: '.$this->logDir);
         }
     }
 
