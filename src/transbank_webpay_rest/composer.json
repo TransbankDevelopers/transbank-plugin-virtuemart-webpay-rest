@@ -1,6 +1,7 @@
 {
     "require": {
-        "transbank/transbank-sdk": "~2.0"
+        "transbank/transbank-sdk": "~2.0",
+        "monolog/monolog": "1.27.1"
     },
     "config": {
         "platform": {

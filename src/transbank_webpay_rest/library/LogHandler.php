@@ -1,6 +1,11 @@
 <?php
 
-require_once 'log4php/main/php/Logger.php';
+require_once __DIR__.'/../vendor/autoload.php';
+
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Formatter\LineFormatter;
+
 define('Webpay_ROOT', dirname(__DIR__));
 
 class LogHandler
@@ -35,30 +40,11 @@ class LogHandler
         $dia = date('Y-m-d');
         $logFile = "{$this->logDir}/log_transbank_{$ecommerce}_{$dia}.log";
 
-        $logConfiguration = [
-            'appenders' => [
-                'default' => [
-                    'class'  => 'LoggerAppenderRollingFile',
-                    'layout' => [
-                        'class'  => 'LoggerLayoutPattern',
-                        'params' => [
-                            'conversionPattern' => '[%date{Y-m-d H:i:s}] [%-5level] %msg%n',
-                        ],
-                    ],
-                    'params' => [
-                        'file'           => $logFile,
-                        'maxFileSize'    => $this->confweight,
-                        'maxBackupIndex' => 10,
-                    ],
-                ],
-            ],
-            'rootLogger' => [
-                'appenders' => ['default'],
-            ],
-        ];
-
-        Logger::configure($logConfiguration);
-        $this->logger = Logger::getLogger('main');
+        $formatter = new LineFormatter("[%datetime%] [%level_name%] %message%\n", 'Y-m-d H:i:s');
+        $handler = new StreamHandler($logFile, Logger::DEBUG);
+        $handler->setFormatter($formatter);
+        $this->logger = new Logger('main');
+        $this->logger->pushHandler($handler);
     }
 
     private function formatBytes($path)
