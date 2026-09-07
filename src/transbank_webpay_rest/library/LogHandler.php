@@ -185,11 +185,6 @@ class LogHandler
         $this->transactionID = $token;
     }
 
-    private function getTransactionId()
-    {
-        return $this->transactionID;
-    }
-
     private function setLastLog()
     {
         $files = glob($this->logDir.'/*.log');
@@ -246,19 +241,6 @@ class LogHandler
         ];
 
         return $return;
-    }
-
-    private function setLogNewLine($args, $type)
-    {
-        $this->digestLogs();
-        $content = "[{$args['transactionId']}] [{$args['method']}] [{$args['request']}] [{$args['response']}] ";
-        if ($type === true) {
-            $this->logger->info($content);
-        } elseif ($type === false) {
-            $this->logger->error($content);
-        } else {
-            $this->logger->warn('se ha ingresado parametro no valido en la creacion de log');
-        }
     }
 
     private function setLogCount()
