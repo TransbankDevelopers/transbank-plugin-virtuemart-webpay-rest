@@ -6,10 +6,6 @@ if (!class_exists('vmPSPlugin')) {
     require_once VMPATH_PLUGINLIBS.DS.'vmpsplugin.php';
 }
 
-if (!class_exists('LogHandler')) {
-    require_once 'LogHandler.php';
-}
-
 /**
  * Transbank Webpay config provider for outside plugin instance.
  *

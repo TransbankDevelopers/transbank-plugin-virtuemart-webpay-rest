@@ -1,7 +1,5 @@
 <?php
 
-require_once 'TransbankSdkWebpay.php';
-
 use Transbank\Webpay\WebpayPlus;
 
 

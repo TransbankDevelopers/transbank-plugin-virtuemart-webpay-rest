@@ -5,9 +5,7 @@ if (!class_exists('vmPSPlugin')) {
     require_once JPATH_VM_PLUGINS . DS . 'vmpsplugin.php';
 }
 
-include_once dirname(dirname(__FILE__)) . '/library/HealthCheck.php';
-include_once dirname(dirname(__FILE__)) . '/library/LogHandler.php';
-include_once dirname(dirname(__FILE__)) . '/library/ConfigProvider.php';
+require_once dirname(dirname(__FILE__)) . '/vendor/autoload.php';
 
 $cid = vRequest::getvar('cid', null, 'array');
 if (is_array($cid)) {

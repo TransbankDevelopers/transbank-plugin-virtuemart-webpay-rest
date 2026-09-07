@@ -3,6 +3,9 @@
         "transbank/transbank-sdk": "~2.0",
         "monolog/monolog": "1.27.1"
     },
+    "autoload": {
+        "classmap": ["library/"]
+    },
     "config": {
         "platform": {
             "php": "7.0"

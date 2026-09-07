@@ -12,21 +12,7 @@ if (!class_exists('ShopFunctions')) {
 
 defined('DIR_SYSTEM') or define('DIR_SYSTEM', VMPATH_PLUGINS . '/vmpayment/transbank_webpay_rest/transbank_webpay_rest/');
 
-if (!class_exists('TransbankSdkWebpay')) {
-    require_once DIR_SYSTEM . 'library/TransbankSdkWebpay.php';
-}
-
-if (!class_exists('LogHandler')) {
-    require_once DIR_SYSTEM . 'library/LogHandler.php';
-}
-
-if (!class_exists('HealthCheck')) {
-    require_once DIR_SYSTEM . 'library/HealthCheck.php';
-}
-
-if (!class_exists('ConfigProvider')) {
-    require_once DIR_SYSTEM . 'library/ConfigProvider.php';
-}
+require_once DIR_SYSTEM . 'vendor/autoload.php';
 
 /**
  * Transbank Webpay Payment plugin implementation.
