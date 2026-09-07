@@ -24,7 +24,7 @@ $urlCheckTransaction = $baseUrl . '&checkTransaction=true';
 $confProv = new ConfigProvider();
 $configBd = $confProv->getConfig();
 
-if (!isset($configBd['ambiente']) or trim($configBd['ambiente']) == '') {
+if (!isset($configBd['ambiente']) || trim($configBd['ambiente']) == '') {
     $configBd = $confProv->getConfigFromXml();
 }
 
