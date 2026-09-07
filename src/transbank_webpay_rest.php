@@ -1,6 +1,8 @@
 <?php
 
-defined('_JEXEC') or exit('Restricted access');
+if (!defined('_JEXEC')) {
+    exit('Restricted access');
+}
 
 if (!class_exists('vmPSPlugin')) {
     require_once VMPATH_PLUGINLIBS . DS . 'vmpsplugin.php';
@@ -10,7 +12,9 @@ if (!class_exists('ShopFunctions')) {
     require_once JPATH_VM_ADMINISTRATOR . DS . 'helpers' . DS . 'shopfunctions.php';
 }
 
-defined('DIR_SYSTEM') or define('DIR_SYSTEM', VMPATH_PLUGINS . '/vmpayment/transbank_webpay_rest/transbank_webpay_rest/');
+if (!defined('DIR_SYSTEM')) {
+    define('DIR_SYSTEM', VMPATH_PLUGINS . '/vmpayment/transbank_webpay_rest/transbank_webpay_rest/');
+}
 
 require_once DIR_SYSTEM . 'vendor/autoload.php';
 

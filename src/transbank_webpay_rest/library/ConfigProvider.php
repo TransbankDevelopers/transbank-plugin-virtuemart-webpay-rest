@@ -1,6 +1,8 @@
 <?php
 
-defined('_JEXEC') or exit('Restricted access');
+if (!defined('_JEXEC')) {
+    exit('Restricted access');
+}
 
 if (!class_exists('vmPSPlugin')) {
     require_once VMPATH_PLUGINLIBS.DS.'vmpsplugin.php';

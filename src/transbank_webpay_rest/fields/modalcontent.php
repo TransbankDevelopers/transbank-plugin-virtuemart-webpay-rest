@@ -1,5 +1,7 @@
 <?php
-defined('JPATH_BASE') or exit();
+if (!defined('JPATH_BASE')) {
+    exit();
+}
 
 if (!class_exists('vmPSPlugin')) {
     require_once JPATH_VM_PLUGINS . DS . 'vmpsplugin.php';
