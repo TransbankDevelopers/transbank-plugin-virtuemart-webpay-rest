@@ -61,26 +61,6 @@ class LogHandler
         return $bytes;
     }
 
-    private function getIsLogDir()
-    {
-        if (!file_exists($this->logDir)) {
-            //echo "error!: no existe directorio de logs, favor crear uno";
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    private function setMakeLogDir()
-    {
-        if ($this->getIsLogDir() === false) {
-            mkdir($this->logDir, 0755, true);
-            $this->protectLogDir();
-        } else {
-            exit;
-        }
-    }
-
     private function protectLogDir()
     {
         $htaccess = $this->logDir . '/.htaccess';
@@ -132,11 +112,6 @@ class LogHandler
         return $this->logList;
     }
 
-    public function setTransactionId($token)
-    {
-        $this->transactionID = $token;
-    }
-
     private function setLastLog()
     {
         $files = glob($this->logDir . '/*.log');
@@ -161,40 +136,6 @@ class LogHandler
         return $return;
     }
 
-    private function readLogByFile($filename)
-    {
-        $var = file_get_contents($this->logDir . '/' . $filename);
-        $return = [
-            'log_file'    => $filename,
-            'log_content' => $var,
-        ];
-
-        return $return;
-    }
-
-    private function setCountLogByFile($filename)
-    {
-        $fp = file($this->logDir . '/' . $filename);
-        $return = [
-            'log_file'   => $filename,
-            'lines_regs' => count($fp),
-        ];
-
-        return $return;
-    }
-
-    private function setLastLogCountLines()
-    {
-        $lastfile = $this->setLastLog();
-        $fp = file($this->logDir . '/' . $lastfile['log_file']);
-        $return = [
-            'log_file'   => basename($lastfile['log_file']),
-            'lines_regs' => count($fp),
-        ];
-
-        return $return;
-    }
-
     private function setLogCount()
     {
         $count = count($this->setLogList());
@@ -211,58 +152,6 @@ class LogHandler
         return trim($msg);
     }
 
-    /** Funciones de mantencion de directorio de logs**/
-
-    // limpieza total de directorio
-
-    private function delAllLogs()
-    {
-        if (!file_exists($this->logDir)) {
-            // echo "error!: no existe directorio de logs";
-            exit;
-        }
-        $files = glob($this->logDir . '/*');
-        foreach ($files as $file) {
-            if (is_file($file)) {
-                unlink($file);
-            }
-        }
-
-        return true;
-    }
-
-    // mantiene solo los ultimos n dias de logs
-    private function digestLogs()
-    {
-        if (!file_exists($this->logDir)) {
-            // echo "error!: no existe directorio de logs";
-            $this->setMakeLogDir();
-            //exit;
-        }
-        $files = glob($this->logDir . '/*', GLOB_ONLYDIR);
-        $deletions = array_slice($files, 0, count($files) - $this->confdays);
-        foreach ($deletions as $to_delete) {
-            array_map('unlink', glob("$to_delete"));
-            //$deleted = rmdir($to_delete);
-        }
-
-        return true;
-    }
-
-    /**Funciones de retorno**/
-
-    // Obtiene archivo de bloqueo
-    public function getLockFile()
-    {
-        return json_encode($this->getValidateLockFile());
-    }
-
-    // obtiene directorio de log
-    public function getLogDir()
-    {
-        return json_encode($this->getLogDirValue());
-    }
-
     /**
      * Returns the raw (non-JSON-encoded) log directory path.
      *
@@ -271,12 +160,6 @@ class LogHandler
     public function getLogDirValue()
     {
         return $this->logDir;
-    }
-
-    // obtiene conteo de logs en logdir definido
-    public function getLogCount()
-    {
-        return json_encode($this->setLogCount());
     }
 
     /**
@@ -290,46 +173,6 @@ class LogHandler
     public function isLogFilename($filename)
     {
         return preg_match('/^log_transbank_[A-Za-z0-9_\-]+\.log(\.\d+)?$/', $filename) === 1;
-    }
-
-    // obtiene listado de logs en logdir
-    public function getLogList()
-    {
-        return json_encode($this->setLogList());
-    }
-
-    // obtiene ultimo log modificado (al crearse con timestamp es tambien el ultimo creado)
-    public function getLastLog()
-    {
-        return json_encode($this->setLastLog());
-    }
-
-    // obtiene conteo de lineas de ultimo log creado
-    public function getLastLogCountLines()
-    {
-        return json_encode($this->setLastLogCountLines());
-    }
-
-    // obtiene log en base a parametro
-    public function getLogByFile($filename)
-    {
-        return json_encode($this->readLogByFile($filename));
-    }
-
-    // obtiene conteo de lineas de log en base a parametro
-    public function getCountLogByFile($filename)
-    {
-        return json_encode($this->setCountLogByFile($filename));
-    }
-
-    public function delLogsFromDir()
-    {
-        $this->delAllLogs();
-    }
-
-    public function delKeepOnlyLastLogs()
-    {
-        $this->digestLogs();
     }
 
     public function getResume()
