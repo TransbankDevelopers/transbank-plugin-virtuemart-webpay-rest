@@ -1,6 +1,6 @@
 <?php
 if (!defined('JPATH_BASE')) {
-    exit();
+    return;
 }
 
 if (!class_exists('vmPSPlugin')) {

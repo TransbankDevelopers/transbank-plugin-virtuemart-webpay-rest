@@ -1,7 +1,7 @@
 <?php
 
 if (!defined('JPATH_BASE')) {
-    exit();
+    return;
 }
 
 jimport('joomla.form.formfield');

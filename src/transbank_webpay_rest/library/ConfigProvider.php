@@ -1,7 +1,7 @@
 <?php
 
 if (!defined('_JEXEC')) {
-    exit('Restricted access');
+    return;
 }
 
 if (!class_exists('vmPSPlugin')) {
