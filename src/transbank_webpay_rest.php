@@ -607,18 +607,6 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
     }
 
     /**
-     * return the model orders.
-     */
-    private function getModelOrder()
-    {
-        if (!class_exists('VirtueMartModelOrders')) {
-            require_once JPATH_VM_ADMINISTRATOR . DS . 'models' . DS . 'orders.php';
-        }
-
-        return new VirtueMartModelOrders();
-    }
-
-    /**
      * return method payment from virtuemart system by id.
      */
     private function getMethodPayment()
