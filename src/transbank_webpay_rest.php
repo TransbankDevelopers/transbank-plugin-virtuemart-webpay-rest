@@ -134,7 +134,8 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
             $session->set('webpay_payment_ok', 'WAITING');
             $session->set('webpay_token_ws', $tokenWs);
 
-            $this->toRedirect($url, ['token_ws' => $tokenWs]);
+            $sent = $this->toRedirect($url, ['token_ws' => $tokenWs]);
+            $this->log->logDebug('toRedirect a Webpay: ' . ($sent ? 'true' : 'false'));
         } else {
             $session->set('webpay_payment_ok', 'FAIL');
             $app = JFactory::getApplication();
@@ -223,7 +224,8 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
                 $modelOrder->updateStatusForOneOrder($orderId, $order, true);
 
                 $html = $this->getSuccessMessage($result);
-                $this->emptyCart(null);
+                $emptied = $this->emptyCart(null);
+                $this->log->logDebug('emptyCart: ' . ($emptied ? 'true' : 'false'));
             } else {
                 $session->set('webpay_payment_ok', 'FAIL');
 
@@ -251,7 +253,8 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
 
             if ($paymentOk == 'SUCCESS') {
                 $html = $this->getSuccessMessage($result);
-                $this->emptyCart(null);
+                $emptied = $this->emptyCart(null);
+                $this->log->logDebug('emptyCart: ' . ($emptied ? 'true' : 'false'));
             } elseif ($paymentOk == 'FAIL') {
                 $order = [];
                 $order['order_status'] = $this->getConfig('status_canceled');
