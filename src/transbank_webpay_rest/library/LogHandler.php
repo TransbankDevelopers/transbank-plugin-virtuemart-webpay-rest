@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -22,11 +22,11 @@ class LogHandler
     {
         $this->reponse = null;
         $this->logDir = null;
-        $this->lockfile = Webpay_ROOT.'/set_logs_activate.lock';
+        $this->lockfile = Webpay_ROOT . '/set_logs_activate.lock';
 
         $this->confdays = $days;
         $this->confweight = $weight;
-        $this->logDir = JPATH_ROOT.'/administrator/logs/Transbank_webpay';
+        $this->logDir = JPATH_ROOT . '/administrator/logs/Transbank_webpay';
 
         try {
             if (!file_exists($this->logDir)) {
@@ -34,7 +34,7 @@ class LogHandler
             }
             $this->protectLogDir();
         } catch (Exception $e) {
-            error_log('Transbank Webpay: '.$e->getMessage()); 
+            error_log('Transbank Webpay: ' . $e->getMessage());
         }
 
         $dia = date('Y-m-d');
@@ -83,12 +83,12 @@ class LogHandler
 
     private function protectLogDir()
     {
-        $htaccess = $this->logDir.'/.htaccess';
+        $htaccess = $this->logDir . '/.htaccess';
 
         if ((!file_exists($htaccess) || filesize($htaccess) === 0)
-            && file_put_contents($htaccess, "Require all denied\nDeny from all\n") === false)
-        {
-            error_log('Transbank Webpay: could not write .htaccess to log directory: '.$this->logDir);
+            && file_put_contents($htaccess, "Require all denied\nDeny from all\n") === false
+        ) {
+            error_log('Transbank Webpay: could not write .htaccess to log directory: ' . $this->logDir);
         }
     }
 
@@ -187,7 +187,7 @@ class LogHandler
 
     private function setLastLog()
     {
-        $files = glob($this->logDir.'/*.log');
+        $files = glob($this->logDir . '/*.log');
         if (!$files) {
             return ['No existen Logs disponibles'];
         }
@@ -211,7 +211,7 @@ class LogHandler
 
     private function readLogByFile($filename)
     {
-        $var = file_get_contents($this->logDir.'/'.$filename);
+        $var = file_get_contents($this->logDir . '/' . $filename);
         $return = [
             'log_file'    => $filename,
             'log_content' => $var,
@@ -222,7 +222,7 @@ class LogHandler
 
     private function setCountLogByFile($filename)
     {
-        $fp = file($this->logDir.'/'.$filename);
+        $fp = file($this->logDir . '/' . $filename);
         $return = [
             'log_file'   => $filename,
             'lines_regs' => count($fp),
@@ -234,7 +234,7 @@ class LogHandler
     private function setLastLogCountLines()
     {
         $lastfile = $this->setLastLog();
-        $fp = file($this->logDir.'/'.$lastfile['log_file']);
+        $fp = file($this->logDir . '/' . $lastfile['log_file']);
         $return = [
             'log_file'   => basename($lastfile['log_file']),
             'lines_regs' => count($fp),
@@ -269,7 +269,7 @@ class LogHandler
             // echo "error!: no existe directorio de logs";
             exit;
         }
-        $files = glob($this->logDir.'/*');
+        $files = glob($this->logDir . '/*');
         foreach ($files as $file) {
             if (is_file($file)) {
                 unlink($file);
@@ -287,7 +287,7 @@ class LogHandler
             $this->setMakeLogDir();
             //exit;
         }
-        $files = glob($this->logDir.'/*', GLOB_ONLYDIR);
+        $files = glob($this->logDir . '/*', GLOB_ONLYDIR);
         $deletions = array_slice($files, 0, count($files) - $this->confdays);
         foreach ($deletions as $to_delete) {
             array_map('unlink', glob("$to_delete"));
@@ -413,7 +413,7 @@ class LogHandler
     public function logDebug($msg)
     {
         if (self::LOG_DEBUG_ENABLED) {
-            $this->logger->debug('DEBUG: '.$this->sanitizeMessage($msg));
+            $this->logger->debug('DEBUG: ' . $this->sanitizeMessage($msg));
         }
     }
 
@@ -423,7 +423,7 @@ class LogHandler
     public function logInfo($msg)
     {
         if (self::LOG_INFO_ENABLED) {
-            $this->logger->info('INFO: '.$this->sanitizeMessage($msg));
+            $this->logger->info('INFO: ' . $this->sanitizeMessage($msg));
         }
     }
 
@@ -433,7 +433,7 @@ class LogHandler
     public function logError($msg)
     {
         if (self::LOG_ERROR_ENABLED) {
-            $this->logger->error('ERROR: '.$this->sanitizeMessage($msg));
+            $this->logger->error('ERROR: ' . $this->sanitizeMessage($msg));
         }
     }
 }
