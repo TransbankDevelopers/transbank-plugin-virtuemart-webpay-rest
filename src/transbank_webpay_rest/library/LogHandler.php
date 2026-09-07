@@ -92,47 +92,6 @@ class LogHandler
         }
     }
 
-    private function setparamsconf($days, $weight)
-    {
-        if (file_exists($this->lockfile)) {
-            $file = fopen($this->lockfile, 'w') or exit('No se puede truncar archivo');
-            if (!is_numeric($days) or $days == null or $days == '' or $days === false) {
-                $days = 7;
-            }
-            $txt = "{$days}\n";
-            fwrite($file, $txt);
-            $txt = "{$weight}\n";
-            fwrite($file, $txt);
-            fclose($file);
-            chmod($this->lockfile, 0600);
-        } else {
-            //  echo "error!: no se ha podido renovar configuracion";
-            exit;
-        }
-    }
-
-    private function setLockFile()
-    {
-
-        if (!file_exists($this->lockfile)) {
-            $file = fopen($this->lockfile, 'w') or exit('No se puede crear archivo de bloqueo');
-            if (!is_numeric($this->confdays) or $this->confdays == null or $this->confdays == '' or $this->confdays === false) {
-                $this->confdays = self::DEFAULT_CONF_DAYS;
-            }
-            $txt = "{$this->confdays}\n";
-            fwrite($file, $txt);
-            $txt = "{$this->confweight}\n";
-            fwrite($file, $txt);
-            fclose($file);
-            chmod($this->lockfile, 0600);
-
-            return true;
-        } else {
-            // echo "Error!; archivo ya existe!";
-            return false;
-        }
-    }
-
     public function getValidateLockFile()
     {
         if (!file_exists($this->lockfile)) {
@@ -155,13 +114,6 @@ class LogHandler
         }
 
         return $result;
-    }
-
-    private function delLockFile()
-    {
-        if (file_exists($this->lockfile)) {
-            unlink($this->lockfile);
-        }
     }
 
     private function setLogList()
@@ -380,15 +332,6 @@ class LogHandler
         $this->digestLogs();
     }
 
-    public function setLockStatus($status = true)
-    {
-        if ($status === true) {
-            $this->setLockFile();
-        } else {
-            $this->delLockFile();
-        }
-    }
-
     public function getResume()
     {
         $result = [
@@ -400,11 +343,6 @@ class LogHandler
         ];
 
         return json_encode($result);
-    }
-
-    public function setnewconfig($days, $weight)
-    {
-        $this->setparamsconf($days, $weight);
     }
 
     /**

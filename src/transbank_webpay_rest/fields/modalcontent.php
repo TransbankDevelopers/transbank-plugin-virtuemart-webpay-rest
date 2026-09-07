@@ -18,7 +18,6 @@ if (is_array($cid)) {
 
 $virtuemart_paymentmethod_id = (int) $virtuemart_paymentmethod_id;
 $baseUrl = "index.php?option=com_virtuemart&view=paymentmethod&task=edit&cid[]={$virtuemart_paymentmethod_id}";
-$urlUpdateConfig = $baseUrl . '&updateConfig=true';
 $urlCheckTransaction = $baseUrl . '&checkTransaction=true';
 
 $confProv = new ConfigProvider();
@@ -62,21 +61,6 @@ if (isset($logs->last_log->log_content)) {
     $log_file_regs = $log_file;
 }
 
-if ($logs->config->status === false) {
-    $status = "<span class='label label-warning'>Desactivado sistema de Registros</span>";
-} else {
-    $status = "<span class='label label-success'>Activado sistema de Registros</span>";
-}
-
-$tb_max_logs_days = $logs->config->max_logs_days;
-$tb_max_logs_weight = $logs->config->max_log_weight;
-if ($logs->config->status === true) {
-    $tb_check_regs = "<input type='checkbox' name='tb_reg_checkbox' id='tb_reg_checkbox' checked>";
-    $tb_btn_update = '<td><button type="button" name="tb_update" id="tb_update" class="btn btn-info">Actualizar Parametros</button></td>';
-} else {
-    $tb_check_regs = "<input type='checkbox' name='tb_reg_checkbox' id='tb_reg_checkbox'>";
-    $tb_btn_update = '<td><button type="button" name="tb_update" id="tb_update" class="btn btn-info disabled">Actualizar Parametros</button></td>';
-}
 ?>
 
 <style media="screen">
@@ -166,9 +150,6 @@ if ($logs->config->status === true) {
         font-size: 10px;
     }
 </style>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/js/bootstrap-switch.min.js" integrity="sha512-J+763o/bd3r9iW+gFEqTaeyi+uAphmzkE/zU8FxY6iAvD3nQKXa+ZAWkBI9QS9QkYEKddQoiy0I5GDxKf/ORBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet">
 
 <div class="modal fade modal-tbk" id="tb_commerce_mod_info" tabindex="-1" role="dialog"
     aria-labelledby="" aria-hidden="true">
@@ -494,17 +475,6 @@ if ($logs->config->status === true) {
 <script type="text/javascript">
     jQuery().ready(function($) {
 
-        var options = {
-            onText: "Si",
-            size: "small",
-            onColor: 'success',
-            offColor: 'warning',
-            offText: "No",
-            animate: true
-        };
-
-        $('#tb_reg_checkbox').bootstrapSwitch(options);
-
         $('#tb_commerce_mod_info').hide();
 
         $('#tb_commerce_mod_info').on('show.bs.modal', function() {
@@ -525,28 +495,6 @@ if ($logs->config->status === true) {
                 $('#tb_main_info').hide();
                 $('#tb_logs').show();
             }
-        });
-
-        $('#tb_update').click(function(evt) {
-            var max_days = $("#tb_regs_days").val();
-            var max_weight = $("#tb_regs_weight").val();
-            var status = $('#tb_reg_checkbox').is(':checked');
-            var data = {
-                status: status,
-                max_days: max_days,
-                max_weight: max_weight
-            };
-            var el = $(this);
-            el.text('Actualizar Parametros...');
-            $.get(<?php echo json_encode($urlUpdateConfig); ?>, data, function(resp) {
-                el.text('Actualizar Parametros');
-                if (status === false) {
-                    $('#log-status').empty().append("<span class='label label-warning'>Desactivado sistema de Registros</span>");
-                } else {
-                    $('#log-status').empty().append("<span class='label label-success'>Activado sistema de Registros</span>");
-                }
-            });
-            evt.preventDefault();
         });
 
         $('#btn-check-transaction').click(function(evt) {
