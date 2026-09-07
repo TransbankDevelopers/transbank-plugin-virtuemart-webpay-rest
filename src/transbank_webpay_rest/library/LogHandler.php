@@ -30,7 +30,7 @@ class LogHandler
 
         try {
             if (!file_exists($this->logDir)) {
-                mkdir($this->logDir, 0777, true);
+                mkdir($this->logDir, 0755, true);
             }
             $this->protectLogDir();
         } catch (Exception $e) {
@@ -74,7 +74,7 @@ class LogHandler
     private function setMakeLogDir()
     {
         if ($this->getIsLogDir() === false) {
-            mkdir($this->logDir, 0777, true);
+            mkdir($this->logDir, 0755, true);
             $this->protectLogDir();
         } else {
             exit;
