@@ -572,12 +572,6 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
      */
     public function emptyCart($session_id = null, $order_number = null): bool
     {
-        if ($session_id != null) {
-            $session = JFactory::getSession();
-            $session->close();
-            session_regenerate_id();
-            session_start();
-        }
         $cart = $this->getCurrentCart();
         $cart->emptyCart();
 
