@@ -1,6 +1,9 @@
 <?php
 
 use Transbank\Webpay\WebpayPlus;
+use Transbank\Webpay\WebpayPlus\Exceptions\TransactionCreateException;
+use Transbank\Webpay\WebpayPlus\Exceptions\TransactionCommitException;
+use GuzzleHttp\Exception\GuzzleException;
 
 class TransbankSdkWebpay
 {
@@ -39,7 +42,7 @@ class TransbankSdkWebpay
             }
 
             throw new TransbankWebpayException('No se ha creado la transacción para, amount: '.$amount.', sessionId: '.$sessionId.', buyOrder: '.$buyOrder);
-        } catch (Exception $e) {
+        } catch (TransbankWebpayException | TransactionCreateException | GuzzleException $e) {
             $result = [
                 'error'  => 'Error al crear la transacción',
                 'detail' => $e->getMessage(),
@@ -63,7 +66,7 @@ class TransbankSdkWebpay
             }
 
             return $this->transaction->commit($tokenWs);
-        } catch (Exception $e) {
+        } catch (TransbankWebpayException | TransactionCommitException | GuzzleException $e) {
             $result = [
                 'error'  => 'Error al confirmar la transacción',
                 'detail' => $e->getMessage(),
