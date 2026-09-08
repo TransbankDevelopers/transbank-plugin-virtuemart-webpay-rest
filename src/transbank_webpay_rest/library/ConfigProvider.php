@@ -63,28 +63,24 @@ class ConfigProvider
     public function getConfigFromXml($key = null)
     {
         if ($this->_configXml === 0) {
-            try {
-                $this->_configXml = [];
-                $xml = simplexml_load_file(JPATH_PLUGINS.'/vmpayment/transbank_webpay_rest/transbank_webpay_rest.xml', null, LIBXML_NOCDATA);
-                $json = json_encode($xml);
-                $dataConfig = json_decode($json, true);
-                $dataConfig = $dataConfig['vmconfig']['fields']['fieldset']['field'];
-                foreach ($dataConfig as $dConfig) {
-                    $k = $dConfig['@attributes']['name'];
-                    $v = $dConfig['@attributes']['default'];
-                    if (!empty($k)) {
-                        $v = str_replace('\\r\\n', "\n", $v);
-                        $v = str_replace('\\', '', $v);
-                        $v = str_replace(' ', '', $v);
-                        $v = str_replace('-----BEGINRSAPRIVATEKEY-----', '-----BEGIN RSA PRIVATE KEY-----', $v);
-                        $v = str_replace('-----ENDRSAPRIVATEKEY-----', '-----END RSA PRIVATE KEY-----', $v);
-                        $v = str_replace('-----BEGINCERTIFICATE-----', '-----BEGIN CERTIFICATE-----', $v);
-                        $v = str_replace('-----ENDCERTIFICATE-----', '-----END CERTIFICATE-----', $v);
-                        $this->_configXml[$k] = trim($v);
-                    }
+            $this->_configXml = [];
+            $xml = simplexml_load_file(JPATH_PLUGINS.'/vmpayment/transbank_webpay_rest/transbank_webpay_rest.xml', null, LIBXML_NOCDATA);
+            $json = json_encode($xml);
+            $dataConfig = json_decode($json, true);
+            $dataConfig = $dataConfig['vmconfig']['fields']['fieldset']['field'];
+            foreach ($dataConfig as $dConfig) {
+                $k = $dConfig['@attributes']['name'];
+                $v = $dConfig['@attributes']['default'];
+                if (!empty($k)) {
+                    $v = str_replace('\\r\\n', "\n", $v);
+                    $v = str_replace('\\', '', $v);
+                    $v = str_replace(' ', '', $v);
+                    $v = str_replace('-----BEGINRSAPRIVATEKEY-----', '-----BEGIN RSA PRIVATE KEY-----', $v);
+                    $v = str_replace('-----ENDRSAPRIVATEKEY-----', '-----END RSA PRIVATE KEY-----', $v);
+                    $v = str_replace('-----BEGINCERTIFICATE-----', '-----BEGIN CERTIFICATE-----', $v);
+                    $v = str_replace('-----ENDCERTIFICATE-----', '-----END CERTIFICATE-----', $v);
+                    $this->_configXml[$k] = trim($v);
                 }
-            } catch (Exception $e) {
-                $this->log->logError($e);
             }
         }
 
