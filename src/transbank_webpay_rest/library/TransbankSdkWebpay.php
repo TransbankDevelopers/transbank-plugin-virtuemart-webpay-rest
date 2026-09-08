@@ -38,7 +38,7 @@ class TransbankSdkWebpay
                 ];
             }
 
-            throw new Exception('No se ha creado la transacción para, amount: '.$amount.', sessionId: '.$sessionId.', buyOrder: '.$buyOrder);
+            throw new TransbankWebpayException('No se ha creado la transacción para, amount: '.$amount.', sessionId: '.$sessionId.', buyOrder: '.$buyOrder);
         } catch (Exception $e) {
             $result = [
                 'error'  => 'Error al crear la transacción',
@@ -59,7 +59,7 @@ class TransbankSdkWebpay
         try {
             $this->log->logInfo('getTransactionResult - tokenWs: '.$tokenWs);
             if ($tokenWs == null) {
-                throw new Exception('El token webpay es requerido');
+                throw new TransbankWebpayException('El token webpay es requerido');
             }
 
             return $this->transaction->commit($tokenWs);
