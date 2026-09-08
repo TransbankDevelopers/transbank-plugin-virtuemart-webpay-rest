@@ -52,7 +52,7 @@ class ConfigProvider
                     $v = str_replace('-----ENDCERTIFICATE-----', '-----END CERTIFICATE-----', $v);
                     $this->_config[$k] = trim($v);
                 }
-            } catch (Exception $e) {
+            } catch (RuntimeException $e) {
                 $this->log->logError($e);
             }
         }
