@@ -5,6 +5,8 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Monolog\Formatter\LineFormatter;
+use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\Exception\FilesystemException;
 
 define('Webpay_ROOT', dirname(__DIR__));
 
@@ -30,10 +32,10 @@ class LogHandler
 
         try {
             if (!file_exists($this->logDir)) {
-                mkdir($this->logDir, 0755, true);
+                Folder::create($this->logDir, 0755);
             }
             $this->protectLogDir();
-        } catch (Exception $e) {
+        } catch (FilesystemException $e) {
             error_log('Transbank Webpay: ' . $e->getMessage());
         }
 
