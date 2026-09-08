@@ -6,6 +6,7 @@ use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Monolog\Formatter\LineFormatter;
 use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\File;
 use Joomla\Filesystem\Exception\FilesystemException;
 
 define('Webpay_ROOT', dirname(__DIR__));
@@ -66,9 +67,10 @@ class LogHandler
     private function protectLogDir()
     {
         $htaccess = $this->logDir . '/.htaccess';
+        $rules = "Require all denied\nDeny from all\n";
 
         if ((!file_exists($htaccess) || filesize($htaccess) === 0)
-            && file_put_contents($htaccess, "Require all denied\nDeny from all\n") === false
+            && !File::write($htaccess, $rules)
         ) {
             error_log('Transbank Webpay: could not write .htaccess to log directory: ' . $this->logDir);
         }
