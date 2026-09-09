@@ -134,8 +134,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
             $session->set('webpay_payment_ok', 'WAITING');
             $session->set('webpay_token_ws', $tokenWs);
 
-            $sent = $this->toRedirect($url, ['token_ws' => $tokenWs]);
-            $this->log->logDebug('toRedirect a Webpay: ' . ($sent ? 'true' : 'false'));
+            $this->toRedirect($url, ['token_ws' => $tokenWs]);
         } else {
             $session->set('webpay_payment_ok', 'FAIL');
             $app = JFactory::getApplication();
@@ -582,13 +581,11 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
 
     //Helpers
 
-    private function toRedirect($url, $data): bool
+    private function toRedirect($url, $data): void
     {
         $sanitizedURL = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
         $layout = new JLayoutFile('webpay_redirect', DIR_SYSTEM . 'tmpl');
         echo $layout->render(['sanitizedURL' => $sanitizedURL, 'data' => $data]);
-
-        return true;
     }
 
     /**
