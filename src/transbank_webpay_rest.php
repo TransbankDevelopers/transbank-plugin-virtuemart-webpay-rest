@@ -585,7 +585,8 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
     private function toRedirect($url, $data): bool
     {
         $sanitizedURL = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
-        include_once DIR_SYSTEM . 'tmpl/webpay_redirect.php';
+        $layout = new JLayoutFile('webpay_redirect', DIR_SYSTEM . 'tmpl');
+        echo $layout->render(['sanitizedURL' => $sanitizedURL, 'data' => $data]);
 
         return true;
     }

@@ -8,6 +8,7 @@ if (!defined('_JEXEC')) {
  * @var string $sanitizedURL
  * @var array  $data
  */
+extract($displayData);
 ?>
 <form action="<?php echo $sanitizedURL; ?>" method="POST" name="webpayForm">
     <?php foreach ($data as $name => $value): ?>
