@@ -1,7 +1,5 @@
 <?php
 
-require_once 'TransbankSdkWebpay.php';
-
 use Transbank\Webpay\WebpayPlus;
 
 
@@ -212,24 +210,6 @@ class HealthCheck
     }
 
     /**
-     * Creates an array with PHP information.
-     *
-     * @return array Array containing the PHP information
-     */
-    private function getPhpInfo(): array
-    {
-        ob_start();
-        phpinfo();
-        $info = ob_get_contents();
-        ob_end_clean();
-        $newinfo = strstr($info, '<table>');
-        $newinfo = strstr($newinfo, '<h1>PHP Credits</h1>', true);
-        $return = ['string' => ['content' => str_replace('</div></body></html>', '', $newinfo)]];
-
-        return $return;
-    }
-
-    /**
      * Initializes a transaction.
      *
      * @return array Array containing the status and the response.
@@ -253,7 +233,7 @@ class HealthCheck
      * Gets all information into a single method.
      *
      * @return array Array containing server resume, PHP extensions status,
-     *               commerce information, and PHP info.
+     *               and commerce information.
      */
     private function getFullResume(): array
     {
@@ -261,7 +241,6 @@ class HealthCheck
             'server_resume'          => $this->getServerResume(),
             'php_extensions_status'  => $this->getExtensionsValidate(),
             'commerce_info'          => $this->getCommerceInfo(),
-            'php_info'               => $this->getPhpInfo(),
         ];
     }
 

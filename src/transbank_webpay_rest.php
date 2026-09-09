@@ -1,6 +1,8 @@
 <?php
 
-defined('_JEXEC') or exit('Restricted access');
+if (!defined('_JEXEC')) {
+    return;
+}
 
 if (!class_exists('vmPSPlugin')) {
     require_once VMPATH_PLUGINLIBS . DS . 'vmpsplugin.php';
@@ -10,23 +12,11 @@ if (!class_exists('ShopFunctions')) {
     require_once JPATH_VM_ADMINISTRATOR . DS . 'helpers' . DS . 'shopfunctions.php';
 }
 
-defined('DIR_SYSTEM') or define('DIR_SYSTEM', VMPATH_PLUGINS . '/vmpayment/transbank_webpay_rest/transbank_webpay_rest/');
-
-if (!class_exists('TransbankSdkWebpay')) {
-    require_once DIR_SYSTEM . 'library/TransbankSdkWebpay.php';
+if (!defined('DIR_SYSTEM')) {
+    define('DIR_SYSTEM', VMPATH_PLUGINS . '/vmpayment/transbank_webpay_rest/transbank_webpay_rest/');
 }
 
-if (!class_exists('LogHandler')) {
-    require_once DIR_SYSTEM . 'library/LogHandler.php';
-}
-
-if (!class_exists('HealthCheck')) {
-    require_once DIR_SYSTEM . 'library/HealthCheck.php';
-}
-
-if (!class_exists('ConfigProvider')) {
-    require_once DIR_SYSTEM . 'library/ConfigProvider.php';
-}
+require_once DIR_SYSTEM . 'vendor/autoload.php';
 
 /**
  * Transbank Webpay Payment plugin implementation.
@@ -151,7 +141,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
             $app->redirect($returnUrl);
         }
 
-        exit();
+        JFactory::getApplication()->close();
     }
 
     /**
@@ -233,7 +223,8 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
                 $modelOrder->updateStatusForOneOrder($orderId, $order, true);
 
                 $html = $this->getSuccessMessage($result);
-                $this->emptyCart(null);
+                $emptied = $this->emptyCart(null);
+                $this->log->logDebug('emptyCart: ' . ($emptied ? 'true' : 'false'));
             } else {
                 $session->set('webpay_payment_ok', 'FAIL');
 
@@ -261,7 +252,8 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
 
             if ($paymentOk == 'SUCCESS') {
                 $html = $this->getSuccessMessage($result);
-                $this->emptyCart(null);
+                $emptied = $this->emptyCart(null);
+                $this->log->logDebug('emptyCart: ' . ($emptied ? 'true' : 'false'));
             } elseif ($paymentOk == 'FAIL') {
                 $order = [];
                 $order['order_status'] = $this->getConfig('status_canceled');
@@ -436,13 +428,13 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
      * This event is fired after the payment method has been selected. It can be used to store
      * additional payment info in the cart.
      *
+     * Triggered by VirtueMartCart::setPaymentMethod() (components/com_virtuemart/helpers/cart.php).
+     *
      * @param VirtueMartCart $cart: the actual cart
-     * @param $msg
      *
      * @return null if the payment was not selected, true if the data is valid, error message if the data is not valid
-     * @Override
      */
-    public function plgVmOnSelectCheckPayment(VirtueMartCart $cart, &$msg)
+    public function plgVmOnSelectCheckPayment(VirtueMartCart $cart)
     {
         return $this->OnSelectCheck($cart);
     }
@@ -450,14 +442,15 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
     /**
      * This event is fired to display the pluginmethods in the cart (edit shipment/payment) for exampel.
      *
+     * Triggered by the cart view's lSelectPayment() (components/com_virtuemart/views/cart/view.html.php).
+     *
      * @param object $cart     Cart object
      * @param int    $selected ID of the method selected
      *
      * @return bool True on success, false on failures, null when this plugin was not selected.
      *              On errors, JError::raiseWarning (or JError::raiseError) must be used to set a message.
-     * @Override
      */
-    public function plgVmDisplayListFEPayment(VirtueMartCart $cart, $selected = 0, &$htmlIn)
+    public function plgVmDisplayListFEPayment(VirtueMartCart $cart, $selected = 0, &$htmlIn = [])
     {
         return $this->displayListFE($cart, $selected, $htmlIn);
     }
@@ -504,12 +497,13 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
      * Checks how many plugins are available. If only one, the user will not have the choice. Enter edit_xxx page
      * The plugin must check first if it is the correct type.
      *
+     * Triggered by VirtueMartCart::checkAutomaticSelectedPlug('payment') (components/com_virtuemart/helpers/cart.php).
+     *
      * @param VirtueMartCart cart: the cart object
      *
      * @return null if no plugin was found, 0 if more then one plugin was found,  virtuemart_xxx_id if only one plugin is found
-     * @Override
      */
-    public function plgVmOnCheckAutomaticSelectedPayment(VirtueMartCart $cart, array $cart_prices = [], &$paymentCounter)
+    public function plgVmOnCheckAutomaticSelectedPayment(VirtueMartCart $cart, array $cart_prices = [], &$paymentCounter = 0)
     {
         return $this->onCheckAutomaticSelected($cart, $cart_prices, $paymentCounter);
     }
@@ -579,12 +573,6 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
      */
     public function emptyCart($session_id = null, $order_number = null): bool
     {
-        if ($session_id != null) {
-            $session = JFactory::getSession();
-            $session->close();
-            session_regenerate_id();
-            session_start();
-        }
         $cart = $this->getCurrentCart();
         $cart->emptyCart();
 
@@ -593,19 +581,11 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
 
     //Helpers
 
-    private function toRedirect($url, $data): bool
+    private function toRedirect($url, $data): void
     {
         $sanitizedURL = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
-        echo "<form action='$sanitizedURL' method='POST' name='webpayForm'>";
-        foreach ($data as $name => $value) {
-            echo "<input type='hidden' name='" . htmlentities($name) . "' value='" . htmlentities($value) . "'>";
-        }
-        echo '</form>';
-        echo "<script language='JavaScript'>"
-            . 'document.webpayForm.submit();'
-            . '</script>';
-
-        return true;
+        $layout = new JLayoutFile('webpay_redirect', DIR_SYSTEM . 'tmpl');
+        echo $layout->render(['sanitizedURL' => $sanitizedURL, 'data' => $data]);
     }
 
     /**
@@ -618,18 +598,6 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
         }
 
         return VirtueMartCart::getCart();
-    }
-
-    /**
-     * return the model orders.
-     */
-    private function getModelOrder()
-    {
-        if (!class_exists('VirtueMartModelOrders')) {
-            require_once JPATH_VM_ADMINISTRATOR . DS . 'models' . DS . 'orders.php';
-        }
-
-        return new VirtueMartModelOrders();
     }
 
     /**

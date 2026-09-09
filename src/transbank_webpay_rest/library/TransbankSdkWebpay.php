@@ -1,9 +1,9 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
-require_once 'LogHandler.php';
-
 use Transbank\Webpay\WebpayPlus;
+use Transbank\Webpay\WebpayPlus\Exceptions\TransactionCreateException;
+use Transbank\Webpay\WebpayPlus\Exceptions\TransactionCommitException;
+use GuzzleHttp\Exception\GuzzleException;
 
 class TransbankSdkWebpay
 {
@@ -41,8 +41,8 @@ class TransbankSdkWebpay
                 ];
             }
 
-            throw new Exception('No se ha creado la transacción para, amount: '.$amount.', sessionId: '.$sessionId.', buyOrder: '.$buyOrder);
-        } catch (Exception $e) {
+            throw new TransbankWebpayException('No se ha creado la transacción para, amount: '.$amount.', sessionId: '.$sessionId.', buyOrder: '.$buyOrder);
+        } catch (TransbankWebpayException | TransactionCreateException | GuzzleException $e) {
             $result = [
                 'error'  => 'Error al crear la transacción',
                 'detail' => $e->getMessage(),
@@ -62,11 +62,11 @@ class TransbankSdkWebpay
         try {
             $this->log->logInfo('getTransactionResult - tokenWs: '.$tokenWs);
             if ($tokenWs == null) {
-                throw new Exception('El token webpay es requerido');
+                throw new TransbankWebpayException('El token webpay es requerido');
             }
 
             return $this->transaction->commit($tokenWs);
-        } catch (Exception $e) {
+        } catch (TransbankWebpayException | TransactionCommitException | GuzzleException $e) {
             $result = [
                 'error'  => 'Error al confirmar la transacción',
                 'detail' => $e->getMessage(),
