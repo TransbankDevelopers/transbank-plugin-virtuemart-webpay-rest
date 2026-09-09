@@ -429,13 +429,13 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
      * This event is fired after the payment method has been selected. It can be used to store
      * additional payment info in the cart.
      *
+     * Triggered by VirtueMartCart::setPaymentMethod() (components/com_virtuemart/helpers/cart.php).
+     *
      * @param VirtueMartCart $cart: the actual cart
-     * @param $msg
      *
      * @return null if the payment was not selected, true if the data is valid, error message if the data is not valid
-     * @Override
      */
-    public function plgVmOnSelectCheckPayment(VirtueMartCart $cart, &$msg)
+    public function plgVmOnSelectCheckPayment(VirtueMartCart $cart)
     {
         return $this->OnSelectCheck($cart);
     }
@@ -443,14 +443,15 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
     /**
      * This event is fired to display the pluginmethods in the cart (edit shipment/payment) for exampel.
      *
+     * Triggered by the cart view's lSelectPayment() (components/com_virtuemart/views/cart/view.html.php).
+     *
      * @param object $cart     Cart object
      * @param int    $selected ID of the method selected
      *
      * @return bool True on success, false on failures, null when this plugin was not selected.
      *              On errors, JError::raiseWarning (or JError::raiseError) must be used to set a message.
-     * @Override
      */
-    public function plgVmDisplayListFEPayment(VirtueMartCart $cart, $selected = 0, &$htmlIn)
+    public function plgVmDisplayListFEPayment(VirtueMartCart $cart, $selected = 0, &$htmlIn = [])
     {
         return $this->displayListFE($cart, $selected, $htmlIn);
     }
@@ -497,12 +498,13 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
      * Checks how many plugins are available. If only one, the user will not have the choice. Enter edit_xxx page
      * The plugin must check first if it is the correct type.
      *
+     * Triggered by VirtueMartCart::checkAutomaticSelectedPlug('payment') (components/com_virtuemart/helpers/cart.php).
+     *
      * @param VirtueMartCart cart: the cart object
      *
      * @return null if no plugin was found, 0 if more then one plugin was found,  virtuemart_xxx_id if only one plugin is found
-     * @Override
      */
-    public function plgVmOnCheckAutomaticSelectedPayment(VirtueMartCart $cart, array $cart_prices = [], &$paymentCounter)
+    public function plgVmOnCheckAutomaticSelectedPayment(VirtueMartCart $cart, array $cart_prices = [], &$paymentCounter = 0)
     {
         return $this->onCheckAutomaticSelected($cart, $cart_prices, $paymentCounter);
     }
