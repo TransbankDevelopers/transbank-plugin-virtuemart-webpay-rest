@@ -142,7 +142,7 @@ class plgVmPaymentTransbank_Webpay_Rest extends vmPSPlugin
             $app->redirect($returnUrl);
         }
 
-        exit();
+        JFactory::getApplication()->close();
     }
 
     /**
